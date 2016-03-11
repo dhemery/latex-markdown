@@ -1,0 +1,3 @@
+class ReadingMacroName
+
+end

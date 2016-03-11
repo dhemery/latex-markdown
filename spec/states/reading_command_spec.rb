@@ -1,8 +1,9 @@
 require_relative '../spec_helper'
 
+require 'consuming_argument'
 require 'ostruct'
 require 'reading_command'
-require 'reading_macro'
+require 'reading_macro_name'
 require 'strscan'
 
 describe ReadingCommand do
@@ -25,7 +26,23 @@ describe ReadingCommand do
     end
 
     it 'enters reading macro state' do
-      context.state.must_be_instance_of ReadingMacro
+      context.state.must_be_instance_of ReadingMacroName
+    end
+  end
+
+  describe 'when next input character is right brace' do
+    let(:input) { StringScanner.new '}additional text' }
+
+    it 'consumes the right brace' do
+      input.rest.must_equal 'additional text'
+    end
+
+    it 'leaves the output unchanged' do
+      output.string.must_equal previous_output
+    end
+
+    it 'enters consuming argument state' do
+      context.state.must_be_instance_of ConsumingArgument
     end
   end
 end

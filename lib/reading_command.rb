@@ -4,7 +4,11 @@ class ReadingCommand
   end
 
   def execute(input, output)
-    input.scan /\\/
-    @context.state = ReadingMacro.new
+    case input.getch
+      when '\\'
+        @context.state = ReadingMacroName.new
+      when '}'
+        @context.state = ConsumingArgument.new
+    end
   end
 end
