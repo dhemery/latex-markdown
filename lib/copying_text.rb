@@ -5,6 +5,6 @@ class CopyingText
 
   def execute(input, output)
     output.write input.scan(/[^\\}]*/)
-    @context.state = ReadingCommand.new
+    @context.state = ReadingCommand.new(@context)
   end
 end

@@ -5,56 +5,54 @@ require 'copying_text'
 require 'reading_command'
 require 'ostruct'
 
-describe 'states' do
+describe CopyingText do
   let(:context) { OpenStruct.new }
   let(:output) { StringIO.new }
   let(:copying_text) { CopyingText.new(context) }
 
-  describe 'copying text' do
-    before { copying_text.execute(input, output) }
+  before { copying_text.execute(input, output) }
 
-    describe 'when input has no backslash' do
-      let(:input) { StringScanner.new 'A bunch of text with no backslash' }
+  describe 'when input has no backslash' do
+    let(:input) { StringScanner.new 'A bunch of text with no backslash' }
 
-      it 'copies all text' do
-        output.string.must_equal input.string
-      end
-
-      it 'consumes all input' do
-        input.must_be :eos?
-      end
+    it 'copies all text' do
+      output.string.must_equal input.string
     end
 
-    describe 'when input has a backslash' do
-      let(:input) { StringScanner.new 'text text text \macro' }
+    it 'consumes all input' do
+      input.must_be :eos?
+    end
+  end
 
-      it 'copies the text that precedes the backslash' do
-        output.string.must_equal 'text text text '
-      end
+  describe 'when input has a backslash' do
+    let(:input) { StringScanner.new 'text text text \macro' }
 
-      it 'stops scanning at the backslash' do
-        input.rest.must_equal '\macro'
-      end
-
-      it 'enters reading command state' do
-        context.state.must_be_instance_of ReadingCommand
-      end
+    it 'copies the text that precedes the backslash' do
+      output.string.must_equal 'text text text '
     end
 
-    describe 'when input has a right brace' do
-      let(:input) { StringScanner.new 'text text text} more text' }
+    it 'stops scanning at the backslash' do
+      input.rest.must_equal '\macro'
+    end
 
-      it 'copies the text that precedes the right brace' do
-        output.string.must_equal 'text text text'
-      end
+    it 'enters reading command state' do
+      context.state.must_be_instance_of ReadingCommand
+    end
+  end
 
-      it 'stops scanning at the right brace' do
-        input.rest.must_equal '} more text'
-      end
+  describe 'when input has a right brace' do
+    let(:input) { StringScanner.new 'text text text} more text' }
 
-      it 'enters reading command state' do
-        context.state.must_be_instance_of ReadingCommand
-      end
+    it 'copies the text that precedes the right brace' do
+      output.string.must_equal 'text text text'
+    end
+
+    it 'stops scanning at the right brace' do
+      input.rest.must_equal '} more text'
+    end
+
+    it 'enters reading command state' do
+      context.state.must_be_instance_of ReadingCommand
     end
   end
 end
