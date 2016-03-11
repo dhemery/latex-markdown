@@ -1,7 +1,10 @@
+$LOAD_PATH.unshift '../lib'
+
+require 'copying_text'
+
 require_relative '../spec_helper'
 
 require 'strscan'
-require 'copying_text'
 require 'reading_command'
 require 'ostruct'
 

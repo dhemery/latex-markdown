@@ -7,6 +7,6 @@ class ReadingMacroName
 
   def execute(input, output)
     macro_name = input.scan(MACRO_NAME_PATTERN)
-    @context.state = ExecutingMacro.new(macro_name)
+    @context.state = ExecutingCommand.new(@context, macro_name)
   end
 end

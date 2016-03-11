@@ -1,3 +1,5 @@
+require 'executing_command'
+
 class ReadingCommand
   READ_MACRO = '\\'
   CONSUME_ARGUMENT = '}'
@@ -7,11 +9,6 @@ class ReadingCommand
   end
 
   def execute(input, output)
-    case input.getch
-      when READ_MACRO
-        @context.state = ReadingMacroName.new(@context)
-      when CONSUME_ARGUMENT
-        @context.state = ConsumingArgument.new
-    end
+    @context.state = ExecutingCommand.new(@context, input.getch)
   end
 end

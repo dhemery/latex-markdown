@@ -1,8 +1,11 @@
+$LOAD_PATH.unshift '../lib'
+
+require 'reading_macro_name'
+
 require_relative '../spec_helper'
 
+require 'executing_command'
 require 'strscan'
-require 'reading_macro_name'
-require 'executing_macro'
 require 'ostruct'
 
 describe ReadingMacroName do
@@ -17,7 +20,7 @@ describe ReadingMacroName do
     let(:input) { StringScanner.new 'macroname1 2 43 !' }
 
     it 'enters executing macro state' do
-      context.state.must_be_instance_of ExecutingMacro
+      context.state.must_be_instance_of ExecutingCommand
       context.state.name.must_equal 'macroname'
     end
 

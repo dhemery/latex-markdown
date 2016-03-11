@@ -1,8 +1,11 @@
+$LOAD_PATH.unshift '../lib'
+
+require 'reading_command'
+
 require_relative '../spec_helper'
 
-require 'consuming_argument'
+require 'executing_command'
 require 'ostruct'
-require 'reading_command'
 require 'reading_macro_name'
 require 'strscan'
 
@@ -25,8 +28,9 @@ describe ReadingCommand do
       output.string.must_equal previous_output
     end
 
-    it 'enters reading macro state' do
-      context.state.must_be_instance_of ReadingMacroName
+    it 'enters executing command state' do
+      context.state.must_be_instance_of ExecutingCommand
+      context.state.name.must_equal '\\'
     end
   end
 
@@ -41,8 +45,9 @@ describe ReadingCommand do
       output.string.must_equal previous_output
     end
 
-    it 'enters consuming argument state' do
-      context.state.must_be_instance_of ConsumingArgument
+    it 'enters executing command state' do
+      context.state.must_be_instance_of ExecutingCommand
+      context.state.name.must_equal '}'
     end
   end
 end
