@@ -1,14 +1,12 @@
-require 'executing_command'
-
 class ReadingCommand
-  READ_MACRO = '\\'
-  CONSUME_ARGUMENT = '}'
-
-  def initialize(context)
+  def initialize(context, pattern, commands)
     @context = context
+    @pattern = pattern
+    @commands = commands
   end
 
   def execute(input, output)
-    @context.state = ExecutingCommand.new(@context, input.getch)
+    name = input.scan @pattern
+    @context.state = @commands.fetch(name) {  |_| CopyingText.new(@context, /.*/) }
   end
 end

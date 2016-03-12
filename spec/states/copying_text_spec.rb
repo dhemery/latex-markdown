@@ -41,7 +41,7 @@ describe CopyingText do
       scanner.rest.must_equal ',.!:'
     end
 
-    it 'enters reading command state' do
+    it 'changes state to reading command' do
       context.state.must_be_instance_of ReadingCommand
     end
   end
@@ -60,7 +60,7 @@ describe CopyingText do
       output.string.must_equal previous_output
     end
 
-    it 'enters reading command state' do
+    it 'changes state to reading command' do
       context.state.must_be_instance_of ReadingCommand
     end
   end
@@ -79,7 +79,7 @@ describe CopyingText do
       scanner.rest.must_equal input
     end
 
-    it 'enters reading command state' do
+    it 'changes state to reading command' do
       context.state.must_be_instance_of ReadingCommand
     end
   end
