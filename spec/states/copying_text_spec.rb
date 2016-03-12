@@ -10,11 +10,11 @@ require 'ostruct'
 
 describe CopyingText do
   let(:context) { OpenStruct.new }
-  let(:copying_text) { CopyingText.new(context, pattern) }
+  let(:copying_text) { CopyingText.new(context, scanner, output, pattern) }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
 
-  before { copying_text.execute(scanner, output) }
+  before { copying_text.execute }
 
   describe 'when the input entirely matches the copy pattern' do
     let(:input) { 'all of this text is printable' }

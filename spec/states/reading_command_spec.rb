@@ -12,10 +12,10 @@ describe ReadingCommand do
   let(:context) { OpenStruct.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }
-  let(:reading_command) { ReadingCommand.new(context, pattern, commands) }
+  let(:reading_command) { ReadingCommand.new(context, scanner, output, pattern, commands) }
   let(:scanner) { StringScanner.new input }
 
-  before { reading_command.execute(scanner, output) }
+  before { reading_command.execute }
 
   describe 'when the input matches the command name pattern' do
     let(:input) { 'foo123' }
@@ -48,7 +48,7 @@ describe ReadingCommand do
 
 
   describe 'when the input does not match the command pattern' do
-    let(:input) { StringScanner.new '\macroname{macro argument}' }
+    let(:input) { '\macroname{macro argument}' }
   end
 
 end
