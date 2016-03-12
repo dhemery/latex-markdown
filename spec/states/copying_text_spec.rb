@@ -10,38 +10,54 @@ require 'ostruct'
 
 describe CopyingText do
   let(:context) { OpenStruct.new }
+  let(:copying_text) { CopyingText.new(context, pattern) }
   let(:output) { StringIO.new }
+  let(:scanner) { StringScanner.new input }
 
-  before { copying_text.execute(input, output) }
+  before { copying_text.execute(scanner, output) }
 
-  describe 'when input has no match for the stop pattern' do
-    let(:copying_text) { CopyingText.new(context, /[[:punct:]]/) }
-    let(:input) { StringScanner.new 'A bunch of text with no punctuation' }
+  describe 'when input has no match for the copy pattern' do
+    let(:input) { 'A bunch of text with no punctuation' }
+    let(:output) { StringIO.new previous_output }
+    let(:pattern) { /[[:punct:]]/ }
+    let(:previous_output) { 'previous output' }
 
-    it 'copies all text' do
-      output.string.must_equal input.string
+    it 'consumes no input' do
+      scanner.rest.must_equal input
     end
 
-    it 'consumes all input' do
-      input.must_be :eos?
+    it 'leaves the output unchanged' do
+      output.string.must_equal previous_output
     end
   end
 
-  describe 'when input has a match for the stop pattern' do
-    let(:copying_text) { CopyingText.new(context, /[[:punct:]]/) }
+  describe 'when input begins with a match for the copy pattern' do
+    let(:input) { 'stuff1234,.!:' }
+    let(:pattern) { /[[:alnum:]]*/ }
 
-    let(:input) { StringScanner.new 'stuff1234 ,.!:' }
-
-    it 'copies the text that precedes the stop pattern' do
-      output.string.must_equal 'stuff1234 '
+    it 'copies the matching text' do
+      output.string.must_equal 'stuff1234'
     end
 
-    it 'stops scanning at the stop pattern' do
-      input.rest.must_equal '.!:'
+    it 'stops scanning at the end of the matching text' do
+      scanner.rest.must_equal ',.!:'
     end
 
     it 'enters reading command state' do
       context.state.must_be_instance_of ReadingCommand
+    end
+  end
+
+  describe 'when the input entirely matches the copy pattern' do
+    let(:input) { 'all of this text is printable' }
+    let(:pattern) { /[[:print:]]*/ }
+
+    it 'copies the entire input' do
+      output.string.must_equal input
+    end
+
+    it 'consumes the entire input' do
+      scanner.must_be :eos?
     end
   end
 end
