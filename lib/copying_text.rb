@@ -1,12 +1,18 @@
 class CopyingText
   TEXT_PATTERN = /[^\\}]*/
 
-  def initialize(context)
+  def initialize(context, stop_pattern)
     @context = context
+    @stop_pattern = stop_pattern
   end
 
   def execute(input, output)
-    output.write input.scan(TEXT_PATTERN)
-    @context.state = ReadingCommand.new(@context)
+    if input.scan_until(@stop_pattern)
+      output.write input.pre_match
+      @context.state = ReadingCommand.new(@context)
+    else
+      output.write input.scan(/.*/)
+      input.terminate
+    end
   end
 end

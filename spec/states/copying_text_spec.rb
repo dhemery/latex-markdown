@@ -11,12 +11,12 @@ require 'ostruct'
 describe CopyingText do
   let(:context) { OpenStruct.new }
   let(:output) { StringIO.new }
-  let(:copying_text) { CopyingText.new(context) }
 
   before { copying_text.execute(input, output) }
 
-  describe 'when input has no backslash' do
-    let(:input) { StringScanner.new 'A bunch of text with no backslash' }
+  describe 'when input has no match for the stop pattern' do
+    let(:copying_text) { CopyingText.new(context, /[[:punct:]]/) }
+    let(:input) { StringScanner.new 'A bunch of text with no punctuation' }
 
     it 'copies all text' do
       output.string.must_equal input.string
@@ -27,31 +27,17 @@ describe CopyingText do
     end
   end
 
-  describe 'when input has a backslash' do
-    let(:input) { StringScanner.new 'text text text \macro' }
+  describe 'when input has a match for the stop pattern' do
+    let(:copying_text) { CopyingText.new(context, /[[:punct:]]/) }
 
-    it 'copies the text that precedes the backslash' do
-      output.string.must_equal 'text text text '
+    let(:input) { StringScanner.new 'stuff1234 ,.!:' }
+
+    it 'copies the text that precedes the stop pattern' do
+      output.string.must_equal 'stuff1234 '
     end
 
-    it 'stops scanning at the backslash' do
-      input.rest.must_equal '\macro'
-    end
-
-    it 'enters reading command state' do
-      context.state.must_be_instance_of ReadingCommand
-    end
-  end
-
-  describe 'when input has a right brace' do
-    let(:input) { StringScanner.new 'text text text} more text' }
-
-    it 'copies the text that precedes the right brace' do
-      output.string.must_equal 'text text text'
-    end
-
-    it 'stops scanning at the right brace' do
-      input.rest.must_equal '} more text'
+    it 'stops scanning at the stop pattern' do
+      input.rest.must_equal '.!:'
     end
 
     it 'enters reading command state' do
