@@ -1,19 +1,14 @@
 class ReadCommand
   attr_reader :pattern
 
-  def initialize(translator, input, pattern, commands)
+  def initialize(translator, input, pattern)
     @translator = translator
     @input = input
     @pattern = pattern
-    @commands = commands
   end
 
   def execute
-    name = @input.scan @pattern
-    if @commands.has_key? name
-      @translator.execute_command @commands[name]
-    else
-      @translator.finish_current_command
-    end
+    @translator.finish_current_command
+    @translator.execute_command @input.scan(@pattern)
   end
 end

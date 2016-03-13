@@ -17,6 +17,6 @@ class Translator
   end
 
   def read_command
-    @stack.push ReadCommand.new(self, nil, COMMAND_PATTERN, nil)
+    @stack.push ReadCommand.new(self, nil, COMMAND_PATTERN)
   end
 end

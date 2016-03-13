@@ -7,7 +7,7 @@ require_relative '../spec_helper'
 require 'strscan'
 
 describe ReadCommand do
-  subject { ReadCommand.new(translator, scanner, pattern, commands) }
+  subject { ReadCommand.new(translator, scanner, pattern) }
   let(:translator) { FakeTranslator.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }
@@ -17,40 +17,38 @@ describe ReadCommand do
     let(:input) { 'foo123' }
     let(:pattern) { /[[:alpha:]]+/ }
 
-    describe 'and the command table has a command with that name' do
-      let(:commands) { { 'foo' => 'the foo command' } }
-
-      it 'consumes the name' do
-        subject.execute
-        scanner.rest.must_equal '123'
-      end
-
-      describe 'tells translator to' do
-        let(:translator) { MiniTest::Mock.new }
-
-        it 'execute the command' do
-          translator.expect :execute_command, nil, [commands['foo']]
-          subject.execute
-        end
-      end
+    it 'consumes the name' do
+      subject.execute
+      scanner.rest.must_equal '123'
     end
 
-    describe 'and the command table has no command with that name' do
-      let(:commands) { {} }
+    describe 'tells translator to' do
+      let(:translator) { MiniTest::Mock.new }
 
-      it 'consumes the name' do
+      it 'finish the current command and execute the named command' do
+        translator.expect :finish_current_command, nil
+        translator.expect :execute_command, nil, ['foo']
         subject.execute
-        scanner.rest.must_equal '123'
       end
+    end
+  end
 
-      describe 'tells translator to' do
-        let(:translator) { MiniTest::Mock.new }
+  describe 'when the input does not match the pattern' do
+    let(:input) { '123' }
+    let(:pattern) { /[[:alpha:]]+/ }
 
-        it 'finish the current command' do
-          translator.expect :finish_current_command, nil
-          subject.execute
-          translator.verify
-        end
+    it 'consumes no input' do
+      subject.execute
+      scanner.rest.must_equal input
+    end
+
+    describe 'tells translator to' do
+      let(:translator) { MiniTest::Mock.new }
+
+      it 'finish the current command and execute the nil command' do
+        translator.expect :finish_current_command, nil
+        translator.expect :execute_command, nil, [nil]
+        subject.execute
       end
     end
   end
