@@ -4,7 +4,6 @@ require 'reading_command'
 
 require_relative '../spec_helper'
 
-require 'ostruct'
 require 'strscan'
 
 describe ReadingCommand do

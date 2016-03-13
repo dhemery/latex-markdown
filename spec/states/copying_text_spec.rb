@@ -5,8 +5,6 @@ require 'copying_text'
 require_relative '../spec_helper'
 
 require 'strscan'
-require 'reading_command'
-require 'ostruct'
 
 describe CopyingText do
   subject { CopyingText.new(context, scanner, output, pattern) }
