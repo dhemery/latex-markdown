@@ -9,39 +9,46 @@ require 'strscan'
 
 describe ReadingCommand do
   let(:commands) { {} }
-  let(:context) { OpenStruct.new }
+  let(:context) { MiniTest::Mock.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }
-  let(:reading_command) { ReadingCommand.new(context, scanner, output, pattern, commands) }
+  let(:reading_command) { ReadingCommand.new(context, scanner, pattern, commands) }
   let(:scanner) { StringScanner.new input }
-
-  before { reading_command.execute }
 
   describe 'when the input matches the command name pattern' do
     let(:input) { 'foo123' }
     let(:pattern) { /[[:alpha:]]+/ }
 
-    it 'consumes the matching command name' do
-      scanner.rest.must_equal '123'
-    end
-
-    it 'writes nothing' do
-      output.string.must_equal previous_output
-    end
-
     describe 'and the command table includes a command with the scanned command name' do
       let(:commands) { { 'foo' => 'the foo command' } }
 
-      it 'changes state to the command found in the command table' do
-        context.state.must_be_same_as commands['foo']
+      before do
+        context.expect :execute_command, nil, [commands['foo']]
+        reading_command.execute
+      end
+
+      it 'consumes the matching command name' do
+        scanner.rest.must_equal '123'
+      end
+
+      it 'executes the command found in the command table' do
+        context.verify
       end
     end
 
     describe 'and the command table includes no command with the scanned command name' do
-      before { commands.delete 'foo' }
+      before do
+        commands.delete 'foo'
+        context.expect :pop, nil
+        reading_command.execute
+      end
 
-      it 'changes state to copying text' do
-        context.state.must_be_instance_of CopyingText
+      it 'consumes the matching command name' do
+        scanner.rest.must_equal '123'
+      end
+
+      it 'pops the context' do
+        context.verify
       end
     end
   end

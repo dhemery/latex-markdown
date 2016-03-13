@@ -1,14 +1,17 @@
 class ReadingCommand
-  def initialize(context, input, output, pattern, commands)
+  def initialize(context, input, pattern, commands)
     @context = context
     @pattern = pattern
     @commands = commands
-    @output = output
     @input = input
   end
 
   def execute
     name = @input.scan @pattern
-    @context.state = @commands.fetch(name) {  |_| CopyingText.new(@context, @input, @output, /.*/) }
+    if @commands.has_key? name
+      @context.execute_command @commands[name]
+    else
+      @context.pop
+    end
   end
 end
