@@ -9,7 +9,7 @@ require 'strscan'
 
 describe ReadingCommand do
   subject { ReadingCommand.new(context, scanner, pattern, commands) }
-  let(:context) { FakeContext.new }
+  let(:context) { MiniTest::Mock.new FakeContext.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }
   let(:scanner) { StringScanner.new input }
@@ -27,7 +27,7 @@ describe ReadingCommand do
       end
 
       it 'executes the command found in the command table' do
-        context.expects(:execute_command).with(commands['foo'])
+        context.expect :execute_command, nil, [commands['foo']]
         subject.execute
       end
     end
@@ -41,8 +41,9 @@ describe ReadingCommand do
       end
 
       it 'pops the context' do
-        context.expects(:pop)
+        context.expect :pop, nil
         subject.execute
+        context.verify
       end
     end
   end

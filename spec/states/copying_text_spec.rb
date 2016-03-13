@@ -10,7 +10,7 @@ require 'ostruct'
 
 describe CopyingText do
   subject { CopyingText.new(context, scanner, output, pattern) }
-  let(:context) { FakeContext.new }
+  let(:context) { MiniTest::Mock.new FakeContext.new }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
 
@@ -29,8 +29,9 @@ describe CopyingText do
     end
 
     it 'pops the context' do
-      context.expects(:pop)
+      context.expect :pop, nil
       subject.execute
+      context.verify
     end
   end
 
@@ -49,13 +50,15 @@ describe CopyingText do
     end
 
     it 'pushes itself' do
-      context.expects(:push).with(subject)
+      context.expect :push, nil, [subject]
       subject.execute
+      context.verify
     end
 
     it 'tells the context to read a command' do
-      context.expects(:read_command)
+      context.expect :read_command, nil
       subject.execute
+      context.verify
     end
   end
 
@@ -76,14 +79,15 @@ describe CopyingText do
     end
 
     it 'pushes itself' do
-      context.expects(:push).with(subject)
+      context.expect :push, nil, [subject]
       subject.execute
+      context.verify
     end
 
     it 'tells the context to read a command' do
-      context.expects(:read_command)
+      context.expect :read_command, nil
       subject.execute
+      context.verify
     end
-
   end
 end
