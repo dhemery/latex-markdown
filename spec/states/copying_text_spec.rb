@@ -9,16 +9,19 @@ require 'reading_command'
 require 'ostruct'
 
 describe CopyingText do
-  let(:context) { OpenStruct.new }
+  let(:context) { MiniTest::Mock.new }
   let(:copying_text) { CopyingText.new(context, scanner, output, pattern) }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
 
-  before { copying_text.execute }
-
   describe 'when the input entirely matches the copy pattern' do
     let(:input) { 'all of this text is printable' }
     let(:pattern) { /[[:print:]]*/ }
+
+    before do
+      context.expect :pop, nil
+      copying_text.execute
+    end
 
     it 'writes all input' do
       output.string.must_equal input
@@ -27,50 +30,47 @@ describe CopyingText do
     it 'consumes all input' do
       scanner.must_be :eos?
     end
+
+    it 'pops the context' do
+      context.verify
+    end
   end
 
   describe 'when input begins with a match for the copy pattern' do
     let(:input) { 'stuff1234,.!:' }
     let(:pattern) { /[[:alnum:]]*/ }
+    before do
+      context.expect :push, nil, [copying_text]
+      context.expect :read_command, nil
+      copying_text.execute
+    end
+
 
     it 'writes the matching text' do
       output.string.must_equal 'stuff1234'
     end
 
-    it 'consumes only the matching text' do
+    it 'consumes the matching text' do
       scanner.rest.must_equal ',.!:'
     end
 
-    it 'changes state to reading command' do
-      context.state.must_be_instance_of ReadingCommand
+    it 'pushes itself and tells the context to read a command' do
+      context.verify
     end
   end
 
-  describe 'when the input matches following a mismatch' do
-    let(:input) { ',.:punctuation followed by text' }
-    let(:output) { StringIO.new previous_output }
-    let(:pattern) { /[[:alnum:]]/ }
-    let(:previous_output) { 'previous output' }
-
-    it 'consumes no input' do
-      scanner.rest.must_equal input
-    end
-
-    it 'writes no output' do
-      output.string.must_equal previous_output
-    end
-
-    it 'changes state to reading command' do
-      context.state.must_be_instance_of ReadingCommand
-    end
-  end
-
-  describe 'when input entirely mismatches the copy pattern' do
+  describe 'when input contains no match for the copy pattern' do
     let(:input) { 'A bunch of text with no punctuation' }
     let(:output) { StringIO.new previous_output }
     let(:pattern) { /[[:punct:]]/ }
     let(:previous_output) { 'previous output' }
 
+    before do
+      context.expect :push, nil, [copying_text]
+      context.expect :read_command, nil
+      copying_text.execute
+    end
+
     it 'writes no output' do
       output.string.must_equal previous_output
     end
@@ -79,8 +79,8 @@ describe CopyingText do
       scanner.rest.must_equal input
     end
 
-    it 'changes state to reading command' do
-      context.state.must_be_instance_of ReadingCommand
+    it 'pushes itself and tells the context to read a command' do
+      context.verify
     end
   end
 end

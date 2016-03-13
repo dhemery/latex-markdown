@@ -8,6 +8,11 @@ class CopyingText
 
   def execute
     @output.write @input.scan(@pattern)
-    @context.state = ReadingCommand.new(@context, @input, @output, /[\\]/, {})
+    if @input.eos?
+      @context.pop
+    else
+      @context.push self
+      @context.read_command
+    end
   end
 end
