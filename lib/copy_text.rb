@@ -1,4 +1,4 @@
-class CopyingText
+class CopyText
   def initialize(context, input, output, pattern)
     @context = context
     @pattern = pattern

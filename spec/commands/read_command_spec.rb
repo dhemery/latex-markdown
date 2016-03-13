@@ -1,13 +1,13 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'reading_command'
+require 'read_command'
 
 require_relative '../spec_helper'
 
 require 'strscan'
 
-describe ReadingCommand do
-  subject { ReadingCommand.new(context, scanner, pattern, commands) }
+describe ReadCommand do
+  subject { ReadCommand.new(context, scanner, pattern, commands) }
   let(:context) { FakeContext.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }

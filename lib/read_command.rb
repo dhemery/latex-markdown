@@ -1,9 +1,9 @@
-class ReadingCommand
+class ReadCommand
   def initialize(context, input, pattern, commands)
     @context = context
+    @input = input
     @pattern = pattern
     @commands = commands
-    @input = input
   end
 
   def execute

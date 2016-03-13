@@ -1,18 +1,18 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'writing_span'
+require 'write_span'
 
 require_relative '../spec_helper'
 
 require 'strscan'
 
-describe WritingSpan do
-  subject { WritingSpan.new(context, output, span_class) }
+describe WriteSpan do
+  subject { WriteSpan.new(context, output, span_class) }
   let(:context) { FakeContext.new }
   let(:output) { StringIO.new }
   let(:span_class) { 'foo' }
 
-  it 'writes an open span tag with its CSS class' do
+  it 'writes an open span tag with the CSS class' do
     subject.execute
     output.string.must_equal "<span class='#{span_class}'>"
   end

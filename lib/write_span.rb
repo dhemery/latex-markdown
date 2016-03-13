@@ -1,4 +1,4 @@
-class WritingSpan
+class WriteSpan
   def initialize(context, output, span_class)
     @context = context
     @output = output

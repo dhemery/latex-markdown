@@ -1,13 +1,13 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'copying_text'
+require 'copy_text'
 
 require_relative '../spec_helper'
 
 require 'strscan'
 
-describe CopyingText do
-  subject { CopyingText.new(context, scanner, output, pattern) }
+describe CopyText do
+  subject { CopyText.new(context, scanner, output, pattern) }
   let(:context) { FakeContext.new }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
