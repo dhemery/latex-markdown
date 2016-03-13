@@ -10,10 +10,6 @@ class CopyText
 
   def execute
     @output.write @input.scan(@pattern)
-    if @input.eos?
-      @translator.finish_current_command
-    else
-      @translator.read_command
-    end
+    @translator.read_command
   end
 end

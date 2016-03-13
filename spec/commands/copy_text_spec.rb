@@ -12,30 +12,6 @@ describe CopyText do
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
 
-  describe 'when the input entirely matches the copy pattern' do
-    let(:input) { 'all of this text is printable' }
-    let(:pattern) { /[[:print:]]*/ }
-
-    it 'writes all input' do
-      subject.execute
-      output.string.must_equal input
-    end
-
-    it 'consumes all input' do
-      subject.execute
-      scanner.must_be :eos?
-    end
-
-    describe 'tells translator to' do
-      let(:translator) { MiniTest::Mock.new }
-      it 'finish the current command' do
-        translator.expect :finish_current_command, nil
-        subject.execute
-        translator.verify
-      end
-    end
-  end
-
   describe 'when input begins with a match for the copy pattern' do
     let(:input) { 'stuff1234,.!:' }
     let(:pattern) { /[[:alnum:]]*/ }
@@ -61,7 +37,7 @@ describe CopyText do
     end
   end
 
-  describe 'when input contains no match for the copy pattern' do
+  describe 'when input begins with a mismatch for the copy pattern' do
     let(:input) { 'A bunch of text with no punctuation' }
     let(:output) { StringIO.new previous_output }
     let(:pattern) { /[[:punct:]]/ }
