@@ -26,7 +26,7 @@ describe ReadCommand do
       end
 
       describe 'tells translator to' do
-        let(:translator) { MiniTest::Mock.new FakeTranslator.new }
+        let(:translator) { MiniTest::Mock.new }
 
         it 'execute the command' do
           translator.expect :execute_command, nil, [commands['foo']]
@@ -44,7 +44,7 @@ describe ReadCommand do
       end
 
       describe 'tells translator to' do
-        let(:translator) { MiniTest::Mock.new FakeTranslator.new }
+        let(:translator) { MiniTest::Mock.new }
 
         it 'pop' do
           translator.expect :pop, nil
