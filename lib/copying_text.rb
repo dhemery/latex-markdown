@@ -11,7 +11,7 @@ class CopyingText
     if @input.eos?
       @context.pop
     else
-      @context.push self
+      @context.push
       @context.read_command
     end
   end

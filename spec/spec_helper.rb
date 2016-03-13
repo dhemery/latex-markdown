@@ -4,15 +4,16 @@ require 'minitest/reporters'
 Minitest::Reporters.use!
 
 class FakeContext
-  def push(command)
-  end
 
-  def read_command
+  def execute_command(name)
   end
 
   def pop
   end
 
-  def execute_command(name)
+  def push
+  end
+
+  def read_command
   end
 end

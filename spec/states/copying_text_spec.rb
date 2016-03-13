@@ -10,7 +10,7 @@ require 'ostruct'
 
 describe CopyingText do
   subject { CopyingText.new(context, scanner, output, pattern) }
-  let(:context) { MiniTest::Mock.new FakeContext.new }
+  let(:context) { FakeContext.new }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
 
@@ -28,10 +28,13 @@ describe CopyingText do
       scanner.must_be :eos?
     end
 
-    it 'pops the context' do
-      context.expect :pop, nil
-      subject.execute
-      context.verify
+    describe 'tells context to' do
+      let(:context) { MiniTest::Mock.new }
+      it 'pop once' do
+        context.expect :pop, nil
+        subject.execute
+        context.verify
+      end
     end
   end
 
@@ -49,16 +52,15 @@ describe CopyingText do
       scanner.rest.must_equal ',.!:'
     end
 
-    it 'pushes itself' do
-      context.expect :push, nil, [subject]
-      subject.execute
-      context.verify
-    end
+    describe 'tells context to' do
+      let(:context) { MiniTest::Mock.new }
 
-    it 'tells the context to read a command' do
-      context.expect :read_command, nil
-      subject.execute
-      context.verify
+      it 'push and read a command' do
+        context.expect :push, nil
+        context.expect :read_command, nil
+        subject.execute
+        context.verify
+      end
     end
   end
 
@@ -78,16 +80,15 @@ describe CopyingText do
       scanner.rest.must_equal input
     end
 
-    it 'pushes itself' do
-      context.expect :push, nil, [subject]
-      subject.execute
-      context.verify
-    end
+    describe 'tells context to' do
+      let(:context) { MiniTest::Mock.new }
 
-    it 'tells the context to read a command' do
-      context.expect :read_command, nil
-      subject.execute
-      context.verify
+      it 'push current command and read a command' do
+        context.expect :push, nil
+        context.expect :read_command, nil
+        subject.execute
+        context.verify
+      end
     end
   end
 end
