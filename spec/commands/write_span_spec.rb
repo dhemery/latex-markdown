@@ -7,8 +7,8 @@ require_relative '../spec_helper'
 require 'strscan'
 
 describe WriteSpan do
-  subject { WriteSpan.new(context, output, span_class) }
-  let(:context) { FakeContext.new }
+  subject { WriteSpan.new(translator, output, span_class) }
+  let(:translator) { FakeTranslator.new }
   let(:output) { StringIO.new }
   let(:span_class) { 'foo' }
 
@@ -17,13 +17,13 @@ describe WriteSpan do
     output.string.must_equal "<span class='#{span_class}'>"
   end
 
-  describe 'tells context to' do
-    let(:context) { MiniTest::Mock.new }
+  describe 'tells translator to' do
+    let(:translator) { MiniTest::Mock.new }
     it 'push the end tag and read the argument' do
-      context.expect :push_end_tag, nil, ['span']
-      context.expect :read_argument, nil
+      translator.expect :push_end_tag, nil, ['span']
+      translator.expect :read_argument, nil
       subject.execute
-      context.verify
+      translator.verify
     end
   end
 end

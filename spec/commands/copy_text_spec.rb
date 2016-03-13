@@ -7,8 +7,8 @@ require_relative '../spec_helper'
 require 'strscan'
 
 describe CopyText do
-  subject { CopyText.new(context, scanner, output, pattern) }
-  let(:context) { FakeContext.new }
+  subject { CopyText.new(translator, scanner, output, pattern) }
+  let(:translator) { FakeTranslator.new }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
 
@@ -26,12 +26,12 @@ describe CopyText do
       scanner.must_be :eos?
     end
 
-    describe 'tells context to' do
-      let(:context) { MiniTest::Mock.new }
+    describe 'tells translator to' do
+      let(:translator) { MiniTest::Mock.new }
       it 'pop once' do
-        context.expect :pop, nil
+        translator.expect :pop, nil
         subject.execute
-        context.verify
+        translator.verify
       end
     end
   end
@@ -50,14 +50,14 @@ describe CopyText do
       scanner.rest.must_equal ',.!:'
     end
 
-    describe 'tells context to' do
-      let(:context) { MiniTest::Mock.new }
+    describe 'tells translator to' do
+      let(:translator) { MiniTest::Mock.new }
 
       it 'push and read a command' do
-        context.expect :push, nil
-        context.expect :read_command, nil
+        translator.expect :push, nil
+        translator.expect :read_command, nil
         subject.execute
-        context.verify
+        translator.verify
       end
     end
   end
@@ -78,14 +78,14 @@ describe CopyText do
       scanner.rest.must_equal input
     end
 
-    describe 'tells context to' do
-      let(:context) { MiniTest::Mock.new }
+    describe 'tells traslator to' do
+      let(:translator) { MiniTest::Mock.new }
 
       it 'push current command and read a command' do
-        context.expect :push, nil
-        context.expect :read_command, nil
+        translator.expect :push, nil
+        translator.expect :read_command, nil
         subject.execute
-        context.verify
+        translator.verify
       end
     end
   end

@@ -1,6 +1,6 @@
 class ReadCommand
-  def initialize(context, input, pattern, commands)
-    @context = context
+  def initialize(translator, input, pattern, commands)
+    @translator = translator
     @input = input
     @pattern = pattern
     @commands = commands
@@ -9,9 +9,9 @@ class ReadCommand
   def execute
     name = @input.scan @pattern
     if @commands.has_key? name
-      @context.execute_command @commands[name]
+      @translator.execute_command @commands[name]
     else
-      @context.pop
+      @translator.pop
     end
   end
 end

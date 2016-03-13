@@ -1,18 +1,20 @@
 class CopyText
-  def initialize(context, input, output, pattern)
-    @context = context
-    @pattern = pattern
+  attr_reader :pattern
+
+  def initialize(translator, input, output, pattern)
+    @translator = translator
     @input = input
     @output = output
+    @pattern = pattern
   end
 
   def execute
     @output.write @input.scan(@pattern)
     if @input.eos?
-      @context.pop
+      @translator.pop
     else
-      @context.push
-      @context.read_command
+      @translator.push
+      @translator.read_command
     end
   end
 end

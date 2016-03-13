@@ -3,7 +3,7 @@ require 'minitest/reporters'
 
 Minitest::Reporters.use!
 
-class FakeContext
+class FakeTranslator
 
   def execute_command(command_name)
   end

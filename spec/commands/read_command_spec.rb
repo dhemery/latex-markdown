@@ -7,8 +7,8 @@ require_relative '../spec_helper'
 require 'strscan'
 
 describe ReadCommand do
-  subject { ReadCommand.new(context, scanner, pattern, commands) }
-  let(:context) { FakeContext.new }
+  subject { ReadCommand.new(translator, scanner, pattern, commands) }
+  let(:translator) { FakeTranslator.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }
   let(:scanner) { StringScanner.new input }
@@ -25,11 +25,11 @@ describe ReadCommand do
         scanner.rest.must_equal '123'
       end
 
-      describe 'tells context to' do
-        let(:context) { MiniTest::Mock.new FakeContext.new }
+      describe 'tells translator to' do
+        let(:translator) { MiniTest::Mock.new FakeTranslator.new }
 
         it 'execute the command' do
-          context.expect :execute_command, nil, [commands['foo']]
+          translator.expect :execute_command, nil, [commands['foo']]
           subject.execute
         end
       end
@@ -43,13 +43,13 @@ describe ReadCommand do
         scanner.rest.must_equal '123'
       end
 
-      describe 'tells context to' do
-        let(:context) { MiniTest::Mock.new FakeContext.new }
+      describe 'tells translator to' do
+        let(:translator) { MiniTest::Mock.new FakeTranslator.new }
 
         it 'pop' do
-          context.expect :pop, nil
+          translator.expect :pop, nil
           subject.execute
-          context.verify
+          translator.verify
         end
       end
     end
