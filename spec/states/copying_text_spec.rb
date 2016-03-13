@@ -9,7 +9,7 @@ require 'reading_command'
 require 'ostruct'
 
 describe CopyingText do
-  let(:context) { MiniTest::Mock.new }
+  let(:context) { FakeContext.new }
   let(:copying_text) { CopyingText.new(context, scanner, output, pattern) }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
@@ -18,44 +18,44 @@ describe CopyingText do
     let(:input) { 'all of this text is printable' }
     let(:pattern) { /[[:print:]]*/ }
 
-    before do
-      context.expect :pop, nil
-      copying_text.execute
-    end
-
     it 'writes all input' do
+      copying_text.execute
       output.string.must_equal input
     end
 
     it 'consumes all input' do
+      copying_text.execute
       scanner.must_be :eos?
     end
 
     it 'pops the context' do
-      context.verify
+      context.expects(:pop)
+      copying_text.execute
     end
   end
 
   describe 'when input begins with a match for the copy pattern' do
     let(:input) { 'stuff1234,.!:' }
     let(:pattern) { /[[:alnum:]]*/ }
-    before do
-      context.expect :push, nil, [copying_text]
-      context.expect :read_command, nil
-      copying_text.execute
-    end
-
 
     it 'writes the matching text' do
+      copying_text.execute
       output.string.must_equal 'stuff1234'
     end
 
     it 'consumes the matching text' do
+      copying_text.execute
       scanner.rest.must_equal ',.!:'
     end
 
-    it 'pushes itself and tells the context to read a command' do
-      context.verify
+    it 'pushes itself' do
+      context.expects(:push).with(copying_text)
+      copying_text.execute
+    end
+
+    it 'tells the context to read a command' do
+      context.expects(:read_command)
+      copying_text.execute
     end
   end
 
@@ -65,22 +65,25 @@ describe CopyingText do
     let(:pattern) { /[[:punct:]]/ }
     let(:previous_output) { 'previous output' }
 
-    before do
-      context.expect :push, nil, [copying_text]
-      context.expect :read_command, nil
-      copying_text.execute
-    end
-
     it 'writes no output' do
+      copying_text.execute
       output.string.must_equal previous_output
     end
 
     it 'consumes no input' do
+      copying_text.execute
       scanner.rest.must_equal input
     end
 
-    it 'pushes itself and tells the context to read a command' do
-      context.verify
+    it 'pushes itself' do
+      context.expects(:push).with(copying_text)
+      copying_text.execute
     end
+
+    it 'tells the context to read a command' do
+      context.expects(:read_command)
+      copying_text.execute
+    end
+
   end
 end

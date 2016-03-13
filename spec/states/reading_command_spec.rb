@@ -8,8 +8,7 @@ require 'ostruct'
 require 'strscan'
 
 describe ReadingCommand do
-  let(:commands) { {} }
-  let(:context) { MiniTest::Mock.new }
+  let(:context) { FakeContext.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }
   let(:reading_command) { ReadingCommand.new(context, scanner, pattern, commands) }
@@ -22,33 +21,28 @@ describe ReadingCommand do
     describe 'and the command table includes a command with the scanned command name' do
       let(:commands) { { 'foo' => 'the foo command' } }
 
-      before do
-        context.expect :execute_command, nil, [commands['foo']]
-        reading_command.execute
-      end
-
       it 'consumes the matching command name' do
+        reading_command.execute
         scanner.rest.must_equal '123'
       end
 
       it 'executes the command found in the command table' do
-        context.verify
+        context.expects(:execute_command).with(commands['foo'])
+        reading_command.execute
       end
     end
 
     describe 'and the command table includes no command with the scanned command name' do
-      before do
-        commands.delete 'foo'
-        context.expect :pop, nil
-        reading_command.execute
-      end
+      let(:commands) { {} }
 
       it 'consumes the matching command name' do
+        reading_command.execute
         scanner.rest.must_equal '123'
       end
 
       it 'pops the context' do
-        context.verify
+        context.expects(:pop)
+        reading_command.execute
       end
     end
   end
@@ -57,5 +51,4 @@ describe ReadingCommand do
   describe 'when the input does not match the command pattern' do
     let(:input) { '\macroname{macro argument}' }
   end
-
 end
