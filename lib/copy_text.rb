@@ -11,9 +11,8 @@ class CopyText
   def execute
     @output.write @input.scan(@pattern)
     if @input.eos?
-      @translator.pop
+      @translator.finish_current_command
     else
-      @translator.push
       @translator.read_command
     end
   end

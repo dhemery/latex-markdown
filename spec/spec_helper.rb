@@ -11,13 +11,10 @@ class FakeTranslator
   def execute_command(command_name)
   end
 
-  def pop
+  def finish_current_command
   end
 
-  def push
-  end
-
-  def push_end_tag(tag_name)
+  def write_text(text)
   end
 
   def read_command

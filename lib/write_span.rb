@@ -7,7 +7,7 @@ class WriteSpan
 
   def execute
     @output.write "<span class='#{@span_class}'>"
-    @translator.push_end_tag 'span'
+    @translator.write_text 'span'
     @translator.copy_argument
   end
 end

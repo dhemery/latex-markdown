@@ -28,8 +28,8 @@ describe CopyText do
 
     describe 'tells translator to' do
       let(:translator) { MiniTest::Mock.new }
-      it 'pop once' do
-        translator.expect :pop, nil
+      it 'finish the current command' do
+        translator.expect :finish_current_command, nil
         subject.execute
         translator.verify
       end
@@ -53,8 +53,7 @@ describe CopyText do
     describe 'tells translator to' do
       let(:translator) { MiniTest::Mock.new }
 
-      it 'push and read a command' do
-        translator.expect :push, nil
+      it 'read a command' do
         translator.expect :read_command, nil
         subject.execute
         translator.verify
@@ -81,8 +80,7 @@ describe CopyText do
     describe 'tells traslator to' do
       let(:translator) { MiniTest::Mock.new }
 
-      it 'push current command and read a command' do
-        translator.expect :push, nil
+      it 'read a command' do
         translator.expect :read_command, nil
         subject.execute
         translator.verify

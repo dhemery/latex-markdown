@@ -13,7 +13,7 @@ class ReadCommand
     if @commands.has_key? name
       @translator.execute_command @commands[name]
     else
-      @translator.pop
+      @translator.finish_current_command
     end
   end
 end

@@ -46,8 +46,8 @@ describe ReadCommand do
       describe 'tells translator to' do
         let(:translator) { MiniTest::Mock.new }
 
-        it 'pop' do
-          translator.expect :pop, nil
+        it 'finish the current command' do
+          translator.expect :finish_current_command, nil
           subject.execute
           translator.verify
         end

@@ -20,7 +20,7 @@ describe WriteSpan do
   describe 'tells translator to' do
     let(:translator) { MiniTest::Mock.new }
     it 'push the end tag and read the argument' do
-      translator.expect :push_end_tag, nil, ['span']
+      translator.expect :write_text, nil, ['span']
       translator.expect :copy_argument, nil
       subject.execute
       translator.verify
