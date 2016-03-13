@@ -1,4 +1,6 @@
 class ReadCommand
+  attr_reader :pattern
+
   def initialize(translator, input, pattern, commands)
     @translator = translator
     @input = input

@@ -5,6 +5,9 @@ Minitest::Reporters.use!
 
 class FakeTranslator
 
+  def copy_argument
+  end
+
   def execute_command(command_name)
   end
 
@@ -15,9 +18,6 @@ class FakeTranslator
   end
 
   def push_end_tag(tag_name)
-  end
-
-  def read_argument
   end
 
   def read_command
