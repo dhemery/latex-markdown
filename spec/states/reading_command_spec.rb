@@ -8,10 +8,10 @@ require 'ostruct'
 require 'strscan'
 
 describe ReadingCommand do
+  subject { ReadingCommand.new(context, scanner, pattern, commands) }
   let(:context) { FakeContext.new }
   let(:output) { StringIO.new previous_output }
   let(:previous_output) { 'previous output' }
-  let(:reading_command) { ReadingCommand.new(context, scanner, pattern, commands) }
   let(:scanner) { StringScanner.new input }
 
   describe 'when the input matches the command name pattern' do
@@ -22,13 +22,13 @@ describe ReadingCommand do
       let(:commands) { { 'foo' => 'the foo command' } }
 
       it 'consumes the matching command name' do
-        reading_command.execute
+        subject.execute
         scanner.rest.must_equal '123'
       end
 
       it 'executes the command found in the command table' do
         context.expects(:execute_command).with(commands['foo'])
-        reading_command.execute
+        subject.execute
       end
     end
 
@@ -36,13 +36,13 @@ describe ReadingCommand do
       let(:commands) { {} }
 
       it 'consumes the matching command name' do
-        reading_command.execute
+        subject.execute
         scanner.rest.must_equal '123'
       end
 
       it 'pops the context' do
         context.expects(:pop)
-        reading_command.execute
+        subject.execute
       end
     end
   end
