@@ -1,6 +1,6 @@
 class Translator
-  TEXT_COMMAND = '\\'
-  ARGUMENT_COMMAND = TEXT_COMMAND + '}'
+  TEXT_COMMAND_PATTERN = '\\'
+  COMMAND_PATTERN = TEXT_COMMAND_PATTERN + '}'
 
   attr_reader :stack
 
@@ -9,14 +9,14 @@ class Translator
   end
 
   def copy_text
-    @stack.push CopyText.new(self, nil, nil, TEXT_COMMAND)
+    @stack.push CopyText.new(self, nil, nil, TEXT_COMMAND_PATTERN)
   end
 
   def copy_argument
-    @stack.push CopyText.new(self, nil, nil, ARGUMENT_COMMAND)
+    @stack.push CopyText.new(self, nil, nil, COMMAND_PATTERN)
   end
 
-  def read_command(pattern)
-    @stack.push ReadCommand.new(self, nil, pattern, nil)
+  def read_command
+    @stack.push ReadCommand.new(self, nil, COMMAND_PATTERN, nil)
   end
 end

@@ -8,7 +8,7 @@ class FakeTranslator
   def copy_argument
   end
 
-  def execute_command(command_name)
+  def execute_command(name)
   end
 
   def finish_current_command
