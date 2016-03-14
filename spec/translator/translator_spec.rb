@@ -1,11 +1,11 @@
-$LOAD_PATH.unshift '../lib'
+$LOAD_PATH.unshift '../../lib'
 
 require 'translator'
 
 require_relative '../spec_helper'
 
 describe Translator do
-  subject { Translator.new }
+  subject { Translator.new('', nil) }
 
   describe 'copy text' do
     it 'pushes CopyText interrupted by text command' do

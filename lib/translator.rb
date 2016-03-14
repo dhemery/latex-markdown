@@ -1,22 +1,39 @@
 class Translator
-  TEXT_COMMAND_PATTERN = '\\'
-  COMMAND_PATTERN = TEXT_COMMAND_PATTERN + '}'
+  TEXT_COMMAND_PATTERN = /[^\\]*/
+  COMMAND_PATTERN = /[^\\}]*/
 
   attr_reader :stack
 
-  def initialize
+  def initialize(input, output)
+    @input = StringScanner.new input
+    @output = output
     @stack = []
   end
 
+  def translate
+    copy_text
+    @stack.last.execute
+  end
+
   def copy_text
-    @stack.push CopyText.new(self, nil, nil, TEXT_COMMAND_PATTERN)
+    push CopyText.new(self, @input, @output, TEXT_COMMAND_PATTERN)
   end
 
   def copy_argument
-    @stack.push CopyText.new(self, nil, nil, COMMAND_PATTERN)
+    push CopyText.new(self, @input, @output, COMMAND_PATTERN)
   end
 
   def read_command
-    @stack.push ReadCommand.new(self, nil, COMMAND_PATTERN)
+    push ReadCommand.new(self, @input, COMMAND_PATTERN)
+  end
+
+  private
+
+  def push(command)
+    @stack.push(command)
+  end
+
+  def pop
+    @stack.pop
   end
 end
