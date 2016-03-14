@@ -12,7 +12,7 @@ class Translator
 
   def translate
     copy_text
-    @stack.last.execute
+    @stack.last.execute until @stack.empty?
   end
 
   def copy_text
@@ -21,6 +21,14 @@ class Translator
 
   def copy_argument
     push CopyText.new(self, @input, @output, COMMAND_PATTERN)
+  end
+
+  def execute_command(name)
+    pop
+  end
+
+  def finish_current_command
+    pop
   end
 
   def read_command

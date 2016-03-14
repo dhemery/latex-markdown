@@ -32,4 +32,12 @@ describe Translator do
       current_command.must_be_instance_of ReadCommand
     end
   end
+
+  describe 'finish current command' do
+    it 'pops' do
+      subject.copy_text # to put a command on the stack
+      subject.finish_current_command
+      subject.stack.must_be :empty?
+    end
+  end
 end
