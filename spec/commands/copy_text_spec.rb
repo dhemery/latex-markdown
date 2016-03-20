@@ -7,7 +7,7 @@ require_relative '../spec_helper'
 require 'strscan'
 
 describe CopyText do
-  subject { CopyText.new(translator, scanner, output, pattern) }
+  subject { CopyText.new pattern }
   let(:translator) { FakeTranslator.new }
   let(:output) { StringIO.new }
   let(:scanner) { StringScanner.new input }
@@ -17,12 +17,12 @@ describe CopyText do
     let(:pattern) { /[[:alnum:]]*/ }
 
     it 'writes the matching text' do
-      subject.execute
+      subject.execute translator, scanner, output
       output.string.must_equal 'stuff1234'
     end
 
     it 'consumes the matching text' do
-      subject.execute
+      subject.execute translator, scanner, output
       scanner.rest.must_equal ',.!:'
     end
 
@@ -31,7 +31,7 @@ describe CopyText do
 
       it 'read a command' do
         translator.expect :read_command, nil
-        subject.execute
+        subject.execute translator, scanner, output
         translator.verify
       end
     end
@@ -44,12 +44,12 @@ describe CopyText do
     let(:previous_output) { 'previous output' }
 
     it 'writes no output' do
-      subject.execute
+      subject.execute translator, scanner, output
       output.string.must_equal previous_output
     end
 
     it 'consumes no input' do
-      subject.execute
+      subject.execute translator, scanner, output
       scanner.rest.must_equal input
     end
 
@@ -58,7 +58,7 @@ describe CopyText do
 
       it 'read a command' do
         translator.expect :read_command, nil
-        subject.execute
+        subject.execute translator, scanner, output
         translator.verify
       end
     end

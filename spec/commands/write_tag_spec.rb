@@ -7,14 +7,14 @@ require_relative '../spec_helper'
 require 'strscan'
 
 describe WriteTag do
-  subject { WriteTag.new(translator, output, tag_name, tag_class) }
+  subject { WriteTag.new(tag_name, tag_class) }
   let(:translator) { FakeTranslator.new }
   let(:output) { StringIO.new }
   let(:tag_name) { 'foo' }
   let(:tag_class) { 'bar' }
 
   it 'writes the open tag with the tag class' do
-    subject.execute
+    subject.execute translator, nil, output
     output.string.must_equal "<#{tag_name} class='#{tag_class}'>"
   end
 
@@ -24,7 +24,7 @@ describe WriteTag do
       translator.expect :finish_current_command, nil
       translator.expect :write_text, nil, ["</#{tag_name}>"]
       translator.expect :copy_argument, nil
-      subject.execute
+      subject.execute translator, nil, output
       translator.verify
     end
   end
