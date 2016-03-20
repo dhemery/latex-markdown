@@ -12,7 +12,7 @@ class Translator
 
   def translate
     copy_text
-    @stack.last.execute(self, @input, @output) until @stack.empty?
+    @stack.last.tap{|c| puts "execute: #{c}"}.execute(self, @input, @output) until @stack.empty?
   end
 
   def copy_text

@@ -9,4 +9,8 @@ class ReadCommand
     translator.finish_current_command
     translator.execute_command input.scan(@pattern)
   end
+
+  def to_s
+    "#{self.class}#{@pattern.source}"
+  end
 end

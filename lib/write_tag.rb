@@ -10,4 +10,8 @@ class WriteTag
     translator.write_text "</#{@tag_name}>"
     translator.copy_argument
   end
+
+  def to_s
+    "#{self.class}[#{@tag_name}.#{@tag_class}]"
+  end
 end

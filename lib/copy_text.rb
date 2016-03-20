@@ -9,4 +9,8 @@ class CopyText
     output.write input.scan(@pattern)
     translator.read_command
   end
+
+  def to_s
+    "#{self.class}#{@pattern.source}"
+  end
 end
