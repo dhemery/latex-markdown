@@ -1,4 +1,7 @@
 class WriteTag
+  attr_reader :tag_name
+  alias_method :name, :tag_name
+
   def initialize(tag_name, tag_class)
     @tag_name = tag_name
     @tag_class = tag_class

@@ -5,14 +5,14 @@ require 'translator'
 require_relative '../spec_helper'
 
 describe Translator do
-  subject { Translator.new('', nil) }
+  subject { Translator.new('', nil, []) }
 
   describe 'copy text' do
     it 'pushes CopyText interrupted by text command' do
       subject.copy_text
       current_command = subject.stack.last
       current_command.must_be_instance_of CopyText
-      current_command.pattern.must_equal Translator::TEXT_COMMAND_PATTERN
+      current_command.pattern.must_equal Translator::TEXT_PATTERN
     end
   end
 
@@ -21,7 +21,7 @@ describe Translator do
       subject.copy_argument
       current_command = subject.stack.last
       current_command.must_be_instance_of CopyText
-      current_command.pattern.must_equal Translator::COMMAND_PATTERN
+      current_command.pattern.must_equal Translator::ARGUMENT_PATTERN
     end
   end
 
