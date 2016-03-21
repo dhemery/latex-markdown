@@ -8,6 +8,7 @@ class Translator
   STANDARD_COMMANDS = [
       Done.new,
       ReadMacro.new,
+      IgnoredMacro.new('longpar'),
       IgnoredMacro.new('shortpar'),
   ]
 
