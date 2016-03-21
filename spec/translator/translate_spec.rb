@@ -17,7 +17,7 @@ describe Translator, 'translate' do
   end
 
   describe 'ignores' do
-    %w(longpar shortpar).each do |m|
+    %w(longpage longpar shortpage shortpar).each do |m|
       it "\\#{m}" do
         input = "Some text\\#{m}"
         translator = Translator.new(input, output)

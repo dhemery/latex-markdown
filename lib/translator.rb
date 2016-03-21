@@ -8,9 +8,10 @@ class Translator
   STANDARD_COMMANDS = [
       Done.new,
       ReadMacro.new,
-      IgnoredMacro.new('longpar'),
-      IgnoredMacro.new('shortpar'),
   ]
+
+  %w(longpar longpage shortpage shortpar)
+      .map{ |w| IgnoredMacro.new w }.each{ |m| STANDARD_COMMANDS << m }
 
   def initialize(input, output, commands = STANDARD_COMMANDS)
     @input = StringScanner.new input
