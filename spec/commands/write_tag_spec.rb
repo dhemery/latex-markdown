@@ -21,7 +21,7 @@ describe WriteTag do
   describe 'tells translator to' do
     let(:translator) { MiniTest::Mock.new }
     it 'finish the current command, copy the argument, and write the end tag' do
-      translator.expect :finish_current_command, nil
+      translator.expect :finish_command, nil
       translator.expect :write_text, nil, ["</#{tag_name}>"]
       translator.expect :copy_argument, nil
       subject.execute translator, nil, output

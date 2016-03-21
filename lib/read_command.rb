@@ -6,7 +6,7 @@ class ReadCommand
   end
 
   def execute(translator, input, _)
-    translator.finish_current_command
+    translator.finish_command
     translator.execute_command input.scan(@pattern)
   end
 

@@ -11,12 +11,15 @@ class FakeTranslator
   def execute_command(name)
   end
 
-  def finish_current_command
+  def finish_command
   end
 
-  def write_text(text)
+  def finish_document
   end
 
   def read_command
+  end
+
+  def write_text(text)
   end
 end

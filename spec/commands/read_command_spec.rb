@@ -24,7 +24,7 @@ describe ReadCommand do
       let(:translator) { MiniTest::Mock.new }
 
       it 'finish the current command and execute the named command' do
-        translator.expect :finish_current_command, nil
+        translator.expect :finish_command, nil
         translator.expect :execute_command, nil, ['foo']
         subject.execute translator, scanner, nil
       end
@@ -44,7 +44,7 @@ describe ReadCommand do
       let(:translator) { MiniTest::Mock.new }
 
       it 'finish the current command and execute the nil command' do
-        translator.expect :finish_current_command, nil
+        translator.expect :finish_command, nil
         translator.expect :execute_command, nil, [nil]
         subject.execute translator, scanner, nil
       end

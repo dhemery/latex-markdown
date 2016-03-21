@@ -5,11 +5,15 @@ class Translator
 
   attr_reader :stack
 
-  def initialize(input, output, commands)
+  def initialize(input, output, commands = standard_commands)
     @input = StringScanner.new input
     @output = output
     @commands = commands.reduce({}){|h,c| h[c.name]= c; h}
     @stack = []
+  end
+
+  def self.standard_commands
+    []
   end
 
   def translate
@@ -30,8 +34,12 @@ class Translator
     push command
   end
 
-  def finish_current_command
+  def finish_command
     pop
+  end
+
+  def finish_document
+    @stack.clear
   end
 
   def read_command

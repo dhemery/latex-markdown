@@ -9,7 +9,7 @@ class WriteTag
 
   def execute(translator, _, output)
     output.write "<#{@tag_name} class='#{@tag_class}'>"
-    translator.finish_current_command
+    translator.finish_command
     translator.write_text "</#{@tag_name}>"
     translator.copy_argument
   end

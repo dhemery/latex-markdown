@@ -33,10 +33,24 @@ describe Translator do
     end
   end
 
-  describe 'finish current command' do
-    it 'pops' do
+  describe 'finish command' do
+    it 'pop the stack' do
       subject.copy_text # to put a command on the stack
-      subject.finish_current_command
+      subject.copy_text # to put a command on the stack
+      subject.copy_text # to put a command on the stack
+      subject.finish_command
+      subject.stack.size.must_equal(2)
+    end
+  end
+
+  describe 'finish document' do
+    it 'clears the stack' do
+      subject.copy_text # to put a command on the stack
+      subject.copy_text # to put a command on the stack
+      subject.copy_text # to put a command on the stack
+      subject.copy_text # to put a command on the stack
+      subject.copy_text # to put a command on the stack
+      subject.finish_document
       subject.stack.must_be :empty?
     end
   end
