@@ -4,7 +4,7 @@ require 'translator'
 
 require_relative '../spec_helper'
 
-describe Translator do
+describe Translator, 'methods' do
   subject { Translator.new('', nil, []) }
   let(:current_command) { subject.stack.last }
 

@@ -5,15 +5,17 @@ class Translator
 
   attr_reader :stack
 
-  def initialize(input, output, commands = standard_commands)
+  STANDARD_COMMANDS = [
+      Done.new,
+      ReadMacro.new,
+      IgnoredMacro.new('shortpar'),
+  ]
+
+  def initialize(input, output, commands = STANDARD_COMMANDS)
     @input = StringScanner.new input
     @output = output
     @commands = commands.reduce({}){|h,c| h[c.name]= c; h}
     @stack = []
-  end
-
-  def self.standard_commands
-    []
   end
 
   def translate

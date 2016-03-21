@@ -12,8 +12,8 @@ describe ReadMacro do
   let(:scanner) { StringScanner.new input }
   let(:input) { 'some input' }
 
-  it 'identifies itself as \\' do
-    subject.name.must_equal '\\'
+  it %q{identifies itself as \\} do
+    subject.name.must_equal %q{\\}
   end
 
   it 'consumes no input' do
