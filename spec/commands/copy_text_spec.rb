@@ -18,21 +18,24 @@ describe CopyText do
 
     it 'writes the matching text' do
       subject.execute translator, scanner, output
+
       output.string.must_equal 'stuff1234'
     end
 
     it 'consumes the matching text' do
       subject.execute translator, scanner, output
+
       scanner.rest.must_equal ',.!:'
     end
 
     describe 'tells translator to' do
       let(:translator) { MiniTest::Mock.new }
+      after { translator.verify }
 
       it 'read a command' do
         translator.expect :read_command, nil
+
         subject.execute translator, scanner, output
-        translator.verify
       end
     end
   end
@@ -45,21 +48,24 @@ describe CopyText do
 
     it 'writes no output' do
       subject.execute translator, scanner, output
+
       output.string.must_equal previous_output
     end
 
     it 'consumes no input' do
       subject.execute translator, scanner, output
+
       scanner.rest.must_equal input
     end
 
-    describe 'tells traslator to' do
+    describe 'tells translator to' do
       let(:translator) { MiniTest::Mock.new }
+      after { translator.verify }
 
       it 'read a command' do
         translator.expect :read_command, nil
+
         subject.execute translator, scanner, output
-        translator.verify
       end
     end
   end

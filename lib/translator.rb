@@ -42,8 +42,8 @@ class Translator
     @stack.clear
   end
 
-  def read_command
-    push ReadCommand.new(COMMAND_PATTERN)
+  def read_command(pattern = COMMAND_PATTERN)
+    push ReadCommand.new(pattern)
   end
 
   private

@@ -17,7 +17,7 @@ class FakeTranslator
   def finish_document
   end
 
-  def read_command
+  def read_command(pattern = [])
   end
 
   def write_text(text)

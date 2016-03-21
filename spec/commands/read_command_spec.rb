@@ -17,15 +17,18 @@ describe ReadCommand do
 
     it 'consumes the name' do
       subject.execute translator, scanner, nil
+
       scanner.rest.must_equal '123'
     end
 
     describe 'tells translator to' do
       let(:translator) { MiniTest::Mock.new }
+      after { translator.verify }
 
       it 'finish the current command and execute the named command' do
         translator.expect :finish_command, nil
         translator.expect :execute_command, nil, ['foo']
+
         subject.execute translator, scanner, nil
       end
     end
@@ -37,15 +40,18 @@ describe ReadCommand do
 
     it 'consumes no input' do
       subject.execute translator, scanner, nil
+
       scanner.rest.must_equal input
     end
 
     describe 'tells translator to' do
       let(:translator) { MiniTest::Mock.new }
+      after { translator.verify }
 
       it 'finish the current command and execute the nil command' do
         translator.expect :finish_command, nil
         translator.expect :execute_command, nil, [nil]
+
         subject.execute translator, scanner, nil
       end
     end
