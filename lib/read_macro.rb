@@ -9,4 +9,8 @@ class ReadMacro
     translator.finish_command
     translator.read_command MACRO_NAME
   end
+
+  def to_s
+    "#{self.class}"
+  end
 end
