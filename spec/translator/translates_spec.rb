@@ -17,22 +17,15 @@ describe Translator, 'translate' do
   end
 
   describe 'ignores' do
-    it '\\shortpar' do
-      input = 'Some text\\shortpar'
-      translator = Translator.new(input, output)
+    %w(longpar shortpar).each do |m|
+      it "\\#{m}" do
+        input = "Some text\\#{m}"
+        translator = Translator.new(input, output)
 
-      translator.translate
+        translator.translate
 
-      output.string.must_equal 'Some text'
-    end
-
-    it '\\longpar' do
-      input = 'Some text\\longpar'
-      translator = Translator.new(input, output)
-
-      translator.translate
-
-      output.string.must_equal 'Some text'
+        output.string.must_equal 'Some text'
+      end
     end
   end
 end
