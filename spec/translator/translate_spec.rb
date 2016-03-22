@@ -28,13 +28,15 @@ describe Translator, 'translate' do
       end
     end
 
-    it '\\longpages{n}' do
-      input = "Some text\\longpages{3}"
-      translator = Translator.new(input, output)
+    %w(longpages shortpages).each do |m|
+      it "\\#{m}{n}" do
+        input = "Some text\\#{m}{3}"
+        translator = Translator.new(input, output)
 
-      translator.translate
+        translator.translate
 
-      output.string.must_equal 'Some text'
+        output.string.must_equal 'Some text'
+      end
     end
   end
 end

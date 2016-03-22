@@ -1,4 +1,4 @@
-class Done
+class EndDocument
   attr_reader :name
   def initialize
     @name = nil

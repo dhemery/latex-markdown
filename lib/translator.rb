@@ -9,11 +9,12 @@ class Translator
   attr_reader :stack
 
   STANDARD_COMMANDS = [
-      Done.new,
+      EndDocument.new,
       EndArgument.new,
       ReadMacro.new,
-  ].concat %w(longpar longpage shortpage shortpar).map{ |w| DoNothing.new w }
-    .concat %w(longpages).map{ |w| SkipArgument.new w}
+  ]
+  STANDARD_COMMANDS.concat %w(longpar longpage shortpage shortpar).map{ |w| DoNothing.new w }
+  STANDARD_COMMANDS.concat %w(longpages shortpages).map{ |w| SkipArgument.new w}
 
   def initialize(input, output, commands = STANDARD_COMMANDS)
     @input = StringScanner.new input

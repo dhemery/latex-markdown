@@ -5,8 +5,8 @@ class EndArgument
   end
 
   def execute(translator, _, _)
-    translator.finish_command
-    translator.finish_command
+    translator.finish_command # finish this command
+    translator.finish_command # finish the macro that had the argument
   end
 
   def to_s

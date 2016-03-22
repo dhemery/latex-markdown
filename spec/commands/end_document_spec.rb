@@ -1,11 +1,11 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'done'
+require 'end_document'
 
 require_relative '../spec_helper'
 
-describe Done do
-  subject { Done.new }
+describe EndDocument do
+  subject { EndDocument.new }
   let(:translator) { FakeTranslator.new }
 
   it 'identifies itself as nil' do
@@ -16,7 +16,7 @@ describe Done do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command, copy the argument, and write the end tag' do
+    it 'finish the document' do
       translator.expect :finish_document, nil
 
       subject.execute translator, nil, nil
