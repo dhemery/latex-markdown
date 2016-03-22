@@ -5,8 +5,8 @@ class SkipText
     @pattern = pattern
   end
 
-  def execute(translator, input, _)
-    input.scan(@pattern)
+  def execute(translator, reader, _)
+    reader.scan(@pattern)
     translator.read_command
   end
 

@@ -6,10 +6,10 @@ class WriteTag
     @name = type
   end
 
-  def execute(translator, _, output)
-    output.write "<#{@tag} class='#{@name}'>"
+  def execute(translator, _, writer)
+    writer.write "<#{@tag} class='#{@name}'>"
     translator.finish_command
-    translator.write_text "</#{@tag}>"
+    translator.write_text("</#{@tag}>")
     translator.copy_argument
   end
 

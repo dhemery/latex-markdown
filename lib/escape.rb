@@ -1,13 +1,11 @@
-class ReadMacro
-  MACRO_NAME = /[[:alpha:]]+/
-
+class Escape
   def name
     '\\'
   end
 
   def execute(translator, _, _)
     translator.finish_command
-    translator.read_command MACRO_NAME
+    translator.read_macro
   end
 
   def to_s

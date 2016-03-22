@@ -5,7 +5,7 @@ require 'translator'
 require_relative '../spec_helper'
 
 describe Translator, 'methods' do
-  subject { Translator.new('', nil, []) }
+  subject { Translator.new([]) }
   let(:current_command) { subject.stack.last }
 
   describe 'copy argument' do
@@ -78,6 +78,15 @@ describe Translator, 'methods' do
         current_command.must_be_instance_of ReadCommand
         current_command.pattern.must_equal Translator::COMMAND_PATTERN
       end
+    end
+  end
+
+  describe 'read macro' do
+    it 'pushes ReadCommand with the macro pattern' do
+      subject.read_macro
+
+      current_command.must_be_instance_of ReadCommand
+      current_command.pattern.must_equal Translator::MACRO_PATTERN
     end
   end
 

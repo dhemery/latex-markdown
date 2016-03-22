@@ -5,8 +5,8 @@ class WriteText
     @text = text
   end
 
-  def execute(translator, _, output)
-    output.write @text
+  def execute(translator, _, writer)
+    writer.write(@text)
     translator.finish_command
   end
 

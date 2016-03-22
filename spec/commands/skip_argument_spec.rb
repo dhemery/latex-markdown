@@ -8,25 +8,24 @@ describe SkipArgument do
   subject { SkipArgument.new macro_name }
   let(:macro_name) { 'mymacro' }
   let(:input) { '{argument text}additional text' }
-  let(:original_output) { 'not to be appended' }
-  let(:output) { StringIO.new original_output }
-  let(:scanner) { StringScanner.new input }
   let(:translator) { FakeTranslator.new }
+  let(:reader) { StringScanner.new input }
+  let(:writer) { StringIO.new }
 
   it 'identifies itself by name' do
     subject.name.must_equal macro_name
   end
 
   it 'consumes the left brace' do
-    subject.execute(translator, scanner, output)
+    subject.execute(translator, reader, writer)
 
-    scanner.rest.must_equal 'argument text}additional text'
+    reader.rest.must_equal 'argument text}additional text'
   end
 
   it 'writes nothing' do
-    subject.execute(translator, scanner, output)
+    subject.execute(translator, reader, writer)
 
-    output.string.must_equal original_output
+    writer.string.must_be_empty
   end
 
   describe 'tells translator to' do
@@ -37,7 +36,7 @@ describe SkipArgument do
       translator.expect :finish_command, nil
       translator.expect :skip_argument, nil
 
-      subject.execute translator, scanner, output
+      subject.execute(translator, reader, writer)
     end
   end
 end

@@ -5,8 +5,8 @@ class CopyText
     @pattern = pattern
   end
 
-  def execute(translator, input, output)
-    output.write input.scan(@pattern)
+  def execute(translator, reader, writer)
+    writer.write(reader.scan(@pattern))
     translator.read_command
   end
 

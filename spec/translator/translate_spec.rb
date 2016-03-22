@@ -5,51 +5,48 @@ require 'translator'
 require_relative '../spec_helper'
 
 describe Translator, 'translate' do
-  let(:output) { StringIO.new }
+  subject { Translator.new }
+  let(:reader) { StringScanner.new(input) }
+  let(:writer) { StringIO.new }
 
-  it 'copies plain text' do
-    input = 'Some text with no commands.'
-    translator = Translator.new(input, output)
+  describe 'copies' do
+    let(:input) { 'some text with no commands' }
 
-    translator.translate
+    it 'plain text' do
+      subject.translate(reader, writer)
 
-    output.string.must_equal input
+      writer.string.must_equal input
+    end
   end
 
   describe 'ignores' do
     %w(longpage longpar shortpage shortpar).each do |m|
+      let(:input) { "Some text\\#{m}" }
+
       it "\\#{m}" do
-        input = "Some text\\#{m}"
-        translator = Translator.new(input, output)
+        subject.translate(reader, writer)
 
-        translator.translate
-
-        output.string.must_equal 'Some text'
+        writer.string.must_equal 'Some text'
       end
     end
 
     %w(longpages shortpages).each do |m|
+      let(:input) { "Some text\\#{m}{3}" }
       it "\\#{m}{n}" do
-        input = "Some text\\#{m}{3}"
-        translator = Translator.new(input, output)
+        subject.translate(reader, writer)
 
-        translator.translate
-
-        output.string.must_equal 'Some text'
+        writer.string.must_equal 'Some text'
       end
     end
   end
 
   describe 'replaces' do
+    let(:input) { "Some \\emph{emphasized} text" }
     it '\\emph' do
       skip 'TODO: CopyArgument'
-      input = "Some \\emph{emphasized} text"
+      subject.translate(reader, writer)
 
-      translator = Translator.new(input, output)
-
-      translator.translate
-
-      output.string.must_equal %q[Some <span class='emph'>emphasized</span> text]
+      writer.string.must_equal %q[Some <span class='emph'>emphasized</span> text]
     end
   end
 end

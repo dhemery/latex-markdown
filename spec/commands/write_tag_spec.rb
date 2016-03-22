@@ -10,17 +10,25 @@ describe WriteTag do
   subject { WriteTag.new(tag, type) }
   let(:tag) { 'foo' }
   let(:type) { 'bar' }
+  let(:input) { 'not to be consumed' }
   let(:translator) { FakeTranslator.new }
-  let(:output) { StringIO.new }
+  let(:reader) { StringScanner.new(input) }
+  let(:writer) { StringIO.new }
 
   it 'identifies itself by type' do
     subject.name.must_equal type
   end
 
-  it 'writes the open tag with the type as its class' do
-    subject.execute translator, nil, output
+  it 'consumes no input' do
+    subject.execute(translator, reader, writer)
 
-    output.string.must_equal "<#{tag} class='#{type}'>"
+    reader.rest.must_equal input
+  end
+
+  it 'writes the open tag with the type as its class' do
+    subject.execute(translator, reader, writer)
+
+    writer.string.must_equal "<#{tag} class='#{type}'>"
   end
 
   describe 'tells translator to' do
@@ -32,7 +40,7 @@ describe WriteTag do
       translator.expect :write_text, nil, ["</#{tag}>"]
       translator.expect :copy_argument, nil
 
-      subject.execute translator, nil, output
+      subject.execute(translator, reader, writer)
     end
   end
 end

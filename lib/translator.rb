@@ -7,6 +7,7 @@ class Translator
   TEXT_PATTERN = /[^\\]*/
   ARGUMENT_PATTERN = /[^\\}]*/
   COMMAND_PATTERN = /[\\}]/
+  MACRO_PATTERN = /[[:alpha:]]+/
 
   SPAN_COMMANDS = [
       WriteTag.new('span', 'emph'),
@@ -15,22 +16,20 @@ class Translator
   STANDARD_COMMANDS = [
       EndDocument.new,
       EndArgument.new,
-      ReadMacro.new,
+      Escape.new,
   ]
   STANDARD_COMMANDS.concat %w(longpar longpage shortpage shortpar).map{ |w| DoNothing.new w }
   STANDARD_COMMANDS.concat %w(longpages shortpages).map{ |w| SkipArgument.new w}
   STANDARD_COMMANDS.concat SPAN_COMMANDS
 
-  def initialize(input, output, commands = STANDARD_COMMANDS)
-    @input = StringScanner.new input
-    @output = output
+  def initialize(commands = STANDARD_COMMANDS)
     @commands = commands.reduce({}){|h,c| h[c.name]= c; h}
     @stack = []
   end
 
-  def translate
+  def translate(reader, writer)
     copy_text
-    @stack.last.tap{|c| puts "execute: #{c}"}.execute(self, @input, @output) until @stack.empty?
+    @stack.last.tap{|c| puts "execute: #{c}"}.execute(self, reader, writer) until @stack.empty?
   end
 
   def copy_text
@@ -43,7 +42,7 @@ class Translator
 
   def execute_command(name)
     command = @commands.fetch(name){|c| raise "No such command #{c || 'nil'} in #{@commands}"}
-    puts "Found command #{name}"
+    puts "Found command #{name || 'nil'}"
     push command
   end
 
@@ -61,6 +60,10 @@ class Translator
 
   def read_command(pattern = COMMAND_PATTERN)
     push ReadCommand.new(pattern)
+  end
+
+  def read_macro
+    push ReadCommand.new(MACRO_PATTERN)
   end
 
   def write_text(text)

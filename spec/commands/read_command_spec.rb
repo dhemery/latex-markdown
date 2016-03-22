@@ -9,16 +9,23 @@ require 'strscan'
 describe ReadCommand do
   subject { ReadCommand.new pattern }
   let(:translator) { FakeTranslator.new }
-  let(:scanner) { StringScanner.new input }
+  let(:reader) { StringScanner.new input }
+  let(:writer) { StringIO.new }
 
   describe 'when the input has a name that matches the pattern' do
     let(:input) { 'foo123' }
     let(:pattern) { /[[:alpha:]]+/ }
 
     it 'consumes the name' do
-      subject.execute translator, scanner, nil
+      subject.execute(translator, reader, writer)
 
-      scanner.rest.must_equal '123'
+      reader.rest.must_equal '123'
+    end
+
+    it 'writes no output' do
+      subject.execute(translator, reader, writer)
+
+      writer.string.must_be_empty
     end
 
     describe 'tells translator to' do
@@ -29,7 +36,7 @@ describe ReadCommand do
         translator.expect :finish_command, nil
         translator.expect :execute_command, nil, ['foo']
 
-        subject.execute translator, scanner, nil
+        subject.execute(translator, reader, writer)
       end
     end
   end
@@ -39,9 +46,15 @@ describe ReadCommand do
     let(:pattern) { /[[:alpha:]]+/ }
 
     it 'consumes no input' do
-      subject.execute translator, scanner, nil
+      subject.execute(translator, reader, writer)
 
-      scanner.rest.must_equal input
+      reader.rest.must_equal input
+    end
+
+    it 'writes no output' do
+      subject.execute(translator, reader, writer)
+
+      writer.string.must_be_empty
     end
 
     describe 'tells translator to' do
@@ -52,7 +65,7 @@ describe ReadCommand do
         translator.expect :finish_command, nil
         translator.expect :execute_command, nil, [nil]
 
-        subject.execute translator, scanner, nil
+        subject.execute(translator, reader, writer)
       end
     end
   end

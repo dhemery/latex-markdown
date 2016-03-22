@@ -5,9 +5,10 @@ class ReadCommand
     @pattern = pattern
   end
 
-  def execute(translator, input, _)
+  def execute(translator, reader, _)
     translator.finish_command
-    translator.execute_command input.scan(@pattern)
+    command_name = reader.scan(@pattern)
+    translator.execute_command(command_name)
   end
 
   def to_s
