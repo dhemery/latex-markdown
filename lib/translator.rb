@@ -1,3 +1,6 @@
+require 'do_nothing'
+require 'skip_text'
+
 class Translator
   TEXT_PATTERN = /[^\\]*/
   ARGUMENT_PATTERN = /[^\\}]*/
@@ -7,11 +10,10 @@ class Translator
 
   STANDARD_COMMANDS = [
       Done.new,
+      EndArgument.new,
       ReadMacro.new,
-  ]
-
-  %w(longpar longpage shortpage shortpar)
-      .map{ |w| IgnoredMacro.new w }.each{ |m| STANDARD_COMMANDS << m }
+  ].concat %w(longpar longpage shortpage shortpar).map{ |w| DoNothing.new w }
+    .concat %w(longpages).map{ |w| SkipArgument.new w}
 
   def initialize(input, output, commands = STANDARD_COMMANDS)
     @input = StringScanner.new input
@@ -44,6 +46,10 @@ class Translator
 
   def finish_document
     @stack.clear
+  end
+
+  def skip_argument
+    push SkipText.new(ARGUMENT_PATTERN)
   end
 
   def read_command(pattern = COMMAND_PATTERN)

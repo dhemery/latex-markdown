@@ -50,6 +50,15 @@ describe Translator, 'methods' do
     end
   end
 
+  describe 'skip argument' do
+    it 'pushes SkipText with the argument pattern' do
+      subject.skip_argument
+
+      current_command.must_be_instance_of SkipText
+      current_command.pattern.must_equal Translator::ARGUMENT_PATTERN
+    end
+  end
+
   describe 'read command' do
     describe 'with a pattern' do
       let(:pattern) { /[p.;:]+/}

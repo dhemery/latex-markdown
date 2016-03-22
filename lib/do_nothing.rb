@@ -1,4 +1,4 @@
-class IgnoredMacro
+class DoNothing
   attr_reader :name
 
   def initialize(name)

@@ -20,6 +20,9 @@ class FakeTranslator
   def read_command(pattern = [])
   end
 
+  def skip_argument
+  end
+
   def write_text(text)
   end
 end

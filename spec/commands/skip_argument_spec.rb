@@ -1,13 +1,13 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'ignored_macro'
+require 'skip_argument'
 
 require_relative '../spec_helper'
 
-describe IgnoredMacro do
-  subject { IgnoredMacro.new macro_name }
+describe SkipArgument do
+  subject { SkipArgument.new macro_name }
   let(:macro_name) { 'mymacro' }
-  let(:input) { 'not to be consumed' }
+  let(:input) { '{argument text}additional text' }
   let(:original_output) { 'not to be appended' }
   let(:output) { StringIO.new original_output }
   let(:scanner) { StringScanner.new input }
@@ -17,10 +17,10 @@ describe IgnoredMacro do
     subject.name.must_equal macro_name
   end
 
-  it 'consumes no input' do
+  it 'consumes the left brace' do
     subject.execute(translator, scanner, output)
 
-    scanner.rest.must_equal input
+    scanner.rest.must_equal 'argument text}additional text'
   end
 
   it 'writes nothing' do
@@ -33,10 +33,11 @@ describe IgnoredMacro do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command' do
+    it 'finish the current command and skip the next argument' do
       translator.expect :finish_command, nil
+      translator.expect :skip_argument, nil
 
-      subject.execute translator, input, output
+      subject.execute translator, scanner, output
     end
   end
 end

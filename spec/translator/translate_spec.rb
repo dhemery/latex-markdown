@@ -27,5 +27,14 @@ describe Translator, 'translate' do
         output.string.must_equal 'Some text'
       end
     end
+
+    it '\\longpages{n}' do
+      input = "Some text\\longpages{3}"
+      translator = Translator.new(input, output)
+
+      translator.translate
+
+      output.string.must_equal 'Some text'
+    end
   end
 end
