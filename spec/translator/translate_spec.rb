@@ -39,4 +39,17 @@ describe Translator, 'translate' do
       end
     end
   end
+
+  describe 'replaces' do
+    it '\\emph' do
+      skip 'TODO: CopyArgument'
+      input = "Some \\emph{emphasized} text"
+
+      translator = Translator.new(input, output)
+
+      translator.translate
+
+      output.string.must_equal %q[Some <span class='emph'>emphasized</span> text]
+    end
+  end
 end

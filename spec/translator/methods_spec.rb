@@ -80,4 +80,14 @@ describe Translator, 'methods' do
       end
     end
   end
+
+  describe 'write text' do
+    it 'pushes WriteText with the given text' do
+      text = 'some text to write'
+      subject.write_text text
+
+      current_command.must_be_instance_of WriteText
+      current_command.text.must_equal text
+    end
+  end
 end

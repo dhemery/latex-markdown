@@ -2,11 +2,15 @@ require 'do_nothing'
 require 'skip_text'
 
 class Translator
+  attr_reader :stack
+
   TEXT_PATTERN = /[^\\]*/
   ARGUMENT_PATTERN = /[^\\}]*/
   COMMAND_PATTERN = /[\\}]/
 
-  attr_reader :stack
+  SPAN_COMMANDS = [
+      WriteTag.new('span', 'emph'),
+  ]
 
   STANDARD_COMMANDS = [
       EndDocument.new,
@@ -15,6 +19,7 @@ class Translator
   ]
   STANDARD_COMMANDS.concat %w(longpar longpage shortpage shortpar).map{ |w| DoNothing.new w }
   STANDARD_COMMANDS.concat %w(longpages shortpages).map{ |w| SkipArgument.new w}
+  STANDARD_COMMANDS.concat SPAN_COMMANDS
 
   def initialize(input, output, commands = STANDARD_COMMANDS)
     @input = StringScanner.new input
@@ -38,6 +43,7 @@ class Translator
 
   def execute_command(name)
     command = @commands.fetch(name){|c| raise "No such command #{c || 'nil'} in #{@commands}"}
+    puts "Found command #{name}"
     push command
   end
 
@@ -55,6 +61,10 @@ class Translator
 
   def read_command(pattern = COMMAND_PATTERN)
     push ReadCommand.new(pattern)
+  end
+
+  def write_text(text)
+    push WriteText.new(text)
   end
 
   private
