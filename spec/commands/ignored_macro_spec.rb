@@ -1,11 +1,11 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'ignored_macro'
+require 'ignored_arg_macro'
 
 require_relative '../spec_helper'
 
-describe IgnoredMacro do
-  subject { IgnoredMacro.new macro_name }
+describe IgnoredArgMacro do
+  subject { IgnoredArgMacro.new macro_name }
   let(:macro_name) { 'mymacro' }
   let(:input) { '{argument text}additional text' }
   let(:translator) { FakeTranslator.new }

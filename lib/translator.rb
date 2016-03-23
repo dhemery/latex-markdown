@@ -1,4 +1,4 @@
-require 'ignored'
+require 'ignored_macro'
 require 'skip_text'
 
 class Translator
@@ -9,19 +9,21 @@ class Translator
   MACRO_PATTERN = /[[:alpha:]]+/
   TEXT_PATTERN = /[^\\]*/
 
-  IGNORED_COMMANDS = %w(longpar longpage shortpage shortpar).map{ |w| Ignored.new w }
-  IGNORED_MACROS = %w(longpages shortpages).map{ |w| IgnoredMacro.new w}
-  SPAN_MACROS = %w(abbr emph leadin unbreakable).map { |m| Tag.new('span', m) }
+  IGNORED_MACROS = %w(longpar longpage shortpage shortpar).map{ |name| IgnoredMacro.new(name) }
+  IGNORED_MACROS_WITH_ARGS = %w(longpages shortpages).map{ |name| IgnoredArgMacro.new(name) }
+  SPAN_MACROS = %w(abbr emph leadin unbreakable).map { |name| ElementMacro.new(name, 'span') }
+  HEADING_MACROS = [
+      ElementMacro.new('story', 'h1'),
+      ElementMacro.new('chapter', 'h2'),
+      ElementMacro.new('introduction', 'h2'),
+      ElementMacro.new('note', 'h3'),
+  ]
 
   STANDARD_COMMANDS = [
       EndDocument.new,
       EndArgument.new,
       Escape.new,
-      Tag.new('h1', 'story'),
-      Tag.new('h2', 'chapter'),
-      Tag.new('h2', 'introduction'),
-      Tag.new('h3', 'note'),
-  ] + IGNORED_COMMANDS + IGNORED_MACROS + SPAN_MACROS
+  ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS
 
   def initialize(commands = STANDARD_COMMANDS)
     @commands = commands.reduce({}){|h,c| h[c.name]= c; h}
