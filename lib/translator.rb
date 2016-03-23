@@ -47,7 +47,6 @@ class Translator
   end
 
   def finish_document
-    puts "Ending document with stack: #{@stack}"
     @stack.clear
   end
 
