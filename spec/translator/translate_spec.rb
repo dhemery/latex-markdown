@@ -56,38 +56,47 @@ describe Translator, 'translates' do
   end
 
   describe '\\story' do
-    let(:input) { "Before \\story{story title} after" }
+    let(:input) { 'Before \\story{story title} after' }
     it 'by writing the argument in an h1 with class story' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %Q[Before <h1 class='story'>story title</h1> after]
+      writer.string.must_equal %q[Before <h1 class='story'>story title</h1> after]
     end
   end
 
   describe '\\chapter' do
-    let(:input) { "Before \\chapter{chapter title} after" }
+    let(:input) { 'Before \\chapter{chapter title} after' }
     it 'by writing the argument in an h2 with class chapter' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %Q[Before <h2 class='chapter'>chapter title</h2> after]
+      writer.string.must_equal %q[Before <h2 class='chapter'>chapter title</h2> after]
     end
   end
 
   describe '\\introduction' do
-    let(:input) { "Before \\introduction{introduction title} after" }
+    let(:input) { 'Before \\introduction{introduction title} after' }
     it 'by writing the argument in an h2 with class introduction' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %Q[Before <h2 class='introduction'>introduction title</h2> after]
+      writer.string.must_equal %q[Before <h2 class='introduction'>introduction title</h2> after]
     end
   end
 
   describe '\\note' do
-    let(:input) { "Before \\note{note title} after" }
+    let(:input) { 'Before \\note{note title} after' }
     it 'by writing the argument in an h3 with class note' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %Q[Before <h3 class='note'>note title</h3> after]
+      writer.string.must_equal %q[Before <h3 class='note'>note title</h3> after]
+    end
+  end
+
+  describe 'nested macro calls' do
+    let(:input) { 'Before \chapter{My \emph{great \abbr{TBD}} adventure} after' }
+    it 'by translating each call' do
+      subject.translate(reader, writer)
+
+      writer.string.must_equal %q[Before <h2 class='chapter'>My <span class='emph'>great <span class='abbr'>TBD</span></span> adventure</h2> after]
     end
   end
 end
