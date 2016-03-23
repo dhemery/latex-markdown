@@ -1,4 +1,4 @@
-class WriteTag
+class Tag
   attr_reader :name
 
   def initialize(tag, type)
@@ -6,8 +6,10 @@ class WriteTag
     @name = type
   end
 
-  def execute(translator, _, writer)
+  def execute(translator, reader, writer)
+    reader.scan(/{/)
     writer.write "<#{@tag} class='#{@name}'>"
+
     translator.finish_command
     translator.write_text("</#{@tag}>")
     translator.copy_argument

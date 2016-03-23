@@ -1,26 +1,23 @@
-require 'do_nothing'
+require 'ignored'
 require 'skip_text'
 
 class Translator
   attr_reader :stack
 
-  TEXT_PATTERN = /[^\\]*/
   ARGUMENT_PATTERN = /[^\\}]*/
   COMMAND_PATTERN = /[\\}]/
   MACRO_PATTERN = /[[:alpha:]]+/
+  TEXT_PATTERN = /[^\\]*/
 
-  SPAN_COMMANDS = [
-      WriteTag.new('span', 'emph'),
-  ]
+  IGNORED_COMMANDS = %w(longpar longpage shortpage shortpar).map{ |w| Ignored.new w }
+  IGNORED_MACROS = %w(longpages shortpages).map{ |w| IgnoredMacro.new w}
+  SPAN_MACROS = %w(abbr emph leadin unbreakable).map { |m| Tag.new('span', m) }
 
   STANDARD_COMMANDS = [
       EndDocument.new,
       EndArgument.new,
       Escape.new,
-  ]
-  STANDARD_COMMANDS.concat %w(longpar longpage shortpage shortpar).map{ |w| DoNothing.new w }
-  STANDARD_COMMANDS.concat %w(longpages shortpages).map{ |w| SkipArgument.new w}
-  STANDARD_COMMANDS.concat SPAN_COMMANDS
+  ] + IGNORED_COMMANDS + IGNORED_MACROS + SPAN_MACROS
 
   def initialize(commands = STANDARD_COMMANDS)
     @commands = commands.reduce({}){|h,c| h[c.name]= c; h}
@@ -29,20 +26,19 @@ class Translator
 
   def translate(reader, writer)
     copy_text
-    @stack.last.tap{|c| puts "execute: #{c}"}.execute(self, reader, writer) until @stack.empty?
+    @stack.last.execute(self, reader, writer) until @stack.empty?
   end
 
-  def copy_text
-    push CopyText.new(TEXT_PATTERN)
+  def copy_text(pattern = TEXT_PATTERN)
+    push CopyText.new(pattern)
   end
 
   def copy_argument
-    push CopyText.new(ARGUMENT_PATTERN)
+    copy_text(ARGUMENT_PATTERN)
   end
 
   def execute_command(name)
     command = @commands.fetch(name){|c| raise "No such command #{c || 'nil'} in #{@commands}"}
-    puts "Found command #{name || 'nil'}"
     push command
   end
 
@@ -51,6 +47,7 @@ class Translator
   end
 
   def finish_document
+    puts "Ending document with stack: #{@stack}"
     @stack.clear
   end
 
@@ -63,7 +60,7 @@ class Translator
   end
 
   def read_macro
-    push ReadCommand.new(MACRO_PATTERN)
+    read_command(MACRO_PATTERN)
   end
 
   def write_text(text)

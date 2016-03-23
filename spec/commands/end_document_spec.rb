@@ -32,7 +32,8 @@ describe EndDocument do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the document' do
+    it 'finish the command then finish the document' do
+      translator.expect :finish_command, nil
       translator.expect :finish_document, nil
 
       subject.execute(translator, reader, writer)

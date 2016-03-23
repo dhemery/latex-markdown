@@ -1,25 +1,25 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'do_nothing'
+require 'macro'
 
 require_relative '../spec_helper'
 
-describe DoNothing do
-  subject { DoNothing.new macro_name }
+describe Macro do
+  subject { Macro.new macro_name }
   let(:macro_name) { 'mymacro' }
-  let(:input) { 'not to be consumed' }
+  let(:input) { '{argument text}additional text' }
+  let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
-  let(:reader) { StringScanner.new input }
   let(:translator) { FakeTranslator.new }
 
   it 'identifies itself by name' do
     subject.name.must_equal macro_name
   end
 
-  it 'consumes no input' do
+  it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal input
+    reader.rest.must_equal 'argument text}additional text'
   end
 
   it 'writes no output' do
@@ -32,8 +32,9 @@ describe DoNothing do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command' do
+    it 'finish the current command and copy the argument' do
       translator.expect :finish_command, nil
+      translator.expect :copy_argument, nil
 
       subject.execute(translator, reader, writer)
     end

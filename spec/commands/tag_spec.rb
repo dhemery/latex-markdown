@@ -1,16 +1,16 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'write_tag'
+require 'tag'
 
 require_relative '../spec_helper'
 
 require 'strscan'
 
-describe WriteTag do
-  subject { WriteTag.new(tag, type) }
+describe Tag do
+  subject { Tag.new(tag, type) }
   let(:tag) { 'foo' }
   let(:type) { 'bar' }
-  let(:input) { 'not to be consumed' }
+  let(:input) { '{argument}' }
   let(:translator) { FakeTranslator.new }
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
@@ -19,10 +19,10 @@ describe WriteTag do
     subject.name.must_equal type
   end
 
-  it 'consumes no input' do
+  it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal input
+    reader.rest.must_equal 'argument}'
   end
 
   it 'writes the open tag with the type as its class' do

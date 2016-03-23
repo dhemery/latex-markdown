@@ -5,6 +5,7 @@ class EndDocument
   end
 
   def execute(translator, _, _)
+    translator.finish_command
     translator.finish_document
   end
 

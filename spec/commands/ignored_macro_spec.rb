@@ -1,11 +1,11 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'skip_argument'
+require 'ignored_macro'
 
 require_relative '../spec_helper'
 
-describe SkipArgument do
-  subject { SkipArgument.new macro_name }
+describe IgnoredMacro do
+  subject { IgnoredMacro.new macro_name }
   let(:macro_name) { 'mymacro' }
   let(:input) { '{argument text}additional text' }
   let(:translator) { FakeTranslator.new }
@@ -32,7 +32,7 @@ describe SkipArgument do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and skip the next argument' do
+    it 'finish the current command and skip the argument' do
       translator.expect :finish_command, nil
       translator.expect :skip_argument, nil
 

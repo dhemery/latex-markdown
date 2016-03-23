@@ -1,4 +1,4 @@
-class CopyArgument
+class IgnoredMacro
   attr_reader :name
 
   def initialize(name)
@@ -8,7 +8,7 @@ class CopyArgument
   def execute(translator, reader, _)
     reader.getch
     translator.finish_command
-    translator.copy_argument
+    translator.skip_argument
   end
 
   def to_s

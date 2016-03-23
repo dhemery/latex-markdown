@@ -4,49 +4,54 @@ require 'translator'
 
 require_relative '../spec_helper'
 
-describe Translator, 'translate' do
+describe Translator, 'translates' do
   subject { Translator.new }
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
-  describe 'copies' do
+  describe 'plain text' do
     let(:input) { 'some text with no commands' }
 
-    it 'plain text' do
+    it 'by copying it' do
       subject.translate(reader, writer)
 
       writer.string.must_equal input
     end
   end
 
-  describe 'ignores' do
-    %w(longpage longpar shortpage shortpar).each do |m|
-      let(:input) { "Some text\\#{m}" }
+  %w(longpage longpar shortpage shortpar).each do |macro|
+    describe "\\#{macro}" do
+      let(:input) { "Before \\#{macro} after" }
 
-      it "\\#{m}" do
+      it 'by ignoring it' do
         subject.translate(reader, writer)
 
-        writer.string.must_equal 'Some text'
-      end
-    end
-
-    %w(longpages shortpages).each do |m|
-      let(:input) { "Some text\\#{m}{3}" }
-      it "\\#{m}{n}" do
-        subject.translate(reader, writer)
-
-        writer.string.must_equal 'Some text'
+        writer.string.must_equal 'Before  after'
       end
     end
   end
 
-  describe 'replaces' do
-    let(:input) { "Some \\emph{emphasized} text" }
-    it '\\emph' do
-      skip 'TODO: CopyArgument'
-      subject.translate(reader, writer)
+  %w(longpages shortpages).each do |macro|
+    describe "\\#{macro}{n}" do
+      let(:input) { "Before \\#{macro}{3} after" }
 
-      writer.string.must_equal %q[Some <span class='emph'>emphasized</span> text]
+      it 'by ignoring it and its argument' do
+        subject.translate(reader, writer)
+
+        writer.string.must_equal 'Before  after'
+      end
+    end
+  end
+
+  %w(abbr emph leadin unbreakable).each do |macro|
+    describe "\\#{macro}" do
+      let(:input) { "Before \\#{macro}{argument} after" }
+
+      it "by writing the argument in a span with class #{macro}" do
+        subject.translate(reader, writer)
+
+        writer.string.must_equal %Q[Before <span class='#{macro}'>argument</span> after]
+      end
     end
   end
 end

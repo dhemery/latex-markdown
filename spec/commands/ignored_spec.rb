@@ -1,25 +1,25 @@
 $LOAD_PATH.unshift '../lib'
 
-require 'copy_argument'
+require 'ignored'
 
 require_relative '../spec_helper'
 
-describe CopyArgument do
-  subject { CopyArgument.new macro_name }
-  let(:macro_name) { 'mymacro' }
-  let(:input) { '{argument text}additional text' }
-  let(:reader) { StringScanner.new(input) }
-  let(:writer) { StringIO.new }
+describe Ignored do
+  subject { Ignored.new command_name }
+  let(:command_name) { 'command' }
+  let(:input) { 'not to be consumed' }
   let(:translator) { FakeTranslator.new }
+  let(:reader) { StringScanner.new input }
+  let(:writer) { StringIO.new }
 
   it 'identifies itself by name' do
-    subject.name.must_equal macro_name
+    subject.name.must_equal command_name
   end
 
-  it 'consumes the left brace' do
+  it 'consumes no input' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal 'argument text}additional text'
+    reader.rest.must_equal input
   end
 
   it 'writes no output' do
@@ -32,9 +32,8 @@ describe CopyArgument do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and copy the next argument' do
+    it 'finish the current command' do
       translator.expect :finish_command, nil
-      translator.expect :copy_argument, nil
 
       subject.execute(translator, reader, writer)
     end
