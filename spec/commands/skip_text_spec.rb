@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/skip_text'
+require 'tex2md/commands/skip_text'
 
 require 'strscan'
 

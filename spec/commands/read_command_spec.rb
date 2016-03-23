@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/read_command'
+require 'tex2md/commands/read_command'
 
 require 'strscan'
 

@@ -1,3 +1,8 @@
+PATH
+  remote: .
+  specs:
+    tex2md (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -9,14 +14,16 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    rake (10.4.2)
     ruby-progressbar (1.7.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  minitest
-  minitest-reporters (>= 0.5.0)
+  minitest-reporters (~> 1.0, >= 1.0.8)
+  rake
+  tex2md!
 
 BUNDLED WITH
    1.11.2

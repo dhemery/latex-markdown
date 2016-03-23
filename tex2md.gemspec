@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.summary        = 'Translate DBP TeX files to markdown'
   spec.description    = %q[Translate Driscoll Brook Press TeX files to markdown]
   spec.platform       = Gem::Platform::RUBY
-  spec.version        = TeX2md::VERSION
+  spec.version        = VERSION
   spec.authors        = ['Dale Emery']
   spec.email          = ['dale@dhemery.com']
   spec.homepage       = 'https://github.com/dhemery/tex2md/'
@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
   spec.require_paths  = ['lib']
 
   spec.add_development_dependency 'minitest-reporters', '~> 1.0', '>= 1.0.8'
+  spec.add_development_dependency 'rake'
 end

@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/end_document'
+require 'tex2md/commands/end_document'
 
 
 describe EndDocument do

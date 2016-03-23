@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/ignored_macro'
+require 'tex2md/commands/ignored_macro'
 
 describe IgnoredMacro do
   subject { IgnoredMacro.new command_name }

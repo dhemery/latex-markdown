@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/end_argument'
+require 'tex2md/commands/end_argument'
 
 
 describe EndArgument do

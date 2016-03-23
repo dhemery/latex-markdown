@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'translator/translator'
+require 'tex2md/translator/translator'
 
 describe Translator, 'methods' do
   subject { Translator.new([]) }

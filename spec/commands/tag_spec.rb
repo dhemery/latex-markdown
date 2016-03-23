@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/element_macro'
+require 'tex2md/commands/element_macro'
 
 require 'strscan'
 

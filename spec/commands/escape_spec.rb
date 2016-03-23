@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/escape'
+require 'tex2md/commands/escape'
 
 
 require 'strscan'

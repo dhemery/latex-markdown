@@ -1,6 +1,5 @@
 require_relative '../spec_helper'
-
-require 'commands/copy_text'
+require 'tex2md/commands/copy_text'
 
 require 'strscan'
 

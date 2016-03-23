@@ -1,5 +1,5 @@
 require_relative '../spec_helper'
-require 'commands/write_text'
+require 'tex2md/commands/write_text'
 
 describe WriteText do
   subject { WriteText.new text }

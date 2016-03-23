@@ -30,4 +30,4 @@ class FakeTranslator
   end
 end
 
-$LOAD_PATH.unshift '../lib'
+$LOAD_PATH.unshift 'lib'
