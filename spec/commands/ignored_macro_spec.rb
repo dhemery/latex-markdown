@@ -1,8 +1,5 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'ignored_arg_macro'
-
 require_relative '../spec_helper'
+require 'commands/ignored_arg_macro'
 
 describe IgnoredArgMacro do
   subject { IgnoredArgMacro.new macro_name }

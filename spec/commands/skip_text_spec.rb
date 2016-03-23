@@ -1,8 +1,5 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'skip_text'
-
 require_relative '../spec_helper'
+require 'commands/skip_text'
 
 require 'strscan'
 

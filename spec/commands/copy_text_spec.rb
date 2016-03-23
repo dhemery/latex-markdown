@@ -1,8 +1,6 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'copy_text'
-
 require_relative '../spec_helper'
+
+require 'commands/copy_text'
 
 require 'strscan'
 

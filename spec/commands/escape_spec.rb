@@ -1,8 +1,6 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'escape'
-
 require_relative '../spec_helper'
+require 'commands/escape'
+
 
 require 'strscan'
 

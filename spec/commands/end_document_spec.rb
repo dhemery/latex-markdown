@@ -1,8 +1,6 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'end_document'
-
 require_relative '../spec_helper'
+require 'commands/end_document'
+
 
 describe EndDocument do
   subject { EndDocument.new }

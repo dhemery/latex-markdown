@@ -1,8 +1,5 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'read_command'
-
 require_relative '../spec_helper'
+require 'commands/read_command'
 
 require 'strscan'
 

@@ -1,8 +1,5 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'element_macro'
-
 require_relative '../spec_helper'
+require 'commands/element_macro'
 
 require 'strscan'
 

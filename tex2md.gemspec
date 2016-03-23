@@ -6,7 +6,7 @@ require 'tex2md/version'
 Gem::Specification.new do |spec|
   spec.name           = 'tex2md'
   spec.summary        = 'Translate DBP TeX files to markdown'
-  spec.description    = %q[Translate Driscoll Broook Press TeX files to markdown]
+  spec.description    = %q[Translate Driscoll Brook Press TeX files to markdown]
   spec.platform       = Gem::Platform::RUBY
   spec.version        = TeX2md::VERSION
   spec.authors        = ['Dale Emery']

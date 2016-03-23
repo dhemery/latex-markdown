@@ -1,8 +1,5 @@
-$LOAD_PATH.unshift '../../lib'
-
-require 'translator'
-
 require_relative '../spec_helper'
+require 'translator/translator'
 
 describe Translator, 'methods' do
   subject { Translator.new([]) }

@@ -1,8 +1,5 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'write_text'
-
 require_relative '../spec_helper'
+require 'commands/write_text'
 
 describe WriteText do
   subject { WriteText.new text }

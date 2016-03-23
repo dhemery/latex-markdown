@@ -1,6 +1,3 @@
-require 'ignored_macro'
-require 'skip_text'
-
 class Translator
   attr_reader :stack
 

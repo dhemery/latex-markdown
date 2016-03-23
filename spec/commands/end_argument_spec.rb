@@ -1,8 +1,6 @@
-$LOAD_PATH.unshift '../lib'
-
-require 'end_argument'
-
 require_relative '../spec_helper'
+require 'commands/end_argument'
+
 
 describe EndArgument do
   subject { EndArgument.new }
