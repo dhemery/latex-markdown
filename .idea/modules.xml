@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/latex-markdown.iml" filepath="$PROJECT_DIR$/.idea/latex-markdown.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/tex2md.iml" filepath="$PROJECT_DIR$/.idea/tex2md.iml" />
     </modules>
   </component>
 </project>
