@@ -17,6 +17,10 @@ class Translator
       EndDocument.new,
       EndArgument.new,
       Escape.new,
+      Tag.new('h1', 'story'),
+      Tag.new('h2', 'chapter'),
+      Tag.new('h2', 'introduction'),
+      Tag.new('h3', 'note'),
   ] + IGNORED_COMMANDS + IGNORED_MACROS + SPAN_MACROS
 
   def initialize(commands = STANDARD_COMMANDS)
