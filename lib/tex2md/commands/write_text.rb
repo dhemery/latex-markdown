@@ -8,6 +8,7 @@ module TeX2md
 
     def execute(translator, _, writer)
       writer.write(@text)
+
       translator.finish_command
     end
 

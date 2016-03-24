@@ -8,6 +8,7 @@ module TeX2md
 
     def execute(translator, reader, _)
       reader.scan(@pattern)
+
       translator.read_command
     end
 

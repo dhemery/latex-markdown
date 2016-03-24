@@ -7,8 +7,9 @@ module TeX2md
     end
 
     def execute(translator, reader, _)
-      translator.finish_command
       command_name = reader.scan(@pattern)
+
+      translator.finish_command
       translator.execute_command(command_name)
     end
 

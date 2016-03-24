@@ -7,7 +7,10 @@ module TeX2md
     end
 
     def execute(translator, reader, writer)
-      writer.write(reader.scan(@pattern))
+      text = reader.scan(@pattern)
+
+      writer.write(text)
+      
       translator.read_command
     end
 

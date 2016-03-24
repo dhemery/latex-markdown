@@ -9,6 +9,7 @@ module TeX2md
 
     def execute(translator, reader, writer)
       reader.scan(/{/)
+
       writer.write "<#{@element} class='#{@name}'>"
 
       translator.finish_command

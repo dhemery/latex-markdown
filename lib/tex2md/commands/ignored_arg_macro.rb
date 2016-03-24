@@ -7,7 +7,8 @@ module TeX2md
     end
 
     def execute(translator, reader, _)
-      reader.getch
+      reader.scan(/{/)
+
       translator.finish_command
       translator.skip_argument
     end
