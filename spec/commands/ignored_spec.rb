@@ -5,7 +5,11 @@ describe TeX2md::IgnoredMacro do
   subject { TeX2md::IgnoredMacro.new command_name }
   let(:command_name) { 'command' }
   let(:input) { 'not to be consumed' }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.finish_command ; end
+    end
+  end
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 

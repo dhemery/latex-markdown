@@ -8,7 +8,13 @@ describe TeX2md::ElementMacro do
   let(:macro_name) { 'bar' }
   let(:element) { 'foo' }
   let(:input) { '{argument}' }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.copy_argument ; end
+      def allowing.finish_command ; end
+      def allowing.write_text(_) ; end
+    end
+  end
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 

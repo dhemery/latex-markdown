@@ -5,7 +5,12 @@ describe TeX2md::IgnoredArgMacro do
   subject { TeX2md::IgnoredArgMacro.new macro_name }
   let(:macro_name) { 'mymacro' }
   let(:input) { '{argument text}additional text' }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.finish_command ; end
+      def allowing.skip_argument ; end
+    end
+  end
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 

@@ -5,7 +5,12 @@ describe TeX2md::WriteText do
   subject { TeX2md::WriteText.new text }
   let(:text) { 'some text to write' }
   let(:input) { 'not to be consumed' }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.finish_command ; end
+    end
+  end
+
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 

@@ -5,7 +5,11 @@ require 'strscan'
 
 describe TeX2md::SkipText do
   subject { TeX2md::SkipText.new(pattern) }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.read_command ; end
+    end
+  end
   let(:reader) { StringScanner.new(input )}
   let(:writer) { StringIO.new }
 

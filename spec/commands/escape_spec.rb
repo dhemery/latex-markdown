@@ -6,7 +6,12 @@ require 'strscan'
 
 describe TeX2md::Escape do
   subject { TeX2md::Escape.new }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.finish_command ; end
+      def allowing.read_macro ; end
+    end
+  end
   let(:input) { 'not to be consumed' }
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }

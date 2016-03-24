@@ -5,7 +5,12 @@ require 'strscan'
 
 describe TeX2md::ReadCommand do
   subject { TeX2md::ReadCommand.new pattern }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.execute_command(_) ; end
+      def allowing.finish_command ; end
+    end
+  end
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 

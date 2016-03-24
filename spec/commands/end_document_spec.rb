@@ -4,7 +4,12 @@ require 'tex2md/commands/end_document'
 
 describe TeX2md::EndDocument do
   subject { TeX2md::EndDocument.new }
-  let(:translator) { FakeTranslator.new }
+  let(:translator) do
+    Object.new.tap do |allowing|
+      def allowing.finish_command ; end
+      def allowing.finish_document ; end
+    end
+  end
   let(:input) { 'not to be consumed' }
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
