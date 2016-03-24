@@ -1,15 +1,17 @@
+require_relative 'command.rb'
+
 module TeX2md
   class WriteText
+    include Command
+
     attr_reader :text
 
     def initialize(text)
       @text = text
     end
 
-    def execute(translator, _, writer)
+    def write(writer, _)
       writer.write(@text)
-
-      translator.finish_command
     end
 
     def to_s

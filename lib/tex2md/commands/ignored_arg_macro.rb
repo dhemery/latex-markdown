@@ -1,15 +1,15 @@
+require_relative 'command.rb'
+
 module TeX2md
   class IgnoredArgMacro
-    attr_reader :name
+    include Command
 
     def initialize(name)
       @name = name
+      @pattern = /{/
     end
 
-    def execute(translator, reader, _)
-      reader.scan(/{/)
-
-      translator.finish_command
+    def transition(translator, _)
       translator.skip_argument
     end
 

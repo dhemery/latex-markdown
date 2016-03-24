@@ -1,16 +1,19 @@
+require_relative 'command.rb'
+
 module TeX2md
   class CopyText
-    attr_reader :pattern
+    include Command
 
     def initialize(pattern)
       @pattern = pattern
+      @continue = true
     end
 
-    def execute(translator, reader, writer)
-      text = reader.scan(@pattern)
-
+    def write(writer, text)
       writer.write(text)
-      
+    end
+
+    def transition(translator, _)
       translator.read_command
     end
 

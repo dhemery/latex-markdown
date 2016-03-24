@@ -1,14 +1,15 @@
+require_relative 'command.rb'
+
 module TeX2md
   class SkipText
-    attr_reader :pattern
+    include Command
 
     def initialize(pattern)
       @pattern = pattern
+      @continue = true
     end
 
-    def execute(translator, reader, _)
-      reader.scan(@pattern)
-
+    def transition(translator, _)
       translator.read_command
     end
 

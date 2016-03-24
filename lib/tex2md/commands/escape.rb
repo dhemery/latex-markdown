@@ -1,11 +1,14 @@
+require_relative 'command.rb'
+
 module TeX2md
   class Escape
-    def name
-      '\\'
+    include Command
+
+    def initialize
+      @name = '\\'
     end
 
-    def execute(translator, _, _)
-      translator.finish_command
+    def transition(translator, _)
       translator.read_macro
     end
 

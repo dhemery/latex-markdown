@@ -1,12 +1,14 @@
+require_relative 'command.rb'
+
 module TeX2md
   class EndDocument
-    attr_reader :name
+    include Command
+
     def initialize
       @name = nil
     end
 
-    def execute(translator, _, _)
-      translator.finish_command
+    def transition(translator, _)
       translator.finish_document
     end
 

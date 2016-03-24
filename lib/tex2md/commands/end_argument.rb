@@ -1,12 +1,14 @@
+require_relative 'command.rb'
+
 module TeX2md
   class EndArgument
-    attr_reader :name
+    include Command
+
     def initialize
       @name = '}'
     end
 
-    def execute(translator, _, _)
-      translator.finish_command # finish this command
+    def transition(translator, _)
       translator.finish_command # finish the macro that had the argument
     end
 

@@ -1,18 +1,20 @@
+require_relative 'command.rb'
+
 module TeX2md
   class ElementMacro
-    attr_reader :name
+    include Command
 
     def initialize(name, element)
       @name = name
       @element = element
+      @pattern = /{/
     end
 
-    def execute(translator, reader, writer)
-      reader.scan(/{/)
-
+    def write(writer, _)
       writer.write "<#{@element} class='#{@name}'>"
+    end
 
-      translator.finish_command
+    def transition(translator, _)
       translator.write_text("</#{@element}>")
       translator.copy_argument
     end

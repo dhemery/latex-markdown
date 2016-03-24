@@ -1,15 +1,14 @@
+require_relative 'command.rb'
+
 module TeX2md
   class ReadCommand
-    attr_reader :pattern
+    include Command
 
     def initialize(pattern)
       @pattern = pattern
     end
 
-    def execute(translator, reader, _)
-      command_name = reader.scan(@pattern)
-
-      translator.finish_command
+    def transition(translator, command_name)
       translator.execute_command(command_name)
     end
 
