@@ -1,6 +1,6 @@
-require 'tex2md/app/command_line'
+require 'tex2md/command_line'
 
-options = CommandLine.parse
+options = TeX2md::CommandLine.parse
 
 source = options.source
 dest = options.dest

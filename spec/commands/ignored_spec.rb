@@ -1,8 +1,8 @@
 require_relative '../spec_helper'
 require 'tex2md/commands/ignored_macro'
 
-describe IgnoredMacro do
-  subject { IgnoredMacro.new command_name }
+describe TeX2md::IgnoredMacro do
+  subject { TeX2md::IgnoredMacro.new command_name }
   let(:command_name) { 'command' }
   let(:input) { 'not to be consumed' }
   let(:translator) { FakeTranslator.new }

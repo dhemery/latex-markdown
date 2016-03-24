@@ -4,8 +4,8 @@ require 'tex2md/commands/escape'
 
 require 'strscan'
 
-describe Escape do
-  subject { Escape.new }
+describe TeX2md::Escape do
+  subject { TeX2md::Escape.new }
   let(:translator) { FakeTranslator.new }
   let(:input) { 'not to be consumed' }
   let(:reader) { StringScanner.new input }

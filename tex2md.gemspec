@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.summary        = 'Translate DBP TeX files to markdown'
   spec.description    = %q[Translate Driscoll Brook Press TeX files to markdown]
   spec.platform       = Gem::Platform::RUBY
-  spec.version        = VERSION
+  spec.version        = TeX2md::VERSION
   spec.authors        = ['Dale Emery']
   spec.email          = ['dale@dhemery.com']
   spec.homepage       = 'https://github.com/dhemery/tex2md/'

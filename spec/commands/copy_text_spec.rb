@@ -3,8 +3,8 @@ require 'tex2md/commands/copy_text'
 
 require 'strscan'
 
-describe CopyText do
-  subject { CopyText.new pattern }
+describe TeX2md::CopyText do
+  subject { TeX2md::CopyText.new pattern }
   let(:translator) { FakeTranslator.new }
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }

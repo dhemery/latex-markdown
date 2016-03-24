@@ -3,8 +3,8 @@ require 'tex2md/commands/element_macro'
 
 require 'strscan'
 
-describe ElementMacro do
-  subject { ElementMacro.new(macro_name, element) }
+describe TeX2md::ElementMacro do
+  subject { TeX2md::ElementMacro.new(macro_name, element) }
   let(:macro_name) { 'bar' }
   let(:element) { 'foo' }
   let(:input) { '{argument}' }

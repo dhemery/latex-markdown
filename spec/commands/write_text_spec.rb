@@ -1,8 +1,8 @@
 require_relative '../spec_helper'
 require 'tex2md/commands/write_text'
 
-describe WriteText do
-  subject { WriteText.new text }
+describe TeX2md::WriteText do
+  subject { TeX2md::WriteText.new text }
   let(:text) { 'some text to write' }
   let(:input) { 'not to be consumed' }
   let(:translator) { FakeTranslator.new }

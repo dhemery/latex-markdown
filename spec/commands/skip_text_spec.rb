@@ -3,10 +3,10 @@ require 'tex2md/commands/skip_text'
 
 require 'strscan'
 
-describe SkipText do
-  subject { SkipText.new pattern }
+describe TeX2md::SkipText do
+  subject { TeX2md::SkipText.new(pattern) }
   let(:translator) { FakeTranslator.new }
-  let(:reader) { StringScanner.new input }
+  let(:reader) { StringScanner.new(input )}
   let(:writer) { StringIO.new }
 
   describe 'when input begins with a match for the copy pattern' do

@@ -29,5 +29,3 @@ class FakeTranslator
   def write_text(text)
   end
 end
-
-$LOAD_PATH.unshift 'lib'

@@ -1,16 +1,16 @@
 require_relative '../spec_helper'
-require 'tex2md/translator/translator'
+require 'tex2md/translator'
 
-describe Translator, 'methods' do
-  subject { Translator.new([]) }
+describe TeX2md::Translator, 'methods' do
+  subject { TeX2md::Translator.new }
   let(:current_command) { subject.stack.last }
 
   describe 'copy argument' do
     it 'pushes CopyText with the argument pattern' do
       subject.copy_argument
 
-      current_command.must_be_instance_of CopyText
-      current_command.pattern.must_equal Translator::ARGUMENT_PATTERN
+      current_command.must_be_instance_of TeX2md::CopyText
+      current_command.pattern.must_equal TeX2md::Translator::ARGUMENT_PATTERN
     end
   end
 
@@ -18,8 +18,8 @@ describe Translator, 'methods' do
     it 'pushes CopyText with the text pattern' do
       subject.copy_text
 
-      current_command.must_be_instance_of CopyText
-      current_command.pattern.must_equal Translator::TEXT_PATTERN
+      current_command.must_be_instance_of TeX2md::CopyText
+      current_command.pattern.must_equal TeX2md::Translator::TEXT_PATTERN
     end
   end
 
@@ -51,8 +51,8 @@ describe Translator, 'methods' do
     it 'pushes SkipText with the argument pattern' do
       subject.skip_argument
 
-      current_command.must_be_instance_of SkipText
-      current_command.pattern.must_equal Translator::ARGUMENT_PATTERN
+      current_command.must_be_instance_of TeX2md::SkipText
+      current_command.pattern.must_equal TeX2md::Translator::ARGUMENT_PATTERN
     end
   end
 
@@ -63,7 +63,7 @@ describe Translator, 'methods' do
       it 'pushes ReadCommand with the given pattern' do
         subject.read_command(pattern)
 
-        current_command.must_be_instance_of ReadCommand
+        current_command.must_be_instance_of TeX2md::ReadCommand
         current_command.pattern.must_equal pattern
       end
     end
@@ -72,8 +72,8 @@ describe Translator, 'methods' do
       it 'pushes ReadCommand with the command pattern' do
         subject.read_command
 
-        current_command.must_be_instance_of ReadCommand
-        current_command.pattern.must_equal Translator::COMMAND_PATTERN
+        current_command.must_be_instance_of TeX2md::ReadCommand
+        current_command.pattern.must_equal TeX2md::Translator::COMMAND_PATTERN
       end
     end
   end
@@ -82,8 +82,8 @@ describe Translator, 'methods' do
     it 'pushes ReadCommand with the macro pattern' do
       subject.read_macro
 
-      current_command.must_be_instance_of ReadCommand
-      current_command.pattern.must_equal Translator::MACRO_PATTERN
+      current_command.must_be_instance_of TeX2md::ReadCommand
+      current_command.pattern.must_equal TeX2md::Translator::MACRO_PATTERN
     end
   end
 
@@ -92,7 +92,7 @@ describe Translator, 'methods' do
       text = 'some text to write'
       subject.write_text text
 
-      current_command.must_be_instance_of WriteText
+      current_command.must_be_instance_of TeX2md::WriteText
       current_command.text.must_equal text
     end
   end

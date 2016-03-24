@@ -1,8 +1,8 @@
 require_relative '../spec_helper'
 require 'tex2md/commands/ignored_arg_macro'
 
-describe IgnoredArgMacro do
-  subject { IgnoredArgMacro.new macro_name }
+describe TeX2md::IgnoredArgMacro do
+  subject { TeX2md::IgnoredArgMacro.new macro_name }
   let(:macro_name) { 'mymacro' }
   let(:input) { '{argument text}additional text' }
   let(:translator) { FakeTranslator.new }

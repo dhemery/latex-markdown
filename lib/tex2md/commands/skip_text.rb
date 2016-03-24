@@ -1,16 +1,18 @@
-class SkipText
-  attr_reader :pattern
+module TeX2md
+  class SkipText
+    attr_reader :pattern
 
-  def initialize(pattern)
-    @pattern = pattern
-  end
+    def initialize(pattern)
+      @pattern = pattern
+    end
 
-  def execute(translator, reader, _)
-    reader.scan(@pattern)
-    translator.read_command
-  end
+    def execute(translator, reader, _)
+      reader.scan(@pattern)
+      translator.read_command
+    end
 
-  def to_s
-    "#{self.class}#{@pattern.source}"
+    def to_s
+      "#{self.class}#{@pattern.source}"
+    end
   end
 end

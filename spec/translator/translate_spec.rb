@@ -1,9 +1,9 @@
 require_relative '../spec_helper'
-require 'tex2md/translator/translator'
+require 'tex2md/translator'
 
 
-describe Translator, 'translates' do
-  subject { Translator.new }
+describe TeX2md::Translator, 'translates' do
+  subject { TeX2md::Translator.new }
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 

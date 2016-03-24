@@ -2,7 +2,7 @@ gemname = 'tex2md'
 require_relative "lib/#{gemname}/version"
 
 gemspec = "#{gemname}.gemspec"
-gemfile = "#{gemname}-#{VERSION}.gem"
+gemfile = "#{gemname}-#{TeX2md::VERSION}.gem"
 
 require 'rake/clean'
 require 'rake/testtask'

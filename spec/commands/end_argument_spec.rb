@@ -2,8 +2,8 @@ require_relative '../spec_helper'
 require 'tex2md/commands/end_argument'
 
 
-describe EndArgument do
-  subject { EndArgument.new }
+describe TeX2md::EndArgument do
+  subject { TeX2md::EndArgument.new }
   let(:translator) { FakeTranslator.new }
   let(:input) { 'not to be consumed' }
   let(:reader) { StringScanner.new input }

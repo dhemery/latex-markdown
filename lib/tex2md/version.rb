@@ -1,1 +1,3 @@
-VERSION = '0.0.1'
+module TeX2md
+  VERSION = '0.0.1'
+end

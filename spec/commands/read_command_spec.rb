@@ -3,8 +3,8 @@ require 'tex2md/commands/read_command'
 
 require 'strscan'
 
-describe ReadCommand do
-  subject { ReadCommand.new pattern }
+describe TeX2md::ReadCommand do
+  subject { TeX2md::ReadCommand.new pattern }
   let(:translator) { FakeTranslator.new }
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
