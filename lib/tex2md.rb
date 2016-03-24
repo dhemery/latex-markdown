@@ -2,10 +2,17 @@ require 'tex2md/app/command_line'
 
 options = CommandLine.parse
 
-puts "#{options.source} does not exist. Abort." unless options.source.exist?
-puts "#{options.source} is a file. I will translate it." if options.source.file?
-puts "#{options.source} is a directory. I will translate all .tex files in it." if options.source.directory?
+source = options.source
+dest = options.dest
 
-puts "#{options.dest} is a directory. I will put markdown files in it." if options.dest.directory?
-puts "#{options.dest} does not exist. I will create a directory there." unless options.dest.exist?
-puts "#{options.dest} is a file. Abort." if options.dest.file?
+dest.mkpath unless dest.exist?
+
+puts "#{source}: no such file or directory" unless source.exist?
+
+puts "#{dest}: no such directory" unless options.dest.directory?
+
+if dest.file? || !source.exist?
+  exit 1
+end
+
+puts 'Everything is hunky dory'

@@ -12,5 +12,5 @@ class SkipText
 
   def to_s
     "#{self.class}#{@pattern.source}"
-    end
+  end
 end
