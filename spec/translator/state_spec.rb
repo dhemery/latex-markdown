@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
 require 'tex2md/translator'
 
-describe TeX2md::Translator, 'methods' do
+describe TeX2md::Translator, 'state' do
   subject { TeX2md::Translator.new(stack) }
   let(:stack) { MiniTest::Mock.new }
 
@@ -41,11 +41,11 @@ describe TeX2md::Translator, 'methods' do
     end
   end
 
-  describe 'skip argument' do
-    it 'pushes SkipText with the argument pattern' do
-      stack.expect :push, nil, [TeX2md::SkipText.new(TeX2md::Translator::ARGUMENT_PATTERN)]
+  describe 'read macro' do
+    it 'pushes ReadCommand with the macro pattern' do
+      stack.expect :push, nil, [TeX2md::ReadCommand.new(TeX2md::Translator::MACRO_PATTERN)]
 
-      subject.skip_argument
+      subject.read_macro
     end
   end
 
@@ -69,11 +69,11 @@ describe TeX2md::Translator, 'methods' do
     end
   end
 
-  describe 'read macro' do
-    it 'pushes ReadCommand with the macro pattern' do
-      stack.expect :push, nil, [TeX2md::ReadCommand.new(TeX2md::Translator::MACRO_PATTERN)]
+  describe 'skip argument' do
+    it 'pushes SkipText with the argument pattern' do
+      stack.expect :push, nil, [TeX2md::SkipText.new(TeX2md::Translator::ARGUMENT_PATTERN)]
 
-      subject.read_macro
+      subject.skip_argument
     end
   end
 
