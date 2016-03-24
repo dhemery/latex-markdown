@@ -1,5 +1,6 @@
 module Command
   attr_reader :name, :pattern, :continue
+  alias :eql? :==
 
   def execute(translator, reader, writer)
     text = read(reader)

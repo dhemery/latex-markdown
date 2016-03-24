@@ -14,6 +14,14 @@ module TeX2md
       writer.write(@text)
     end
 
+    def ==(other)
+      self.class == other.class && self.text == other.text
+    end
+
+    def hash
+      [self.class, @text].hash
+    end
+
     def to_s
       %Q{#{self.class} "#{@text}"}
     end

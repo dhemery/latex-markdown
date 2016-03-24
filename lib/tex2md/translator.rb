@@ -23,18 +23,18 @@ module TeX2md
         Escape.new,
     ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS
 
-    def initialize
+    def initialize(stack = [])
       @commands = STANDARD_COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
-      @stack = []
+      @stack = stack
     end
 
     def translate(reader, writer)
-      copy_text
+      copy_text(TEXT_PATTERN)
       @stack.last.execute(self, reader, writer) until @stack.empty?
     end
 
-    def copy_text(pattern = TEXT_PATTERN)
-      push CopyText.new(pattern)
+    def copy_text(pattern)
+      @stack.push(CopyText.new(pattern))
     end
 
     def copy_argument
@@ -42,12 +42,11 @@ module TeX2md
     end
 
     def execute_command(name)
-      command = @commands.fetch(name){|c| raise "No such command #{c || 'nil'} in #{@commands}"}
-      push command
+      @stack.push(command(name))
     end
 
     def finish_command
-      pop
+      @stack.pop
     end
 
     def finish_document
@@ -55,11 +54,11 @@ module TeX2md
     end
 
     def skip_argument
-      push SkipText.new(ARGUMENT_PATTERN)
+      @stack.push(SkipText.new(ARGUMENT_PATTERN))
     end
 
     def read_command(pattern = COMMAND_PATTERN)
-      push ReadCommand.new(pattern)
+      @stack.push(ReadCommand.new(pattern))
     end
 
     def read_macro
@@ -67,17 +66,13 @@ module TeX2md
     end
 
     def write_text(text)
-      push WriteText.new(text)
+      @stack.push(WriteText.new(text))
     end
 
     private
 
-    def push(command)
-      @stack.push(command)
-    end
-
-    def pop
-      @stack.pop
+    def command(name)
+      @commands.fetch(name) { |c| raise "No such command #{c || 'nil'} in #{@commands}" }
     end
   end
 end
