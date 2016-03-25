@@ -53,6 +53,18 @@ describe TeX2md::Translator, 'translates' do
     end
   end
 
+  %w(quote).each do |environment|
+    describe environment do
+      let(:input) { "Before \\begin{#{environment}}in the environment\\end{#{environment}} after" }
+
+      it "by writing the contents in a div with class #{environment}" do
+        subject.translate(reader, writer)
+
+        writer.string.must_equal %Q[Before <div class='#{environment}'>in the environment</div> after]
+      end
+    end
+  end
+
   describe '\\story' do
     let(:input) { 'Before \\story{story title} after' }
     it 'by writing the argument in an h1 with class story' do

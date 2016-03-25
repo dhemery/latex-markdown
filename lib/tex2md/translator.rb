@@ -27,11 +27,15 @@ module TeX2md
         ElementMacro.new('note', 'h3'),
     ]
 
+    ENVIRONMENTS = %w(quote).map { |name| Environment.new(name) }
+
     STANDARD_COMMANDS = [
         EndDocument.new,
         EndArgument.new,
         Escape.new,
-    ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS
+        Begin.new,
+        End.new,
+    ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS + ENVIRONMENTS
 
     def initialize(stack = [])
       @commands = STANDARD_COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
@@ -39,11 +43,11 @@ module TeX2md
     end
 
     def translate(reader, writer)
-      copy_text(TEXT_PATTERN)
+      copy_text
       @stack.last.execute(self, reader, writer) until @stack.empty?
     end
 
-    def copy_text(pattern)
+    def copy_text(pattern = TEXT_PATTERN)
       @stack.push(CopyText.new(pattern))
     end
 
