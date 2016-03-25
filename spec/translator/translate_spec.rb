@@ -76,48 +76,30 @@ describe TeX2md::Translator do
     end
   end
 
-  describe 'wraps the argument of \story' do
-    let(:input) { 'Before \story{story title} after' }
-    it 'in h1.story' do
-      subject.translate(reader, writer)
+  %w(chapter note introduction story).each do |style|
+    describe "converts \\#{style} into yaml" do
+      let(:input) { "\\#{style}{page title}" }
 
-      _(writer.string).must_equal %q[Before <h1 class='story'>story title</h1> after]
-    end
-  end
+      it "style property with value #{style}" do
+        subject.translate(reader, writer)
 
-  describe 'wraps the argument of \chapter' do
-    let(:input) { 'Before \chapter{chapter title} after' }
-    it 'in h2.chapter' do
-      subject.translate(reader, writer)
+        _(writer.string.each_line(&:chomp)).must_include "style: #{style}"
+      end
 
-      _(writer.string).must_equal %q[Before <h2 class='chapter'>chapter title</h2> after]
-    end
-  end
+      it 'title property with the argument as its value' do
+        subject.translate(reader, writer)
 
-  describe 'wraps the argument of \introduction' do
-    let(:input) { 'Before \introduction{introduction title} after' }
-    it 'in h2.introduction' do
-      subject.translate(reader, writer)
-
-      _(writer.string).must_equal %q[Before <h2 class='introduction'>introduction title</h2> after]
-    end
-  end
-
-  describe 'wraps the argument of \note' do
-    let(:input) { 'Before \note{note title} after' }
-    it 'in h3.note' do
-      subject.translate(reader, writer)
-
-      _(writer.string).must_equal %q[Before <h3 class='note'>note title</h3> after]
+        _(writer.string.each_line(&:chomp)).must_include 'title: page title'
+      end
     end
   end
 
   describe 'nests the output of' do
-    let(:input) { 'Before \chapter{My \emph{great \abbr{TBD}} adventure} after' }
+    let(:input) { 'Before \unbreakable{My \emph{great \abbr{TBD}} adventure} after' }
     it 'nested macro calls' do
       subject.translate(reader, writer)
 
-      _(writer.string).must_equal %q[Before <h2 class='chapter'>My <span class='emph'>great <span class='abbr'>TBD</span></span> adventure</h2> after]
+      _(writer.string).must_equal %q[Before <span class='unbreakable'>My <span class='emph'>great <span class='abbr'>TBD</span></span> adventure</span> after]
     end
   end
 

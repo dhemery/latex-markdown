@@ -7,6 +7,8 @@ require 'tex2md/commands/end_document'
 require 'tex2md/commands/environment'
 require 'tex2md/commands/escape'
 require 'tex2md/commands/ignored_arg_macro'
+require 'tex2md/commands/markdown'
+require 'tex2md/commands/page'
 require 'tex2md/commands/read_command'
 require 'tex2md/commands/skip_text'
 require 'tex2md/commands/write_text'
@@ -19,18 +21,11 @@ module TeX2md
     TEXT_PATTERN = /[^~\\]*/
 
     ENVIRONMENTS = %w(dedication quote signature).map { |name| Environment.new(name) }
-    IGNORED_MACROS = %w(longpar longpage shortpage shortpar).map{ |name| WriteText.new(name, '') }
+    REPLACEMENTS = %w(longpar longpage shortpage shortpar).map{ |name| WriteText.new(name, '') }
+    REPLACEMENTS << WriteText.new('~', ' ')
     IGNORED_MACROS_WITH_ARGS = %w(longpages shortpages).map{ |name| IgnoredArgMacro.new(name) }
-    SPAN_MACROS = %w(abbr emph leadin unbreakable).map { |name| ElementMacro.new(name, 'span') }
-    HEADING_MACROS = [
-        ElementMacro.new('story', 'h1'),
-        ElementMacro.new('chapter', 'h2'),
-        ElementMacro.new('introduction', 'h2'),
-        ElementMacro.new('note', 'h3'),
-    ]
-    REPLACEMENTS = [
-        WriteText.new('~', ' '),
-    ]
+    SPANS = %w(abbr emph leadin unbreakable).map { |name| ElementMacro.new(name, 'span') }
+    PAGES = %w(chapter introduction note story).map { |style| Page.new(style) }
 
     STANDARD_COMMANDS = [
         EndDocument.new,
@@ -39,7 +34,7 @@ module TeX2md
         BeginEnvironment.new,
         EndEnvironment.new,
         Markdown.new,
-    ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS + ENVIRONMENTS + REPLACEMENTS
+    ] + IGNORED_MACROS_WITH_ARGS + SPANS + PAGES + ENVIRONMENTS + REPLACEMENTS
 
     def initialize(stack = [])
       @commands = STANDARD_COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
