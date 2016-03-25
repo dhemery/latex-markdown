@@ -1,11 +1,15 @@
+require 'tex2md/commands/begin_environment'
 require 'tex2md/commands/copy_text'
 require 'tex2md/commands/element_macro'
+require 'tex2md/commands/end_environment'
 require 'tex2md/commands/end_argument'
 require 'tex2md/commands/end_document'
+require 'tex2md/commands/environment'
 require 'tex2md/commands/escape'
 require 'tex2md/commands/ignored_macro'
 require 'tex2md/commands/ignored_arg_macro'
 require 'tex2md/commands/read_command'
+require 'tex2md/commands/skip_text'
 require 'tex2md/commands/write_text'
 
 module TeX2md
@@ -33,8 +37,8 @@ module TeX2md
         EndDocument.new,
         EndArgument.new,
         Escape.new,
-        Begin.new,
-        End.new,
+        BeginEnvironment.new,
+        EndEnvironment.new,
     ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS + ENVIRONMENTS
 
     def initialize(stack = [])

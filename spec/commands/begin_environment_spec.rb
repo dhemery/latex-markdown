@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/begin'
+require 'tex2md/commands/begin_environment'
 
 require 'strscan'
 
-describe TeX2md::Begin do
-  subject { TeX2md::Begin.new }
+describe TeX2md::BeginEnvironment do
+  subject { TeX2md::BeginEnvironment.new }
   let(:input) { '{environment}some text\end{environment}' }
   let(:translator) do
     Object.new.tap do |allowing|

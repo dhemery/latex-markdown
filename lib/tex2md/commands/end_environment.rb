@@ -1,7 +1,7 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class End
+  class EndEnvironment
     include Command
 
     def initialize
