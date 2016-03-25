@@ -14,7 +14,7 @@ module TeX2md
     end
 
     def to_s
-      "#{self.class}"
+      "#{self.class}(#{name})"
     end
   end
 end

@@ -6,24 +6,17 @@ module TeX2md
 
     attr_reader :text
 
-    def initialize(text)
+    def initialize(name, text)
+      @name = name
       @text = text
     end
 
     def write(writer, _)
-      writer.write(@text)
-    end
-
-    def ==(other)
-      self.class == other.class && self.text == other.text
-    end
-
-    def hash
-      [self.class, @text].hash
+      writer.write(text)
     end
 
     def to_s
-      %Q{#{self.class} "#{@text}"}
+      "#{self.class}(#{name},#{text})"
     end
   end
 end

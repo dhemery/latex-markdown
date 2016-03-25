@@ -11,7 +11,7 @@ module TeX2md
     end
 
     def write(writer, _)
-      writer.write "<#{@element} class='#{@name}'>"
+      writer.write "<#{@element} class='#{name}'>"
     end
 
     def transition(translator, _)
@@ -20,7 +20,7 @@ module TeX2md
     end
 
     def to_s
-      "#{self.class} #{@element}.#{@name}"
+      "#{self.class}(#{element}.#{name})"
     end
   end
 end

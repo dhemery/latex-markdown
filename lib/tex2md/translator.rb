@@ -6,7 +6,6 @@ require 'tex2md/commands/end_argument'
 require 'tex2md/commands/end_document'
 require 'tex2md/commands/environment'
 require 'tex2md/commands/escape'
-require 'tex2md/commands/ignored_macro'
 require 'tex2md/commands/ignored_arg_macro'
 require 'tex2md/commands/read_command'
 require 'tex2md/commands/skip_text'
@@ -14,15 +13,13 @@ require 'tex2md/commands/write_text'
 
 module TeX2md
   class Translator
-    attr_reader :stack
-
-    ARGUMENT_PATTERN = /[^\\}]*/
-    COMMAND_PATTERN = /[\\}]/
+    ARGUMENT_PATTERN = /[^~\\}]*/
+    COMMAND_PATTERN = /[~\\}]/
     MACRO_PATTERN = /[[:alpha:]]+/
-    TEXT_PATTERN = /[^\\]*/
+    TEXT_PATTERN = /[^~\\]*/
 
     ENVIRONMENTS = %w(dedication quote signature).map { |name| Environment.new(name) }
-    IGNORED_MACROS = %w(longpar longpage shortpage shortpar).map{ |name| IgnoredMacro.new(name) }
+    IGNORED_MACROS = %w(longpar longpage shortpage shortpar).map{ |name| WriteText.new(name, '') }
     IGNORED_MACROS_WITH_ARGS = %w(longpages shortpages).map{ |name| IgnoredArgMacro.new(name) }
     SPAN_MACROS = %w(abbr emph leadin unbreakable).map { |name| ElementMacro.new(name, 'span') }
     HEADING_MACROS = [
@@ -31,7 +28,9 @@ module TeX2md
         ElementMacro.new('introduction', 'h2'),
         ElementMacro.new('note', 'h3'),
     ]
-
+    REPLACEMENTS = [
+        WriteText.new('~', ' '),
+    ]
 
     STANDARD_COMMANDS = [
         EndDocument.new,
@@ -39,7 +38,7 @@ module TeX2md
         Escape.new,
         BeginEnvironment.new,
         EndEnvironment.new,
-    ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS + ENVIRONMENTS
+    ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS + ENVIRONMENTS + REPLACEMENTS
 
     def initialize(stack = [])
       @commands = STANDARD_COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
@@ -84,13 +83,16 @@ module TeX2md
     end
 
     def write_text(text)
-      @stack.push(WriteText.new(text))
+      @stack.push(WriteText.new(nil, text))
     end
 
     private
 
     def command(name)
-      @commands.fetch(name) { |c| raise "No such command #{c || 'nil'} in #{@commands}" }
+      @commands.fetch(name) do |c|
+        names = @commands.keys.map { |k| (k || 'nil').to_s }
+        raise "No such command #{c || 'nil'} in #{names}"
+      end
     end
   end
 end

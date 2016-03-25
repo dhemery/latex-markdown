@@ -2,7 +2,8 @@ require_relative '../spec_helper'
 require 'tex2md/commands/write_text'
 
 describe TeX2md::WriteText do
-  subject { TeX2md::WriteText.new text }
+  subject { TeX2md::WriteText.new(command_name, text) }
+  let(:command_name) { 'mytext' }
   let(:text) { 'some text to write' }
   let(:input) { 'not to be consumed' }
   let(:translator) do
@@ -13,6 +14,10 @@ describe TeX2md::WriteText do
 
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
+
+  it 'identifies itself by name' do
+    subject.name.must_equal command_name
+  end
 
   it 'consumes no input' do
     subject.execute(translator, reader, writer)

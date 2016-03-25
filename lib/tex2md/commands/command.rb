@@ -20,4 +20,12 @@ module Command
   end
 
   def transition(_, _) ; end
+
+  def ==(other)
+    self.to_s == other.to_s
+  end
+
+  def hash
+    to_s.hash
+  end
 end
