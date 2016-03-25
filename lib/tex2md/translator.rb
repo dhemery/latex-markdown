@@ -90,8 +90,8 @@ module TeX2md
 
     def command(name)
       @commands.fetch(name) do |c|
-        names = @commands.keys.map { |k| (k || 'nil').to_s }
-        raise "No such command #{c || 'nil'} in #{names}"
+        command_names = @commands.keys.map { |k| "#{k || 'nil'}" }.sort
+        raise "No such command #{c || 'nil'} in [#{command_names.join(', ')}]"
       end
     end
   end
