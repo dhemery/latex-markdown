@@ -20,10 +20,13 @@ module TeX2md
     MACRO_PATTERN = /[[:alpha:]]+/
     TEXT_PATTERN = /[^~\\]*/
 
+    COPIES = %w(markdown).map { |name| CopyArgumentMacro.new(name) }
     ENVIRONMENTS = %w(dedication quote signature).map { |name| Environment.new(name) }
-    REPLACEMENTS = %w(longpar longpage shortpage shortpar).map{ |name| WriteText.new(name, '') }
-    REPLACEMENTS << WriteText.new('~', ' ')
-    IGNORED_MACROS_WITH_ARGS = %w(longpages shortpages).map{ |name| SkipArgumentMacro.new(name) }
+    NULLS = %w(longpar longpage shortpage shortpar).map{ |name| NullMacro.new(name) }
+    REPLACEMENTS = [
+        WriteText.new('~', ' ')
+    ]
+    SKIPS = %w(longpages shortpages).map{ |name| SkipArgumentMacro.new(name) }
     SPANS = %w(abbr emph leadin unbreakable).map { |style| SpanMacro.new(style) }
     PAGES = %w(chapter introduction note story).map { |style| PageMacro.new(style) }
 
@@ -33,8 +36,7 @@ module TeX2md
         Escape.new,
         BeginEnvironmentMacro.new,
         EndEnvironmentMacro.new,
-        CopyArgumentMacro.new('markdown'),
-    ] + IGNORED_MACROS_WITH_ARGS + SPANS + PAGES + ENVIRONMENTS + REPLACEMENTS
+    ] + COPIES + ENVIRONMENTS + NULLS + REPLACEMENTS + SKIPS + SPANS + PAGES
 
     def initialize(stack = [])
       @commands = STANDARD_COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
