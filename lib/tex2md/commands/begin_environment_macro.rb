@@ -1,7 +1,7 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class BeginEnvironment
+  class BeginEnvironmentMacro
     include Command
 
     def initialize

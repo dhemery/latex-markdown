@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/end_environment'
+require 'tex2md/commands/end_environment_macro'
 
 require 'strscan'
 
-describe TeX2md::EndEnvironment do
-  subject { TeX2md::EndEnvironment.new }
+describe TeX2md::EndEnvironmentMacro do
+  subject { TeX2md::EndEnvironmentMacro.new }
   let(:input) { '{environment}' }
   let(:translator) do
     Object.new.tap do |allowing|

@@ -1,12 +1,11 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/element_macro'
+require 'tex2md/commands/span_macro'
 
 require 'strscan'
 
-describe TeX2md::ElementMacro do
-  subject { TeX2md::ElementMacro.new(style, element) }
+describe TeX2md::SpanMacro do
+  subject { TeX2md::SpanMacro.new(style) }
   let(:style) { 'bar' }
-  let(:element) { 'foo' }
   let(:input) { '{argument}' }
   let(:translator) do
     Object.new.tap do |allowing|
@@ -28,19 +27,19 @@ describe TeX2md::ElementMacro do
     _(reader.rest).must_equal 'argument}'
   end
 
-  it 'writes the open element.style tag' do
+  it 'writes the open span tag with the style as its class' do
     subject.execute(translator, reader, writer)
 
-    _(writer.string).must_equal "<#{element} class='#{style}'>"
+    _(writer.string).must_equal "<span class='#{style}'>"
   end
 
   describe 'tells translator to' do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command, copy the argument, and write the end tag' do
+    it 'finish the current command, copy the argument, and write the end span tag' do
       translator.expect :finish_command, nil
-      translator.expect :write_text, nil, ["</#{element}>"]
+      translator.expect :write_text, nil, ['</span>']
       translator.expect :copy_argument, nil
 
       subject.execute(translator, reader, writer)

@@ -1,10 +1,11 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/markdown'
+require 'tex2md/commands/copy_argument_macro'
 
 require 'strscan'
 
-describe TeX2md::Markdown do
-  subject { TeX2md::Markdown.new }
+describe TeX2md::CopyArgumentMacro do
+  subject { TeX2md::CopyArgumentMacro.new(macro_name) }
+  let(:macro_name) { 'mymacro' }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
@@ -13,16 +14,16 @@ describe TeX2md::Markdown do
   end
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
-  let(:input) { '{--- some markdown text ---}' }
+  let(:input) { '{--- some text ---}' }
 
-  it 'identifies itself as markdown' do
-    _(subject.name).must_equal 'markdown'
+  it 'identifies itself by name' do
+    _(subject.name).must_equal macro_name
   end
 
   it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal '--- some markdown text ---}'
+    _(reader.rest).must_equal '--- some text ---}'
   end
 
   describe 'tells the translator to' do

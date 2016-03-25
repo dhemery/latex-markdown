@@ -1,12 +1,17 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class Markdown
+
+  class PageMacro
     include Command
 
-    def initialize
-      @name = 'markdown'
+    def initialize(style)
+      @name = style
       @pattern = /{/
+    end
+
+    def write(writer, _)
+      writer.write("style: #{name}#{$/}title: ")
     end
 
     def transition(translator, _)

@@ -1,15 +1,15 @@
-require 'tex2md/commands/begin_environment'
+require 'tex2md/commands/begin_environment_macro'
+require 'tex2md/commands/copy_argument_macro'
 require 'tex2md/commands/copy_text'
-require 'tex2md/commands/element_macro'
-require 'tex2md/commands/end_environment'
+require 'tex2md/commands/end_environment_macro'
 require 'tex2md/commands/end_argument'
 require 'tex2md/commands/end_document'
 require 'tex2md/commands/environment'
 require 'tex2md/commands/escape'
-require 'tex2md/commands/ignored_arg_macro'
-require 'tex2md/commands/markdown'
-require 'tex2md/commands/page'
+require 'tex2md/commands/page_macro'
 require 'tex2md/commands/read_command'
+require 'tex2md/commands/skip_argument_macro'
+require 'tex2md/commands/span_macro'
 require 'tex2md/commands/skip_text'
 require 'tex2md/commands/write_text'
 
@@ -23,17 +23,17 @@ module TeX2md
     ENVIRONMENTS = %w(dedication quote signature).map { |name| Environment.new(name) }
     REPLACEMENTS = %w(longpar longpage shortpage shortpar).map{ |name| WriteText.new(name, '') }
     REPLACEMENTS << WriteText.new('~', ' ')
-    IGNORED_MACROS_WITH_ARGS = %w(longpages shortpages).map{ |name| IgnoredArgMacro.new(name) }
-    SPANS = %w(abbr emph leadin unbreakable).map { |name| ElementMacro.new(name, 'span') }
-    PAGES = %w(chapter introduction note story).map { |style| Page.new(style) }
+    IGNORED_MACROS_WITH_ARGS = %w(longpages shortpages).map{ |name| SkipArgumentMacro.new(name) }
+    SPANS = %w(abbr emph leadin unbreakable).map { |style| SpanMacro.new(style) }
+    PAGES = %w(chapter introduction note story).map { |style| PageMacro.new(style) }
 
     STANDARD_COMMANDS = [
         EndDocument.new,
         EndArgument.new,
         Escape.new,
-        BeginEnvironment.new,
-        EndEnvironment.new,
-        Markdown.new,
+        BeginEnvironmentMacro.new,
+        EndEnvironmentMacro.new,
+        CopyArgumentMacro.new('markdown'),
     ] + IGNORED_MACROS_WITH_ARGS + SPANS + PAGES + ENVIRONMENTS + REPLACEMENTS
 
     def initialize(stack = [])

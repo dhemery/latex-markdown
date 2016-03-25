@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/page'
+require 'tex2md/commands/page_macro'
 
 require 'strscan'
 
-describe TeX2md::Page do
-  subject { TeX2md::Page.new(style) }
+describe TeX2md::PageMacro do
+  subject { TeX2md::PageMacro.new(style) }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.copy_argument ; end

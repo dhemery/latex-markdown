@@ -1,30 +1,31 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/ignored_arg_macro'
+require 'tex2md/commands/begin_environment_macro'
 
-describe TeX2md::IgnoredArgMacro do
-  subject { TeX2md::IgnoredArgMacro.new macro_name }
-  let(:macro_name) { 'mymacro' }
-  let(:input) { '{argument text}additional text' }
+require 'strscan'
+
+describe TeX2md::BeginEnvironmentMacro do
+  subject { TeX2md::BeginEnvironmentMacro.new }
+  let(:input) { '{environment}some text\end{environment}' }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
-      def allowing.skip_argument ; end
+      def allowing.read_macro ; end
     end
   end
-  let(:reader) { StringScanner.new input }
+  let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself by name' do
-    _(subject.name).must_equal macro_name
+  it 'identifies itself as begin' do
+    _(subject.name).must_equal 'begin'
   end
 
   it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal 'argument text}additional text'
+    _(reader.rest).must_equal 'environment}some text\end{environment}'
   end
 
-  it 'writes nothing' do
+  it 'writes no output' do
     subject.execute(translator, reader, writer)
 
     _(writer.string).must_be_empty
@@ -34,9 +35,9 @@ describe TeX2md::IgnoredArgMacro do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and skip the argument' do
+    it 'finish the current command and read a macro' do
       translator.expect :finish_command, nil
-      translator.expect :skip_argument, nil
+      translator.expect :read_macro, nil
 
       subject.execute(translator, reader, writer)
     end
