@@ -15,7 +15,7 @@ describe TeX2md::BeginEnvironment do
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself by name' do
+  it 'identifies itself as begin' do
     subject.name.must_equal 'begin'
   end
 

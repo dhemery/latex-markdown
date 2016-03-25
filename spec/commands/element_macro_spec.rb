@@ -4,8 +4,8 @@ require 'tex2md/commands/element_macro'
 require 'strscan'
 
 describe TeX2md::ElementMacro do
-  subject { TeX2md::ElementMacro.new(macro_name, element) }
-  let(:macro_name) { 'bar' }
+  subject { TeX2md::ElementMacro.new(style, element) }
+  let(:style) { 'bar' }
   let(:element) { 'foo' }
   let(:input) { '{argument}' }
   let(:translator) do
@@ -18,8 +18,8 @@ describe TeX2md::ElementMacro do
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself by name' do
-    subject.name.must_equal macro_name
+  it 'identifies itself by its style' do
+    subject.name.must_equal style
   end
 
   it 'consumes the left brace' do
@@ -28,10 +28,10 @@ describe TeX2md::ElementMacro do
     reader.rest.must_equal 'argument}'
   end
 
-  it 'writes the open tag with the type as its class' do
+  it 'writes the open element.style tag' do
     subject.execute(translator, reader, writer)
 
-    writer.string.must_equal "<#{element} class='#{macro_name}'>"
+    writer.string.must_equal "<#{element} class='#{style}'>"
   end
 
   describe 'tells translator to' do

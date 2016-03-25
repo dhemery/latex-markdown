@@ -15,7 +15,7 @@ describe TeX2md::EndEnvironment do
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself by name' do
+  it 'identifies itself as end' do
     subject.name.must_equal 'end'
   end
 

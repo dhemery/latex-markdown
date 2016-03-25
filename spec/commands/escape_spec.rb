@@ -16,8 +16,8 @@ describe TeX2md::Escape do
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 
-  it %q{identifies itself as \\} do
-    subject.name.must_equal %q{\\}
+  it 'identifies itself as \\' do
+    subject.name.must_equal '\\'
   end
 
   it 'consumes no input' do
