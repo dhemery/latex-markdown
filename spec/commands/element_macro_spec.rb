@@ -19,19 +19,19 @@ describe TeX2md::ElementMacro do
   let(:writer) { StringIO.new }
 
   it 'identifies itself by its style' do
-    subject.name.must_equal style
+    _(subject.name).must_equal style
   end
 
   it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal 'argument}'
+    _(reader.rest).must_equal 'argument}'
   end
 
   it 'writes the open element.style tag' do
     subject.execute(translator, reader, writer)
 
-    writer.string.must_equal "<#{element} class='#{style}'>"
+    _(writer.string).must_equal "<#{element} class='#{style}'>"
   end
 
   describe 'tells translator to' do

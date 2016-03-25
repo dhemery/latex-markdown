@@ -16,19 +16,19 @@ describe TeX2md::EndEnvironment do
   let(:writer) { StringIO.new }
 
   it 'identifies itself as end' do
-    subject.name.must_equal 'end'
+    _(subject.name).must_equal 'end'
   end
 
   it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal 'environment}'
+    _(reader.rest).must_equal 'environment}'
   end
 
   it 'writes and end div tag' do
     subject.execute(translator, reader, writer)
 
-    writer.string.must_equal '</div>'
+    _(writer.string).must_equal '</div>'
   end
 
   describe 'tells translator to' do

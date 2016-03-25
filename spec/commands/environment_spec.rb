@@ -17,19 +17,19 @@ describe TeX2md::Environment do
   let(:writer) { StringIO.new }
 
   it 'identifies itself by type' do
-    subject.name.must_equal type
+    _(subject.name).must_equal type
   end
 
   it 'consumes the right brace' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal 'some text\end{foo}'
+    _(reader.rest).must_equal 'some text\end{foo}'
   end
 
   it 'writes an open div tag with the type as its class ' do
     subject.execute(translator, reader, writer)
 
-    writer.string.must_equal %Q{<div class='#{type}'>}
+    _(writer.string).must_equal %Q{<div class='#{type}'>}
   end
 
   describe 'tells translator to' do

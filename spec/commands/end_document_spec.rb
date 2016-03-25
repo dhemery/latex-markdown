@@ -16,19 +16,19 @@ describe TeX2md::EndDocument do
 
 
   it 'identifies itself as nil' do
-    subject.name.must_be_nil
+    _(subject.name).must_be_nil
   end
 
   it 'consumes no input' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal input
+    _(reader.rest).must_equal input
   end
 
   it 'writes no output' do
     subject.execute(translator, reader, writer)
 
-    writer.string.must_be_empty
+    _(writer.string).must_be_empty
   end
 
   describe 'tells translator to' do

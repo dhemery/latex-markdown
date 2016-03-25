@@ -20,13 +20,13 @@ describe TeX2md::SkipText do
     it 'consumes the matching text' do
       subject.execute(translator, reader, writer)
 
-      reader.rest.must_equal ',.!:'
+      value(reader.rest).must_equal ',.!:'
     end
 
     it 'writes no output' do
       subject.execute(translator, reader, writer)
 
-      writer.string.must_be_empty
+      value(writer.string).must_be_empty
     end
 
     describe 'tells translator to' do
@@ -49,13 +49,13 @@ describe TeX2md::SkipText do
     it 'writes no output' do
       subject.execute(translator, reader, writer)
 
-      writer.string.must_be_empty
+      _(writer.string).must_be_empty
     end
 
     it 'consumes no input' do
       subject.execute(translator, reader, writer)
 
-      reader.rest.must_equal input
+      _(reader.rest).must_equal input
     end
 
     describe 'tells translator to' do

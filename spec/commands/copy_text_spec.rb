@@ -20,13 +20,13 @@ describe TeX2md::CopyText do
     it 'consumes the matching text' do
       subject.execute(translator, reader, writer)
 
-      reader.rest.must_equal ',.!:'
+      _(reader.rest).must_equal ',.!:'
     end
 
     it 'writes the matching text' do
       subject.execute(translator, reader, writer)
 
-      writer.string.must_equal 'stuff1234'
+      _(writer.string).must_equal 'stuff1234'
     end
 
     describe 'tells translator to' do
@@ -49,13 +49,13 @@ describe TeX2md::CopyText do
     it 'consumes no input' do
       subject.execute(translator, reader, writer)
 
-      reader.rest.must_equal input
+      _(reader.rest).must_equal input
     end
 
     it 'writes no output' do
       subject.execute(translator, reader, writer)
 
-      writer.string.must_be_empty
+      _(writer.string).must_be_empty
     end
 
     describe 'tells translator to' do

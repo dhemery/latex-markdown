@@ -13,7 +13,7 @@ describe TeX2md::Translator do
     it 'plain text' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal input
+      _(writer.string).must_equal input
     end
   end
 
@@ -24,7 +24,7 @@ describe TeX2md::Translator do
       it "\\#{macro}" do
         subject.translate(reader, writer)
 
-        writer.string.must_equal 'Before  after'
+        _(writer.string).must_equal 'Before  after'
       end
     end
   end
@@ -36,7 +36,7 @@ describe TeX2md::Translator do
       it "\\#{macro} and its argument" do
         subject.translate(reader, writer)
 
-        writer.string.must_equal 'Before  after'
+        _(writer.string).must_equal 'Before  after'
       end
     end
   end
@@ -48,7 +48,7 @@ describe TeX2md::Translator do
       it "in span.#{macro}" do
         subject.translate(reader, writer)
 
-        writer.string.must_equal %Q[Before <span class='#{macro}'>argument</span> after]
+        _(writer.string).must_equal %Q[Before <span class='#{macro}'>argument</span> after]
       end
     end
   end
@@ -60,7 +60,7 @@ describe TeX2md::Translator do
       it "in div.#{environment}" do
         subject.translate(reader, writer)
 
-        writer.string.must_equal %Q[Before <div class='#{environment}'>in the environment</div> after]
+        _(writer.string).must_equal %Q[Before <div class='#{environment}'>in the environment</div> after]
       end
     end
   end
@@ -70,7 +70,7 @@ describe TeX2md::Translator do
     it 'in h1.story' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %q[Before <h1 class='story'>story title</h1> after]
+      _(writer.string).must_equal %q[Before <h1 class='story'>story title</h1> after]
     end
   end
 
@@ -79,7 +79,7 @@ describe TeX2md::Translator do
     it 'in h2.chapter' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %q[Before <h2 class='chapter'>chapter title</h2> after]
+      _(writer.string).must_equal %q[Before <h2 class='chapter'>chapter title</h2> after]
     end
   end
 
@@ -88,7 +88,7 @@ describe TeX2md::Translator do
     it 'in h2.introduction' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %q[Before <h2 class='introduction'>introduction title</h2> after]
+      _(writer.string).must_equal %q[Before <h2 class='introduction'>introduction title</h2> after]
     end
   end
 
@@ -97,7 +97,7 @@ describe TeX2md::Translator do
     it 'in h3.note' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %q[Before <h3 class='note'>note title</h3> after]
+      _(writer.string).must_equal %q[Before <h3 class='note'>note title</h3> after]
     end
   end
 
@@ -106,7 +106,7 @@ describe TeX2md::Translator do
     it 'nested macro calls' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal %q[Before <h2 class='chapter'>My <span class='emph'>great <span class='abbr'>TBD</span></span> adventure</h2> after]
+      _(writer.string).must_equal %q[Before <h2 class='chapter'>My <span class='emph'>great <span class='abbr'>TBD</span></span> adventure</h2> after]
     end
   end
 
@@ -115,7 +115,7 @@ describe TeX2md::Translator do
     it 'with a space' do
       subject.translate(reader, writer)
 
-      writer.string.must_equal 'Before after'
+      _(writer.string).must_equal 'Before after'
     end
   end
 end

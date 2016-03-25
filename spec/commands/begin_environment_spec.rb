@@ -16,19 +16,19 @@ describe TeX2md::BeginEnvironment do
   let(:writer) { StringIO.new }
 
   it 'identifies itself as begin' do
-    subject.name.must_equal 'begin'
+    _(subject.name).must_equal 'begin'
   end
 
   it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal 'environment}some text\end{environment}'
+    _(reader.rest).must_equal 'environment}some text\end{environment}'
   end
 
   it 'writes no output' do
     subject.execute(translator, reader, writer)
 
-    writer.string.must_be_empty
+    _(writer.string).must_be_empty
   end
 
   describe 'tells translator to' do

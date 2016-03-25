@@ -15,19 +15,19 @@ describe TeX2md::IgnoredArgMacro do
   let(:writer) { StringIO.new }
 
   it 'identifies itself by name' do
-    subject.name.must_equal macro_name
+    _(subject.name).must_equal macro_name
   end
 
   it 'consumes the left brace' do
     subject.execute(translator, reader, writer)
 
-    reader.rest.must_equal 'argument text}additional text'
+    _(reader.rest).must_equal 'argument text}additional text'
   end
 
   it 'writes nothing' do
     subject.execute(translator, reader, writer)
 
-    writer.string.must_be_empty
+    _(writer.string).must_be_empty
   end
 
   describe 'tells translator to' do
