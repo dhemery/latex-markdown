@@ -17,6 +17,7 @@ module TeX2md
     MACRO_PATTERN = /[[:alpha:]]+/
     TEXT_PATTERN = /[^\\]*/
 
+    ENVIRONMENTS = %w(dedication quote signature).map { |name| Environment.new(name) }
     IGNORED_MACROS = %w(longpar longpage shortpage shortpar).map{ |name| IgnoredMacro.new(name) }
     IGNORED_MACROS_WITH_ARGS = %w(longpages shortpages).map{ |name| IgnoredArgMacro.new(name) }
     SPAN_MACROS = %w(abbr emph leadin unbreakable).map { |name| ElementMacro.new(name, 'span') }
@@ -27,7 +28,6 @@ module TeX2md
         ElementMacro.new('note', 'h3'),
     ]
 
-    ENVIRONMENTS = %w(quote).map { |name| Environment.new(name) }
 
     STANDARD_COMMANDS = [
         EndDocument.new,

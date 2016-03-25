@@ -53,7 +53,7 @@ describe TeX2md::Translator, 'translates' do
     end
   end
 
-  %w(quote).each do |environment|
+  %w(dedication quote signature).each do |environment|
     describe environment do
       let(:input) { "Before \\begin{#{environment}}in the environment\\end{#{environment}} after" }
 
