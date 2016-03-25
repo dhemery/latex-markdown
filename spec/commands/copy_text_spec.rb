@@ -4,7 +4,7 @@ require 'tex2md/commands/copy_text'
 require 'strscan'
 
 describe TeX2md::CopyText do
-  subject { TeX2md::CopyText.new pattern }
+  subject { TeX2md::CopyText.new(pattern) }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.read_command ; end

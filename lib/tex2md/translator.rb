@@ -38,6 +38,7 @@ module TeX2md
         Escape.new,
         BeginEnvironment.new,
         EndEnvironment.new,
+        Markdown.new,
     ] + IGNORED_MACROS + IGNORED_MACROS_WITH_ARGS + SPAN_MACROS + HEADING_MACROS + ENVIRONMENTS + REPLACEMENTS
 
     def initialize(stack = [])

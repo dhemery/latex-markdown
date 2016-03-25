@@ -8,12 +8,23 @@ describe TeX2md::Translator do
   let(:writer) { StringIO.new }
 
   describe 'copies' do
-    let(:input) { 'some text with no commands' }
+    describe 'plain text' do
+      let(:input) { 'some text with no commands' }
 
-    it 'plain text' do
-      subject.translate(reader, writer)
+      it 'verbatim' do
+        subject.translate(reader, writer)
 
-      _(writer.string).must_equal input
+        _(writer.string).must_equal input
+      end
+    end
+
+    describe 'the argument of \markdown' do
+      let(:input) { 'Before\markdown{---}after'}
+      it 'verbatim' do
+        subject.translate(reader, writer)
+
+        _(writer.string).must_equal 'Before---after'
+      end
     end
   end
 
