@@ -4,7 +4,7 @@ require 'tex2md/commands/read_command'
 require 'strscan'
 
 describe TeX2md::ReadCommand do
-  subject { TeX2md::ReadCommand.new pattern }
+  subject { TeX2md::ReadCommand.new(pattern) }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.execute_command(_) ; end

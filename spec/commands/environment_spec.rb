@@ -4,8 +4,8 @@ require 'tex2md/commands/environment'
 require 'strscan'
 
 describe TeX2md::Environment do
-  subject { TeX2md::Environment.new(type) }
-  let(:type) { 'foo' }
+  subject { TeX2md::Environment.new(environment) }
+  let(:environment) { 'foo' }
   let(:input) { '}some text\end{foo}' }
   let(:translator) do
     Object.new.tap do |allowing|
@@ -16,8 +16,8 @@ describe TeX2md::Environment do
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself by type' do
-    _(subject.name).must_equal type
+  it 'identifies itself by environment name' do
+    _(subject.name).must_equal environment
   end
 
   it 'consumes the right brace' do
@@ -26,10 +26,10 @@ describe TeX2md::Environment do
     _(reader.rest).must_equal 'some text\end{foo}'
   end
 
-  it 'writes an open div tag with the type as its class ' do
+  it 'writes an open div tag with the environment name as its class ' do
     subject.execute(translator, reader, writer)
 
-    _(writer.string).must_equal %Q{<div class='#{type}'>}
+    _(writer.string).must_equal %Q{<div class='#{environment}'>}
   end
 
   describe 'tells translator to' do

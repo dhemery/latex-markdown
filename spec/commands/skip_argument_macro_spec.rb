@@ -2,8 +2,8 @@ require_relative '../spec_helper'
 require 'tex2md/commands/skip_argument_macro'
 
 describe TeX2md::SkipArgumentMacro do
-  subject { TeX2md::SkipArgumentMacro.new macro_name }
-  let(:macro_name) { 'mymacro' }
+  subject { TeX2md::SkipArgumentMacro.new(macro) }
+  let(:macro) { 'mymacro' }
   let(:input) { '{argument text}additional text' }
   let(:translator) do
     Object.new.tap do |allowing|
@@ -15,7 +15,7 @@ describe TeX2md::SkipArgumentMacro do
   let(:writer) { StringIO.new }
 
   it 'identifies itself by name' do
-    _(subject.name).must_equal macro_name
+    _(subject.name).must_equal macro
   end
 
   it 'consumes the left brace' do

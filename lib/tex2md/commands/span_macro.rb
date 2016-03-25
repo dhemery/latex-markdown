@@ -3,10 +3,9 @@ require_relative 'command.rb'
 module TeX2md
   class SpanMacro
     include Command
-    attr_reader :element
 
-    def initialize(style)
-      @name = style
+    def initialize(name)
+      @name = name
       @pattern = /{/
     end
 
