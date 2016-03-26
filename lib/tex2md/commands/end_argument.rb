@@ -9,7 +9,7 @@ module TeX2md
     end
 
     def transition(translator, _)
-      translator.finish_command # finish the macro that had the argument
+      translator.finish_command # the command that the macro interrupted
     end
 
     def to_s

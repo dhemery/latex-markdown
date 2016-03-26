@@ -35,8 +35,7 @@ describe TeX2md::EndDocument do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the command then finish the document' do
-      translator.expect :finish_command, nil
+    it 'finish the document' do
       translator.expect :finish_document, nil
 
       subject.execute(translator, reader, writer)

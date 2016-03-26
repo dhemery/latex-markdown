@@ -36,8 +36,7 @@ describe TeX2md::BeginEnvironmentMacro do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and copy text' do
-      translator.expect :finish_command, nil
+    it 'copy text' do
       translator.expect :copy_text, nil
 
       subject.execute(translator, reader, writer)

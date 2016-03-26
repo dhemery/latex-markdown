@@ -42,8 +42,7 @@ describe TeX2md::PageMacro do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the command and copy the argument' do
-      translator.expect :finish_command, nil
+    it 'copy the argument' do
       translator.expect :copy_argument, nil
 
       subject.execute(translator, reader, writer)

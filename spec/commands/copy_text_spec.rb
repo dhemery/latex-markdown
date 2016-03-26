@@ -8,6 +8,7 @@ describe TeX2md::CopyText do
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.read_command ; end
+      def allowing.resume(_) ; end
     end
   end
   let(:reader) { StringScanner.new(input) }
@@ -33,8 +34,9 @@ describe TeX2md::CopyText do
       let(:translator) { MiniTest::Mock.new }
       after { translator.verify }
 
-      it 'read a command' do
+      it 'read a command then resume copying text' do
         translator.expect :read_command, nil
+        translator.expect :resume, nil, [subject]
 
         subject.execute(translator, reader, writer)
       end
@@ -62,8 +64,9 @@ describe TeX2md::CopyText do
       let(:translator) { MiniTest::Mock.new }
       after { translator.verify }
 
-      it 'read a command' do
+      it 'read a command then resume copying text' do
         translator.expect :read_command, nil
+        translator.expect :resume, nil, [subject]
 
         subject.execute(translator, reader, writer)
       end

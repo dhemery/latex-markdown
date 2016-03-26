@@ -44,7 +44,7 @@ module TeX2md
 
     def translate(reader, writer)
       copy_text
-      @stack.last.execute(self, reader, writer) until @stack.empty?
+      @stack.pop.execute(self, reader, writer) until @stack.empty?
     end
 
     def copy_text(pattern = TEXT_PATTERN)
@@ -69,6 +69,10 @@ module TeX2md
 
     def read_command(pattern = COMMAND_PATTERN)
       @stack.push(ReadCommand.new(pattern))
+    end
+
+    def resume(command)
+      @stack.push(command)
     end
 
     def write_text(text)

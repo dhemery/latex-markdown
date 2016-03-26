@@ -33,8 +33,7 @@ describe TeX2md::EndArgument do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and the previous command' do
-      translator.expect :finish_command, nil
+    it 'finish the command that the macro interrupted' do
       translator.expect :finish_command, nil
 
       subject.execute(translator, reader, writer)

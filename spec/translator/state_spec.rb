@@ -61,6 +61,16 @@ describe TeX2md::Translator, 'state' do
     end
   end
 
+  describe 'resume' do
+    let(:command) { Object.new }
+
+    it 'pushes the command' do
+      stack.expect :push, nil, [command]
+
+      subject.resume(command)
+    end
+  end
+
   # describe 'skip argument' do
   #   it 'pushes SkipText with the argument pattern' do
   #     stack.expect :push, nil, [TeX2md::SkipText.new(TeX2md::Translator::ARGUMENT_PATTERN)]

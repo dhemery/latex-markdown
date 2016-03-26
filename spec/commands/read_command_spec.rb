@@ -34,8 +34,7 @@ describe TeX2md::ReadCommand do
       let(:translator) { MiniTest::Mock.new }
       after { translator.verify }
 
-      it 'finish the current command and execute the named command' do
-        translator.expect :finish_command, nil
+      it 'execute the named command' do
         translator.expect :execute_command, nil, ['foo']
 
         subject.execute(translator, reader, writer)
@@ -63,8 +62,7 @@ describe TeX2md::ReadCommand do
       let(:translator) { MiniTest::Mock.new }
       after { translator.verify }
 
-      it 'finish the current command and execute the nil command' do
-        translator.expect :finish_command, nil
+      it 'execute the nil command' do
         translator.expect :execute_command, nil, [nil]
 
         subject.execute(translator, reader, writer)

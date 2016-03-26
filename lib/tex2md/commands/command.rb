@@ -1,11 +1,10 @@
 module Command
-  attr_reader :name, :pattern, :continue
+  attr_reader :name, :pattern
   alias :eql? :==
 
   def execute(translator, reader, writer)
     captured = read(reader)
     write(writer, captured)
-    finish(translator)
     transition(translator, captured)
   end
 
@@ -15,10 +14,6 @@ module Command
   end
 
   def write(_, _) ; end
-
-  def finish(translator)
-    translator.finish_command unless continue
-  end
 
   def transition(_, _) ; end
 

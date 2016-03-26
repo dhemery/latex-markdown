@@ -35,8 +35,7 @@ describe TeX2md::EndEnvironmentMacro do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command, finish the next command, and skip the argument' do
-      translator.expect :finish_command, nil
+    it 'finish the command that the \end interrupted' do
       translator.expect :finish_command, nil
 
       subject.execute(translator, reader, writer)

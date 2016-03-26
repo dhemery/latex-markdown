@@ -30,13 +30,11 @@ describe TeX2md::NullMacro do
     _(writer.string).must_be_empty
   end
 
-  describe 'tells translator to' do
+  describe 'tells translator' do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command' do
-      translator.expect :finish_command, nil
-
+    it 'nothing' do
       subject.execute(translator, reader, writer)
     end
   end

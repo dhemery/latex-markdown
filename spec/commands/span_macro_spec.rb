@@ -37,8 +37,7 @@ describe TeX2md::SpanMacro do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command, copy the argument, and write the end span tag' do
-      translator.expect :finish_command, nil
+    it 'copy the argument and write the end span tag' do
       translator.expect :write_text, nil, ['</span>']
       translator.expect :copy_argument, nil
 

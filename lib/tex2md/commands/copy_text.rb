@@ -6,14 +6,14 @@ module TeX2md
 
     def initialize(pattern)
       @pattern = pattern
-      @continue = true
     end
 
-    def write(writer, text)
-      writer.write(text)
+    def write(writer, captured)
+      writer.write(captured)
     end
 
     def transition(translator, _)
+      translator.resume(self)
       translator.read_command
     end
 

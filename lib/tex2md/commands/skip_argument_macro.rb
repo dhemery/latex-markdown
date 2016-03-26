@@ -6,7 +6,7 @@ module TeX2md
 
     def initialize(name)
       @name = name
-      @pattern = /{[^}]*}/
+      @pattern = /[^}]*}/
     end
 
     def to_s

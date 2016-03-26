@@ -22,7 +22,7 @@ describe TeX2md::Escape do
     _(subject.name).must_equal '\\'
   end
 
-  it 'consumes the macro name' do
+  it 'reads the macro name' do
     subject.execute(translator, reader, writer)
 
     _(reader.rest).must_equal '-not to be consumed'
@@ -38,8 +38,7 @@ describe TeX2md::Escape do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and execute the macro' do
-      translator.expect :finish_command, nil
+    it 'execute the named macro' do
       translator.expect :execute_command, nil, [macro]
 
       subject.execute(translator, reader, writer)
