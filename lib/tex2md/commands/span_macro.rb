@@ -7,14 +7,15 @@ module TeX2md
     def initialize(name)
       @name = name
       @pattern = /{/
+      @text = "<span class='#{name}'>"
     end
 
     def write(writer, _)
-      writer.write "<span class='#{name}'>"
+      writer.write(@text)
     end
 
     def transition(translator, _)
-      translator.write_text("</span>")
+      translator.write_text('</span>')
       translator.copy_argument
     end
 

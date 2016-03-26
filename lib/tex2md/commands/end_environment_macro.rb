@@ -7,10 +7,11 @@ module TeX2md
     def initialize
       @name = 'end'
       @pattern = /{/
+      @text = '</div>'
     end
 
     def write(writer, _)
-      writer.write('</div>')
+      writer.write(@text)
     end
 
     def transition(translator, _)

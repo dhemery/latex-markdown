@@ -8,10 +8,11 @@ module TeX2md
     def initialize(name)
       @name = name
       @pattern = /{/
+      @text = "style: #{name}#{$/}title: "
     end
 
     def write(writer, _)
-      writer.write("style: #{name}#{$/}title: ")
+      writer.write(@text)
     end
 
     def transition(translator, _)

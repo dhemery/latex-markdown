@@ -1,7 +1,13 @@
 # The Tex to Markdown (tex2md) Command
 
-    tex2md source mddir
+    tex2md [options] source mddir
 
-- If `source `is a file, translate it.
-- If `source` is a dir, find every `**/*.tex` file and translate it. 
-- If `mddir` does not exist, create it.
+## Options
+
+- `-c, --collection`: \\chapter{The Chapter Title} writes <div class='chapter'>The Chapter Title</div>
+- `-s, --standalone`: \\chapter{The Chapter Title} writes ---<nl>style: chapter<nl>title: The Chapter Title<nl>---
+
+
+Or:
+
+- `-s, --styles`: Each listed style writes the yaml style and title tags
