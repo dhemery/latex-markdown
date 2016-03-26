@@ -31,7 +31,7 @@ module TeX2md
     SPANS = %w(abbr emph leadin unbreakable).map { |style| SpanMacro.new(style) }
     PAGES = %w(chapter introduction note story).map { |style| PageMacro.new(style) }
 
-    STANDARD_COMMANDS = [
+    COMMANDS = [
         EndDocument.new,
         EndArgument.new,
         Escape.new,
@@ -40,7 +40,7 @@ module TeX2md
     ] + COPIES + ENVIRONMENTS + NULLS + REPLACEMENTS + SKIPS + SPANS + PAGES
 
     def initialize(stack = [])
-      @commands = STANDARD_COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
+      @commands = COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
       @stack = stack
     end
 
