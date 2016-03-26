@@ -42,22 +42,10 @@ describe TeX2md::Translator, 'state' do
   end
 
   describe 'read command' do
-    describe 'with a pattern' do
-      let(:pattern) { /[p.;:]+/}
+    it 'pushes ReadCommand with the command pattern' do
+      stack.expect :push, nil, [TeX2md::ReadCommand.new(nil, TeX2md::Translator::COMMAND_PATTERN)]
 
-      it 'pushes ReadCommand with the given pattern' do
-        stack.expect :push, nil, [TeX2md::ReadCommand.new(pattern)]
-
-        subject.read_command(pattern)
-      end
-    end
-
-    describe 'with no pattern' do
-      it 'pushes ReadCommand with the command pattern' do
-        stack.expect :push, nil, [TeX2md::ReadCommand.new(TeX2md::Translator::COMMAND_PATTERN)]
-
-        subject.read_command
-      end
+      subject.read_command
     end
   end
 
@@ -71,14 +59,6 @@ describe TeX2md::Translator, 'state' do
     end
   end
 
-  # describe 'skip argument' do
-  #   it 'pushes SkipText with the argument pattern' do
-  #     stack.expect :push, nil, [TeX2md::SkipText.new(TeX2md::Translator::ARGUMENT_PATTERN)]
-  #
-  #     subject.skip_argument
-  #   end
-  # end
-  #
   describe 'write text' do
     it 'pushes an anonymous WriteText with the given text' do
       text = 'some text to write'

@@ -4,7 +4,8 @@ module TeX2md
   class ReadCommand
     include Command
 
-    def initialize(pattern)
+    def initialize(name, pattern)
+      @name = name
       @pattern = pattern
     end
 
@@ -13,7 +14,7 @@ module TeX2md
     end
 
     def to_s
-      "#{self.class}(#{pattern.source})"
+      "#{self.class}(#{name},#{pattern.source})"
     end
   end
 end

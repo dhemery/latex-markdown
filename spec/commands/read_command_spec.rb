@@ -4,7 +4,11 @@ require 'tex2md/commands/read_command'
 require 'strscan'
 
 describe TeX2md::ReadCommand do
-  subject { TeX2md::ReadCommand.new(pattern) }
+  subject { TeX2md::ReadCommand.new(command, pattern) }
+  let(:command) { 'myreadcommand' }
+  let(:input) { 'foo123' }
+  let(:pattern) { /[[:alpha:]]+/ }
+
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.execute_command(_) ; end
@@ -14,59 +18,30 @@ describe TeX2md::ReadCommand do
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 
-  describe 'when the input has a name that matches the pattern' do
-    let(:input) { 'foo123' }
-    let(:pattern) { /[[:alpha:]]+/ }
-
-    it 'consumes the name' do
-      subject.execute(translator, reader, writer)
-
-      value(reader.rest).must_equal '123'
-    end
-
-    it 'writes no output' do
-      subject.execute(translator, reader, writer)
-
-      value(writer.string).must_be_empty
-    end
-
-    describe 'tells translator to' do
-      let(:translator) { MiniTest::Mock.new }
-      after { translator.verify }
-
-      it 'execute the named command' do
-        translator.expect :execute_command, nil, ['foo']
-
-        subject.execute(translator, reader, writer)
-      end
-    end
+  it 'identifies itself by name' do
+    subject.name.must_equal command
   end
 
-  describe 'when the input does not match the pattern' do
-    let(:input) { '123' }
-    let(:pattern) { /[[:alpha:]]+/ }
+  it 'consumes the matching input' do
+    subject.execute(translator, reader, writer)
 
-    it 'consumes no input' do
+    value(reader.rest).must_equal '123'
+  end
+
+  it 'writes no output' do
+    subject.execute(translator, reader, writer)
+
+    value(writer.string).must_be_empty
+  end
+
+  describe 'tells translator to' do
+    let(:translator) { MiniTest::Mock.new }
+    after { translator.verify }
+
+    it 'execute the command with the scanned name' do
+      translator.expect :execute_command, nil, ['foo']
+
       subject.execute(translator, reader, writer)
-
-      _(reader.rest).must_equal input
-    end
-
-    it 'writes no output' do
-      subject.execute(translator, reader, writer)
-
-      _(writer.string).must_be_empty
-    end
-
-    describe 'tells translator to' do
-      let(:translator) { MiniTest::Mock.new }
-      after { translator.verify }
-
-      it 'execute the nil command' do
-        translator.expect :execute_command, nil, [nil]
-
-        subject.execute(translator, reader, writer)
-      end
     end
   end
 end

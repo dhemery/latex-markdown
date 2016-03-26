@@ -4,7 +4,6 @@ require 'tex2md/commands/copy_text'
 require 'tex2md/commands/end_environment_macro'
 require 'tex2md/commands/end_argument'
 require 'tex2md/commands/end_document'
-require 'tex2md/commands/escape'
 require 'tex2md/commands/null_macro'
 require 'tex2md/commands/page_macro'
 require 'tex2md/commands/read_command'
@@ -32,9 +31,9 @@ module TeX2md
     COMMANDS = [
         EndDocument.new,
         EndArgument.new,
-        Escape.new,
         BeginEnvironmentMacro.new,
         EndEnvironmentMacro.new,
+        ReadCommand.new('\\', MACRO_PATTERN),
     ] + COPIES + NULLS + REPLACEMENTS + SKIPS + SPANS + PAGES
 
     def initialize(stack = [])
@@ -67,8 +66,8 @@ module TeX2md
       @stack.clear
     end
 
-    def read_command(pattern = COMMAND_PATTERN)
-      @stack.push(ReadCommand.new(pattern))
+    def read_command
+      @stack.push(ReadCommand.new(nil, COMMAND_PATTERN))
     end
 
     def resume(command)
