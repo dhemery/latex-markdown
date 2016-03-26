@@ -4,6 +4,7 @@ module TeX2md
 
   class PageMacro
     include Command
+    attr_reader :text
 
     def initialize(name)
       @name = name
@@ -12,7 +13,7 @@ module TeX2md
     end
 
     def write(writer, _)
-      writer.write(@text)
+      writer.write(text)
     end
 
     def transition(translator, _)

@@ -5,11 +5,12 @@ require 'strscan'
 
 describe TeX2md::BeginEnvironmentMacro do
   subject { TeX2md::BeginEnvironmentMacro.new }
-  let(:input) { '{environment}some text\end{environment}' }
+  let(:argument) { 'myenvironment' }
+  let(:input) { "{#{argument}}some text\end{#{argument}}" }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
-      def allowing.read_macro ; end
+      def allowing.copy_text ; end
     end
   end
   let(:reader) { StringScanner.new(input) }
@@ -19,25 +20,25 @@ describe TeX2md::BeginEnvironmentMacro do
     _(subject.name).must_equal 'begin'
   end
 
-  it 'consumes the left brace' do
+  it 'consumes the argument' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal 'environment}some text\end{environment}'
+    _(reader.rest).must_equal "some text\end{#{argument}}"
   end
 
-  it 'writes no output' do
+  it 'writes an opening div with the argument as its class' do
     subject.execute(translator, reader, writer)
 
-    _(writer.string).must_be_empty
+    _(writer.string).must_equal "<div class='#{argument}'>"
   end
 
   describe 'tells translator to' do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and read a macro' do
+    it 'finish the current command and copy text' do
       translator.expect :finish_command, nil
-      translator.expect :read_macro, nil
+      translator.expect :copy_text, nil
 
       subject.execute(translator, reader, writer)
     end

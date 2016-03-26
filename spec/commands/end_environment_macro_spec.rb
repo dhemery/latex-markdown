@@ -5,7 +5,7 @@ require 'strscan'
 
 describe TeX2md::EndEnvironmentMacro do
   subject { TeX2md::EndEnvironmentMacro.new }
-  let(:input) { '{environment}' }
+  let(:input) { '{environment}remaining text' }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
@@ -19,10 +19,10 @@ describe TeX2md::EndEnvironmentMacro do
     _(subject.name).must_equal 'end'
   end
 
-  it 'consumes the left brace' do
+  it 'consumes the argument' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal 'environment}'
+    _(reader.rest).must_equal 'remaining text'
   end
 
   it 'writes and end div tag' do
@@ -38,7 +38,6 @@ describe TeX2md::EndEnvironmentMacro do
     it 'finish the current command, finish the next command, and skip the argument' do
       translator.expect :finish_command, nil
       translator.expect :finish_command, nil
-      translator.expect :skip_argument, nil
 
       subject.execute(translator, reader, writer)
     end

@@ -18,10 +18,10 @@ describe TeX2md::SkipArgumentMacro do
     _(subject.name).must_equal macro
   end
 
-  it 'consumes the left brace' do
+  it 'consumes the argument' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal 'argument text}additional text'
+    _(reader.rest).must_equal 'additional text'
   end
 
   it 'writes nothing' do
@@ -36,7 +36,6 @@ describe TeX2md::SkipArgumentMacro do
 
     it 'finish the current command and skip the argument' do
       translator.expect :finish_command, nil
-      translator.expect :skip_argument, nil
 
       subject.execute(translator, reader, writer)
     end

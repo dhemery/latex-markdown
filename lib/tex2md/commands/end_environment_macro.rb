@@ -3,20 +3,20 @@ require_relative 'command.rb'
 module TeX2md
   class EndEnvironmentMacro
     include Command
+    attr_reader :text
 
     def initialize
       @name = 'end'
-      @pattern = /{/
+      @pattern = /{([[:alpha:]]+)}/
       @text = '</div>'
     end
 
     def write(writer, _)
-      writer.write(@text)
+      writer.write(text)
     end
 
     def transition(translator, _)
       translator.finish_command
-      translator.skip_argument
     end
 
     def to_s

@@ -6,11 +6,7 @@ module TeX2md
 
     def initialize(name)
       @name = name
-      @pattern = /{/
-    end
-
-    def transition(translator, _)
-      translator.skip_argument
+      @pattern = /{[^}]*}/
     end
 
     def to_s

@@ -6,11 +6,15 @@ module TeX2md
 
     def initialize
       @name = 'begin'
-      @pattern = /{/
+      @pattern = /{([[:alpha:]]+)}/
+    end
+
+    def write(writer, environment_name)
+      writer.write("<div class='#{environment_name}'>")
     end
 
     def transition(translator, _)
-      translator.read_macro
+      translator.copy_text
     end
 
     def to_s

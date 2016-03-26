@@ -69,14 +69,14 @@ describe TeX2md::Translator, 'state' do
     end
   end
 
-  describe 'skip argument' do
-    it 'pushes SkipText with the argument pattern' do
-      stack.expect :push, nil, [TeX2md::SkipText.new(TeX2md::Translator::ARGUMENT_PATTERN)]
-
-      subject.skip_argument
-    end
-  end
-
+  # describe 'skip argument' do
+  #   it 'pushes SkipText with the argument pattern' do
+  #     stack.expect :push, nil, [TeX2md::SkipText.new(TeX2md::Translator::ARGUMENT_PATTERN)]
+  #
+  #     subject.skip_argument
+  #   end
+  # end
+  #
   describe 'write text' do
     it 'pushes an anonymous WriteText with the given text' do
       text = 'some text to write'

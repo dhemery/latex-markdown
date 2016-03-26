@@ -3,14 +3,15 @@ module Command
   alias :eql? :==
 
   def execute(translator, reader, writer)
-    text = read(reader)
-    write(writer, text)
+    captured = read(reader)
+    write(writer, captured)
     finish(translator)
-    transition(translator, text)
+    transition(translator, captured)
   end
 
   def read(reader)
-    reader.scan(pattern) if pattern
+    match = reader.scan(pattern || //)
+    reader[1] || match
   end
 
   def write(_, _) ; end

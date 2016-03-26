@@ -4,14 +4,12 @@ require 'tex2md/commands/copy_text'
 require 'tex2md/commands/end_environment_macro'
 require 'tex2md/commands/end_argument'
 require 'tex2md/commands/end_document'
-require 'tex2md/commands/environment'
 require 'tex2md/commands/escape'
 require 'tex2md/commands/null_macro'
 require 'tex2md/commands/page_macro'
 require 'tex2md/commands/read_command'
 require 'tex2md/commands/skip_argument_macro'
 require 'tex2md/commands/span_macro'
-require 'tex2md/commands/skip_text'
 require 'tex2md/commands/write_text_macro'
 
 module TeX2md
@@ -22,7 +20,6 @@ module TeX2md
     TEXT_PATTERN = /[^~\\]*/
 
     COPIES = %w(markdown).map { |name| CopyArgumentMacro.new(name) }
-    ENVIRONMENTS = %w(dedication quote signature).map { |name| Environment.new(name) }
     NULLS = %w(longpar longpage shortpage shortpar).map{ |name| NullMacro.new(name) }
     REPLACEMENTS = [
         WriteTextMacro.new('~', ' '),
@@ -38,7 +35,7 @@ module TeX2md
         Escape.new,
         BeginEnvironmentMacro.new,
         EndEnvironmentMacro.new,
-    ] + COPIES + ENVIRONMENTS + NULLS + REPLACEMENTS + SKIPS + SPANS + PAGES
+    ] + COPIES + NULLS + REPLACEMENTS + SKIPS + SPANS + PAGES
 
     def initialize(stack = [])
       @commands = COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
@@ -68,10 +65,6 @@ module TeX2md
 
     def finish_document
       @stack.clear
-    end
-
-    def skip_argument
-      @stack.push(SkipText.new(ARGUMENT_PATTERN))
     end
 
     def read_command(pattern = COMMAND_PATTERN)
