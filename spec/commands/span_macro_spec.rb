@@ -4,8 +4,8 @@ require 'tex2md/commands/span_macro'
 require 'strscan'
 
 describe TeX2md::SpanMacro do
-  subject { TeX2md::SpanMacro.new(style) }
-  let(:style) { 'bar' }
+  subject { TeX2md::SpanMacro.new(macro) }
+  let(:macro) { 'myspanmacro' }
   let(:input) { '{argument}' }
   let(:translator) do
     Object.new.tap do |allowing|
@@ -17,8 +17,8 @@ describe TeX2md::SpanMacro do
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself by its style' do
-    _(subject.name).must_equal style
+  it 'identifies itself by its name' do
+    _(subject.name).must_equal macro
   end
 
   it 'consumes the left brace' do
@@ -27,10 +27,10 @@ describe TeX2md::SpanMacro do
     _(reader.rest).must_equal 'argument}'
   end
 
-  it 'writes the open span tag with the style as its class' do
+  it 'writes the open span tag with the macro name as its class' do
     subject.execute(translator, reader, writer)
 
-    _(writer.string).must_equal "<span class='#{style}'>"
+    _(writer.string).must_equal "<span class='#{macro}'>"
   end
 
   describe 'tells translator to' do

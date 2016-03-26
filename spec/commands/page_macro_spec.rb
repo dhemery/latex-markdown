@@ -4,20 +4,20 @@ require 'tex2md/commands/page_macro'
 require 'strscan'
 
 describe TeX2md::PageMacro do
-  subject { TeX2md::PageMacro.new(style) }
+  subject { TeX2md::PageMacro.new(macro) }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.copy_argument ; end
       def allowing.finish_command ; end
     end
   end
-  let(:style) { 'foo' }
+  let(:macro) { 'mypagemacro' }
   let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
   let(:input) { '{the page title}' }
 
-  it 'identifies itself by style' do
-    _(subject.name).must_equal style
+  it 'identifies itself by name' do
+    _(subject.name).must_equal macro
   end
 
   it 'consumes the left brace' do
@@ -26,10 +26,10 @@ describe TeX2md::PageMacro do
     _(reader.rest).must_equal 'the page title}'
   end
 
-  it 'writes its style as a YAML attribute' do
+  it 'writes its name as a YAML style attribute' do
     subject.execute(translator, reader, writer)
 
-    _(writer.string.each_line.map(&:chomp)).must_include "style: #{style}"
+    _(writer.string.each_line.map(&:chomp)).must_include "style: #{macro}"
   end
 
   it 'writes the key for a title YAML attribute' do

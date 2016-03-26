@@ -81,7 +81,7 @@ describe TeX2md::Translator, 'state' do
     it 'pushes an anonymous WriteText with the given text' do
       text = 'some text to write'
 
-      stack.expect :push, nil, [TeX2md::WriteText.new(nil, text)]
+      stack.expect :push, nil, [TeX2md::WriteTextMacro.new(nil, text)]
 
       subject.write_text text
     end

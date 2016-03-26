@@ -11,7 +11,7 @@ require 'tex2md/commands/read_command'
 require 'tex2md/commands/skip_argument_macro'
 require 'tex2md/commands/span_macro'
 require 'tex2md/commands/skip_text'
-require 'tex2md/commands/write_text'
+require 'tex2md/commands/write_text_macro'
 
 module TeX2md
   class Translator
@@ -24,7 +24,8 @@ module TeX2md
     ENVIRONMENTS = %w(dedication quote signature).map { |name| Environment.new(name) }
     NULLS = %w(longpar longpage shortpage shortpar).map{ |name| NullMacro.new(name) }
     REPLACEMENTS = [
-        WriteText.new('~', ' ')
+        WriteTextMacro.new('~', ' '),
+        WriteTextMacro.new('break', '<br />'),
     ]
     SKIPS = %w(longpages shortpages).map{ |name| SkipArgumentMacro.new(name) }
     SPANS = %w(abbr emph leadin unbreakable).map { |style| SpanMacro.new(style) }
@@ -81,7 +82,7 @@ module TeX2md
     end
 
     def write_text(text)
-      @stack.push(WriteText.new(nil, text))
+      @stack.push(WriteTextMacro.new(nil, text))
     end
 
     private

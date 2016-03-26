@@ -3,7 +3,7 @@ require 'tex2md/commands/skip_argument_macro'
 
 describe TeX2md::SkipArgumentMacro do
   subject { TeX2md::SkipArgumentMacro.new(macro) }
-  let(:macro) { 'mymacro' }
+  let(:macro) { 'myskipargumentmacro' }
   let(:input) { '{argument text}additional text' }
   let(:translator) do
     Object.new.tap do |allowing|

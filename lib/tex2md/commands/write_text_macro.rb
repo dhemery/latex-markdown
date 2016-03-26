@@ -1,7 +1,7 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class WriteText
+  class WriteTextMacro
     include Command
     attr_reader :text
 

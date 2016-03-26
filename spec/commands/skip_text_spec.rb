@@ -10,7 +10,7 @@ describe TeX2md::SkipText do
       def allowing.read_command ; end
     end
   end
-  let(:reader) { StringScanner.new(input )}
+  let(:reader) { StringScanner.new(input) }
   let(:writer) { StringIO.new }
 
   describe 'when input begins with a match for the copy pattern' do

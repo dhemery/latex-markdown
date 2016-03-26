@@ -1,9 +1,9 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/write_text'
+require 'tex2md/commands/write_text_macro'
 
-describe TeX2md::WriteText do
-  subject { TeX2md::WriteText.new(command_name, text) }
-  let(:command_name) { 'mytext' }
+describe TeX2md::WriteTextMacro do
+  subject { TeX2md::WriteTextMacro.new(macro, text) }
+  let(:macro) { 'mywritetextmacro' }
   let(:text) { 'some text to write' }
   let(:input) { 'not to be consumed' }
   let(:translator) do
@@ -16,7 +16,7 @@ describe TeX2md::WriteText do
   let(:writer) { StringIO.new }
 
   it 'identifies itself by name' do
-    _(subject.name).must_equal command_name
+    _(subject.name).must_equal macro
   end
 
   it 'consumes no input' do

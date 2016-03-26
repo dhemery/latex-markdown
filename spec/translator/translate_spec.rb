@@ -95,20 +95,32 @@ describe TeX2md::Translator do
   end
 
   describe 'nests the output of' do
-    let(:input) { 'Before \unbreakable{My \emph{great \abbr{TBD}} adventure} after' }
+    let(:input) { 'Before \unbreakable{My \emph{great \break\abbr{TBD}} adventure} after' }
     it 'nested macro calls' do
       subject.translate(reader, writer)
 
-      _(writer.string).must_equal %q[Before <span class='unbreakable'>My <span class='emph'>great <span class='abbr'>TBD</span></span> adventure</span> after]
+      _(writer.string).must_equal %q[Before <span class='unbreakable'>My <span class='emph'>great <br /><span class='abbr'>TBD</span></span> adventure</span> after]
     end
   end
 
-  describe 'replaces tilde' do
-    let(:input) { 'Before~after' }
-    it 'with a space' do
-      subject.translate(reader, writer)
+  describe 'replaces' do
+    describe 'tilde' do
+      let(:input) { 'Before~after' }
+      it 'with a space' do
+        subject.translate(reader, writer)
 
-      _(writer.string).must_equal 'Before after'
+        _(writer.string).must_equal 'Before after'
+      end
+    end
+
+    describe '\break' do
+      let(:input) { 'before \break after'}
+      it 'with <br />' do
+        subject.translate(reader, writer)
+
+        _(writer.string).must_equal 'before <br /> after'
+      end
     end
   end
+
 end
