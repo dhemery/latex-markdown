@@ -6,10 +6,11 @@ module TeX2md
 
     def initialize
       @name = '\\'
+      @pattern = /[[:alpha:]]+/
     end
 
-    def transition(translator, _)
-      translator.read_macro
+    def transition(translator, macro)
+      translator.execute_command(macro)
     end
 
     def to_s

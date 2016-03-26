@@ -6,13 +6,15 @@ require 'strscan'
 
 describe TeX2md::Escape do
   subject { TeX2md::Escape.new }
+
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
-      def allowing.read_macro ; end
+      def allowing.execute_command(_) ; end
     end
   end
-  let(:input) { 'not to be consumed' }
+  let(:macro) { 'mymacro' }
+  let(:input) { "#{macro}-not to be consumed" }
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 
@@ -20,10 +22,10 @@ describe TeX2md::Escape do
     _(subject.name).must_equal '\\'
   end
 
-  it 'consumes no input' do
+  it 'consumes the macro name' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal input
+    _(reader.rest).must_equal '-not to be consumed'
   end
 
   it 'writes no output' do
@@ -36,9 +38,9 @@ describe TeX2md::Escape do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the current command and read a macro' do
+    it 'finish the current command and execute the macro' do
       translator.expect :finish_command, nil
-      translator.expect :read_macro, nil
+      translator.expect :execute_command, nil, [macro]
 
       subject.execute(translator, reader, writer)
     end

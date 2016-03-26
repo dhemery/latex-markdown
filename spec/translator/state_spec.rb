@@ -41,14 +41,6 @@ describe TeX2md::Translator, 'state' do
     end
   end
 
-  describe 'read macro' do
-    it 'pushes ReadCommand with the macro pattern' do
-      stack.expect :push, nil, [TeX2md::ReadCommand.new(TeX2md::Translator::MACRO_PATTERN)]
-
-      subject.read_macro
-    end
-  end
-
   describe 'read command' do
     describe 'with a pattern' do
       let(:pattern) { /[p.;:]+/}

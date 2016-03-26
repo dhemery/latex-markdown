@@ -71,10 +71,6 @@ module TeX2md
       @stack.push(ReadCommand.new(pattern))
     end
 
-    def read_macro
-      read_command(MACRO_PATTERN)
-    end
-
     def write_text(text)
       @stack.push(WriteTextMacro.new(nil, text))
     end
