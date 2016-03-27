@@ -1,20 +1,21 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/end_argument'
+require 'tex2md/commands/do_nothing'
 
-
-describe TeX2md::EndArgument do
-  subject { TeX2md::EndArgument.new }
+describe TeX2md::DoNothing do
+  subject { TeX2md::DoNothing.new(macro) }
+  let(:macro) { 'mydonothing' }
+  let(:input) { 'not to be consumed' }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
     end
   end
-  let(:input) { 'not to be consumed' }
+
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself as }' do
-    _(subject.name).must_equal '}'
+  it 'identifies itself by name' do
+    _(subject.name).must_equal macro
   end
 
   it 'consumes no input' do
@@ -29,13 +30,11 @@ describe TeX2md::EndArgument do
     _(writer.string).must_be_empty
   end
 
-  describe 'tells translator to' do
+  describe 'tells translator' do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'finish the command that the macro interrupted' do
-      translator.expect :finish_command, nil
-
+    it 'nothing' do
       subject.execute(translator, reader, writer)
     end
   end

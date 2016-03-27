@@ -1,16 +1,12 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class CopyArgumentMacro
+  class DiscardArgument
     include Command
 
     def initialize(name)
       @name = name
-      @pattern = /{/
-    end
-
-    def transition(translator, _)
-      translator.copy_argument
+      @pattern = /[^}]*}/
     end
 
     def to_s

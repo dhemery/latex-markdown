@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/span_macro'
+require 'tex2md/commands/wrap_argument_in_span'
 
 require 'strscan'
 
-describe TeX2md::SpanMacro do
-  subject { TeX2md::SpanMacro.new(macro) }
+describe TeX2md::WrapArgumentInSpan do
+  subject { TeX2md::WrapArgumentInSpan.new(macro) }
   let(:macro) { 'myspanmacro' }
   let(:input) { '{argument}' }
   let(:translator) do

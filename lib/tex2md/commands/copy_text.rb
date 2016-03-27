@@ -14,7 +14,7 @@ module TeX2md
 
     def transition(translator, _)
       translator.resume(self)
-      translator.read_command
+      translator.execute_operator
     end
 
     def to_s

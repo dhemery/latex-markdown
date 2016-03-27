@@ -1,11 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/read_command'
+require 'tex2md/commands/execute_command'
 
 require 'strscan'
 
-describe TeX2md::ReadCommand do
-  subject { TeX2md::ReadCommand.new(command, pattern) }
-  let(:command) { 'myreadcommand' }
+describe TeX2md::ExecuteCommand do
+  subject { TeX2md::ExecuteCommand.new(pattern) }
   let(:input) { 'foo123' }
   let(:pattern) { /[[:alpha:]]+/ }
 
@@ -18,8 +17,8 @@ describe TeX2md::ReadCommand do
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 
-  it 'identifies itself by name' do
-    subject.name.must_equal command
+  it 'identifies itself as \\' do
+    subject.name.must_equal '\\'
   end
 
   it 'consumes the matching input' do

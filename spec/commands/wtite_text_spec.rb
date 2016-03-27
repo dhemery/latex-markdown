@@ -1,16 +1,17 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/skip_argument_macro'
+require 'tex2md/commands/write_text'
 
-describe TeX2md::SkipArgumentMacro do
-  subject { TeX2md::SkipArgumentMacro.new(macro) }
-  let(:macro) { 'myskipargumentmacro' }
-  let(:input) { '{argument text}additional text' }
+describe TeX2md::WriteText do
+  subject { TeX2md::WriteText.new(macro, text) }
+  let(:macro) { 'mywritetextmacro' }
+  let(:text) { 'some text to write' }
+  let(:input) { 'not to be consumed' }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
-      def allowing.skip_argument ; end
     end
   end
+
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 
@@ -18,16 +19,16 @@ describe TeX2md::SkipArgumentMacro do
     _(subject.name).must_equal macro
   end
 
-  it 'consumes the argument' do
+  it 'consumes no input' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal 'additional text'
+    _(reader.rest).must_equal input
   end
 
-  it 'writes nothing' do
+  it 'writes the given text' do
     subject.execute(translator, reader, writer)
 
-    _(writer.string).must_be_empty
+    _(writer.string).must_equal text
   end
 
   describe 'tells translator' do

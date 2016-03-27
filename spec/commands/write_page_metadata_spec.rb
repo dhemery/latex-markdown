@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/page_macro'
+require 'tex2md/commands/write_page_metadata'
 
 require 'strscan'
 
-describe TeX2md::PageMacro do
-  subject { TeX2md::PageMacro.new(macro) }
+describe TeX2md::WritePageMetadata do
+  subject { TeX2md::WritePageMetadata.new(macro) }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.copy_argument ; end

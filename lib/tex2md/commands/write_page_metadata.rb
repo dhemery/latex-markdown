@@ -2,7 +2,7 @@ require_relative 'command.rb'
 
 module TeX2md
 
-  class PageMacro
+  class WritePageMetadata
     include Command
     attr_reader :text
 

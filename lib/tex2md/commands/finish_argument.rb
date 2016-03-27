@@ -1,7 +1,7 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class EndArgument
+  class FinishArgument
     include Command
 
     def initialize

@@ -1,11 +1,11 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class ReadCommand
+  class ExecuteCommand
     include Command
 
-    def initialize(name, pattern)
-      @name = name
+    def initialize(pattern)
+      @name = '\\'
       @pattern = pattern
     end
 

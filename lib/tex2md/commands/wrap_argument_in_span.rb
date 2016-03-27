@@ -1,7 +1,7 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class SpanMacro
+  class WrapArgumentInSpan
     include Command
     attr_reader :text
 

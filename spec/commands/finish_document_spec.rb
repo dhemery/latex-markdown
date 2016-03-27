@@ -1,9 +1,9 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/end_document'
+require 'tex2md/commands/finish_document'
 
 
-describe TeX2md::EndDocument do
-  subject { TeX2md::EndDocument.new }
+describe TeX2md::FinishDocument do
+  subject { TeX2md::FinishDocument.new }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end

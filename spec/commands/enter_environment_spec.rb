@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/begin_environment_macro'
+require 'tex2md/commands/enter_environment'
 
 require 'strscan'
 
-describe TeX2md::BeginEnvironmentMacro do
-  subject { TeX2md::BeginEnvironmentMacro.new }
+describe TeX2md::EnterEnvironment do
+  subject { TeX2md::EnterEnvironment.new }
   let(:argument) { 'myenvironment' }
   let(:input) { "{#{argument}}some text\end{#{argument}}" }
   let(:translator) do

@@ -1,11 +1,11 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class WriteTextMacro
+  class WriteText
     include Command
     attr_reader :text
 
-    def initialize(name, text)
+    def initialize(name='anonymous', text)
       @name = name
       @text = text
     end

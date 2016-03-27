@@ -9,19 +9,25 @@ describe TeX2md::Translator, 'state' do
 
   describe 'copy argument' do
     it 'pushes CopyText with the argument pattern' do
-      stack.expect :push, nil, [TeX2md::CopyText.new(TeX2md::Translator::ARGUMENT_PATTERN)]
+      stack.expect :push, nil, [TeX2md::CopyText.new(TeX2md::Translator::ARGUMENT)]
 
       subject.copy_argument
     end
   end
 
   describe 'copy text' do
-    it 'pushes CopyText with the given pattern' do
-      pattern = /[[:print:]]+/
+    it 'pushes CopyText with the text pattern' do
+      stack.expect :push, nil, [TeX2md::CopyText.new(TeX2md::Translator::TEXT)]
 
-      stack.expect :push, nil, [TeX2md::CopyText.new(pattern)]
+      subject.copy_text
+    end
 
-      subject.copy_text(pattern)
+    describe 'execute operator' do
+      it 'pushes ExecuteCommand with the operator pattern' do
+        stack.expect :push, nil, [TeX2md::ExecuteCommand.new(TeX2md::Translator::OPERATOR)]
+
+        subject.execute_operator
+      end
     end
   end
 
@@ -41,14 +47,6 @@ describe TeX2md::Translator, 'state' do
     end
   end
 
-  describe 'read command' do
-    it 'pushes ReadCommand with the command pattern' do
-      stack.expect :push, nil, [TeX2md::ReadCommand.new(nil, TeX2md::Translator::COMMAND_PATTERN)]
-
-      subject.read_command
-    end
-  end
-
   describe 'resume' do
     let(:command) { Object.new }
 
@@ -63,7 +61,7 @@ describe TeX2md::Translator, 'state' do
     it 'pushes an anonymous WriteText with the given text' do
       text = 'some text to write'
 
-      stack.expect :push, nil, [TeX2md::WriteTextMacro.new(nil, text)]
+      stack.expect :push, nil, [TeX2md::WriteText.new(text)]
 
       subject.write_text text
     end

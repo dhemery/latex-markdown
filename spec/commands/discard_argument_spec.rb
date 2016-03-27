@@ -1,16 +1,16 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/null_macro'
+require 'tex2md/commands/discard_argument'
 
-describe TeX2md::NullMacro do
-  subject { TeX2md::NullMacro.new(macro) }
-  let(:macro) { 'mynullmacro' }
-  let(:input) { 'not to be consumed' }
+describe TeX2md::DiscardArgument do
+  subject { TeX2md::DiscardArgument.new(macro) }
+  let(:macro) { 'myskipargumentmacro' }
+  let(:input) { '{argument text}additional text' }
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
+      def allowing.skip_argument ; end
     end
   end
-
   let(:reader) { StringScanner.new input }
   let(:writer) { StringIO.new }
 
@@ -18,13 +18,13 @@ describe TeX2md::NullMacro do
     _(subject.name).must_equal macro
   end
 
-  it 'consumes no input' do
+  it 'consumes the argument' do
     subject.execute(translator, reader, writer)
 
-    _(reader.rest).must_equal input
+    _(reader.rest).must_equal 'additional text'
   end
 
-  it 'writes no output' do
+  it 'writes nothing' do
     subject.execute(translator, reader, writer)
 
     _(writer.string).must_be_empty

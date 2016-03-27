@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require 'tex2md/commands/copy_argument_macro'
+require 'tex2md/commands/copy_argument'
 
 require 'strscan'
 
-describe TeX2md::CopyArgumentMacro do
-  subject { TeX2md::CopyArgumentMacro.new(macro_name) }
+describe TeX2md::CopyArgument do
+  subject { TeX2md::CopyArgument.new(macro_name) }
   let(:macro_name) { 'mymacro' }
   let(:translator) do
     Object.new.tap do |allowing|

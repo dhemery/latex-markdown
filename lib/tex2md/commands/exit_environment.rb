@@ -1,20 +1,22 @@
 require_relative 'command.rb'
 
 module TeX2md
-  class BeginEnvironmentMacro
+  class ExitEnvironment
     include Command
+    attr_reader :text
 
     def initialize
-      @name = 'begin'
+      @name = 'end'
       @pattern = /{([[:alpha:]]+)}/
+      @text = '</div>'
     end
 
-    def write(writer, environment_name)
-      writer.write("<div class='#{environment_name}'>")
+    def write(writer, _)
+      writer.write(text)
     end
 
     def transition(translator, _)
-      translator.copy_text
+      translator.finish_command
     end
 
     def to_s
