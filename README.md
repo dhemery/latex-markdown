@@ -1,2 +1,2 @@
 # latex-markdown
-Translate Driscoll Brook Press manuscripts from LaTeX to markdown
+Translate Driscoll Brook Press manuscripts from DBP TeX format to markdown.
