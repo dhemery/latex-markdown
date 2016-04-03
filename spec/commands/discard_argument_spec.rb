@@ -7,7 +7,6 @@ describe TeX2md::DiscardArgument do
   let(:input) { '{argument text}additional text' }
   let(:translator) do
     Object.new.tap do |allowing|
-      def allowing.finish_command ; end
       def allowing.skip_argument ; end
     end
   end

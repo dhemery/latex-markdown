@@ -9,7 +9,6 @@ describe TeX2md::EnterEnvironment do
   let(:input) { "{#{argument}}some text\end{#{argument}}" }
   let(:translator) do
     Object.new.tap do |allowing|
-      def allowing.finish_command ; end
       def allowing.copy_text ; end
     end
   end

@@ -9,7 +9,6 @@ describe TeX2md::ExitEnvironment do
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.finish_command ; end
-      def allowing.skip_argument ; end
     end
   end
   let(:reader) { StringScanner.new(input) }

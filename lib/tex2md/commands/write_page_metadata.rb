@@ -13,10 +13,12 @@ module TeX2md
     end
 
     def write(writer, _)
+      writer.puts('---')
       writer.write(text)
     end
 
     def transition(translator, _)
+      translator.write_text(['', '---'].join($/))
       translator.copy_argument
     end
 

@@ -10,7 +10,6 @@ describe TeX2md::WrapArgumentInSpan do
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.copy_argument ; end
-      def allowing.finish_command ; end
       def allowing.write_text(_) ; end
     end
   end

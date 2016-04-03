@@ -6,7 +6,6 @@ describe TeX2md::FinishDocument do
   subject { TeX2md::FinishDocument.new }
   let(:translator) do
     Object.new.tap do |allowing|
-      def allowing.finish_command ; end
       def allowing.finish_document ; end
     end
   end

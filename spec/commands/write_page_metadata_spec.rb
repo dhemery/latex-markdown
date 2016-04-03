@@ -8,7 +8,7 @@ describe TeX2md::WritePageMetadata do
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.copy_argument ; end
-      def allowing.finish_command ; end
+      def allowing.write_text(_) ; end
     end
   end
   let(:macro) { 'mypagemacro' }
@@ -24,6 +24,12 @@ describe TeX2md::WritePageMetadata do
     subject.execute(translator, reader, writer)
 
     _(reader.rest).must_equal 'the page title}'
+  end
+
+  it 'writes a YAML document marker line' do
+    subject.execute(translator, reader, writer)
+
+    _(writer.string.lines.first.chomp).must_equal '---'
   end
 
   it 'writes its name as a YAML style attribute' do
@@ -42,7 +48,8 @@ describe TeX2md::WritePageMetadata do
     let(:translator) { MiniTest::Mock.new }
     after { translator.verify }
 
-    it 'copy the argument' do
+    it 'copy the argument and write a YAML document marker on a new line' do
+      translator.expect :write_text, nil, [['', '---'].join($/)]
       translator.expect :copy_argument, nil
 
       subject.execute(translator, reader, writer)

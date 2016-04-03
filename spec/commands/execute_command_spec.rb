@@ -11,7 +11,6 @@ describe TeX2md::ExecuteCommand do
   let(:translator) do
     Object.new.tap do |allowing|
       def allowing.execute_command(_) ; end
-      def allowing.finish_command ; end
     end
   end
   let(:reader) { StringScanner.new input }

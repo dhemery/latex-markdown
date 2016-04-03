@@ -7,7 +7,6 @@ describe TeX2md::DoNothing do
   let(:input) { 'not to be consumed' }
   let(:translator) do
     Object.new.tap do |allowing|
-      def allowing.finish_command ; end
     end
   end
 
