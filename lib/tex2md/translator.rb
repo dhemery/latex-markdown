@@ -15,7 +15,7 @@ module TeX2md
   class Translator
     ARGUMENT = /[^~\\}]*/
     OPERATOR = /[~\\}]/
-    MACRO_NAME = /[[:alpha:]]+/
+    MACRO_NAME = /[[:alpha:]]+|[$]/
     TEXT = /[^~\\]*/
 
     COPY_TEXT = CopyText.new(TEXT)
@@ -30,6 +30,7 @@ module TeX2md
     WRITE_TEXT_COMMANDS = [
         WriteText.new('~', ' '),
         WriteText.new('break', '<br />'),
+        WriteText.new('$', '$')
     ]
 
     COMMANDS = [

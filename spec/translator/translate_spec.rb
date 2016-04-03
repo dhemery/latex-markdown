@@ -44,6 +44,15 @@ describe TeX2md::Translator do
         _(writer.string).must_equal 'Before---after'
       end
     end
+
+    describe '\$' do
+      let(:input) { 'Before\$after'}
+      it 'with $' do
+        subject.translate(reader, writer)
+
+        _(writer.string).must_equal 'Before$after'
+      end
+    end
   end
 
   describe 'discards' do
