@@ -31,8 +31,8 @@ module DBP
           exit
         end
 
-        options.source = Pathname(ARGV[0])
-        options.dest = Pathname(ARGV[1])
+        options.source = ARGV[0]
+        options.dest = ARGV[1]
 
         options
       end
