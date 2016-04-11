@@ -13,4 +13,4 @@ ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile",
 require "rubygems"
 require "bundler/setup"
 
-load Gem.bin_path("tex2md", "tex2md")
+load Gem.bin_path("dbp-book_compiler", "tex2md")

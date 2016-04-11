@@ -1,2 +1,2 @@
-# latex-markdown
-Translate Driscoll Brook Press manuscripts from DBP TeX format to markdown.
+# Driscoll Brook Press Book Compiler
+Driscoll Brook Press tools to compile books for publication.

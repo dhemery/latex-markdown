@@ -1,25 +1,25 @@
-gemname = 'tex2md'
-require_relative "lib/#{gemname}/version"
+gemname = 'dbp-book_compiler'
+require_relative 'lib/dbp/book_compiler/version'
 
 gemspec = "#{gemname}.gemspec"
-gemfile = "#{gemname}-#{TeX2md::VERSION}.gem"
+gemfile = "#{gemname}-#{DBP::BookCompiler::VERSION::STRING}.gem"
 
 require 'rake/clean'
 require 'rake/testtask'
 
-desc 'Build the gem'
-task :build do
-  puts %x{ gem build #{gemspec} }
+desc "Build the #{gemname} gem"
+task build: [:test] do
+  system 'gem', 'build', gemspec
 end
 
-desc 'Install the gem'
-task install: :build do
-  puts %x{ gem install --local #{gemfile} }
+desc "Install the #{gemname} gem"
+task install: [:build] do
+  system 'gem', 'install', '--local', gemfile
 end
 
-desc 'Uninstall the gem'
+desc "Uninstall the #{gemname} gem"
 task :uninstall do
-  puts %x{ gem uninstall -a -x #{gemname} }
+  system 'gem', 'uninstall', '-a', '-x', gemname
 end
 
 desc 'Run all tests'
@@ -29,4 +29,4 @@ end
 
 task default: :test
 
-CLEAN.include gemfile
+CLOBBER.include gemfile
