@@ -1,0 +1,40 @@
+% Cat codes for fundamental TeX features
+\catcode`\\=0     % \ escape character
+\catcode`\{=1     % { begin group
+\catcode`\}=2     % } end group
+\catcode`\$=3     % $ shift into and out of math mode
+\catcode`\&=4     % & alignment tab
+\catcode`\#=6     % # macro parameter prefix
+\catcode`\^=7     % ^ superscript operator
+\catcode`\_=8     % _ subscript operator
+\catcode`\ =10    % space acts as space
+\catcode`\~=13    % tilde is a control symbol
+\catcode`\%=14    % % comment to end of line
+
+\catcode`\^^M=5   % treat return as end of line
+\catcode`\^^@=9   % char 0 is ignored
+\catcode`\^^I=10  % tab acts as space
+\catcode`\^^L=13  % form feed is a control symbol
+
+% Tab and return act as space
+\def\^^I={\ } % Tab
+\def\^^M={\ } % Return
+
+% Form feed acts as \par
+\outer\def\^^L{\par}
+
+\def\'#1{{\accent"13 #1}}
+\chardef\$=`\$
+
+\def\break{\penalty-10000 }
+\def\nobreak{\penalty10000 }
+\def\allowbreak{\penalty0 }
+
+\def~{\nobreak\ }
+
+% =0: assignments obey \global prefix
+% <0: all assignments are local (\global prefix ignored)
+% >0: all assignments are global (\global prefix implied)
+\globaldefs=0
+
+% \endlinechar % character placed at the right end of an input line

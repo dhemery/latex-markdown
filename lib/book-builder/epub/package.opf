@@ -1,0 +1,41 @@
+---
+layout:
+manifest: false
+---
+<package xmlns='http://www.idpf.org/2007/opf' unique-identifier='isbn' version='2.0'>
+  {% assign author = site.data.author %}
+  {% assign ebook = site.data.ebook  %}
+  {% assign manuscript = site.data.manuscript %}
+  {% assign publication = site.data.publication  %}
+  {% assign publisher = site.data.publisher %}
+  <metadata xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:opf='http://www.idpf.org/2007/opf'>
+    <dc:format>application/epub+zip</dc:format>
+    <dc:language>en-US</dc:language>
+    <dc:title>{{ publication.title }}</dc:title>
+    <dc:identifier id='isbn' opf:scheme='ISBN'>{{ publication.isbn.ebook }}</dc:identifier>
+    <dc:publisher>{{ publisher.name }}</dc:publisher>
+    <dc:date opf:event='publication'>{{ publication.date }}</dc:date>
+    <dc:description>{{ publication.description }}</dc:description>
+    <dc:creator opf:role='aut' opf:file-as='{{ author.sort }}'>{{ author.name }}</dc:creator>
+    {% for subject in publication.subjects %}<dc:subject>{{ subject }}</dc:subject>{% endfor %}
+    {% for genre in publication.genres %}<dc:type>{{ genre }}</dc:type>{% endfor %}
+    {% for notice in publication.copyright %}
+      <dc:rights>{{ notice[1].material}} © {{ notice[1].date }} {{ notice[1].owner }}</dc:rights>
+    {% endfor %}
+    {% unless site.exclude contains 'cover' %}<meta name="cover" content="{{ ebook.cover.image | slugify }}" />{% endunless %}
+
+  </metadata>
+  <manifest>
+    {% for page in site.pages %}{% if page.manifest %}{% include manifest-entry.xml path=page.url %}{% endif %}{% endfor %}
+    {% for file in site.static_files %}{% include manifest-entry.xml path=file.path %}{% endfor %}
+  </manifest>
+  <spine toc='{{ 'toc.ncx' | slugify }}'>
+    {% unless site.exclude contains 'cover' %}{% include spine-entry.xml path=ebook.cover.page %}{% endunless %}
+    {% for path in ebook.frontmatter %}{% include spine-entry.xml path=path %}{% endfor %}
+    {% for path in manuscript %}{% include spine-entry.xml path=path %}{% endfor %}
+    {% for path in ebook.backmatter %}{% include spine-entry.xml path=path %}{% endfor %}
+  </spine>
+  <guide>
+    {% for page in site.html_pages %}{% include guide-entry.xml page=page %}{% endfor %}
+  </guide>
+</package>

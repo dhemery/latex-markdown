@@ -1,0 +1,25 @@
+% TeX writes \count0 and \count1 to the log when it ships a
+% page. So the log will give the current page number and
+% the total page count.
+\countdef\pagecount=0
+\countdef\pageno=1
+
+\def\nextpage{\vfil\eject\clearedframethispage}
+\def\nextrectopage{\nextpage\onrectopage}
+\def\nextversopage{\nextpage\ifodd\pageno \line{}\nextpage\else\fi}
+\def\onrectopage{\ifodd\pageno \else\line{}\nextpage\fi}
+
+\def\eject{\par\break}
+
+\def\advancepageno{\global\advance\pageno by 1 \global\advance\pagecount by 1 }
+
+\def\normalpages{\adjusttextheight{0pt}{0}}
+\def\longpages#1{\adjusttextheight{\leading}{#1}}
+\def\shortpages#1{\adjusttextheight{-\leading}{#1}}
+\def\longpage{\longpages{1}}
+\def\shortpage{\shortpages{1}}
+
+\interlinepenalty=1 % Okay to break between lines
+\clubpenalty=2 % Bringhurst says don't worry about these
+\brokenpenalty=4 % For leaving hyphen on last line of page
+\widowpenalty=8 % For breaking before last line of par

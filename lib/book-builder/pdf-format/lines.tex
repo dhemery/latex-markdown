@@ -1,0 +1,35 @@
+\newdimen\leading
+
+\def\nointerlineskip{\prevdepth=-1000pt}
+\def\offinterlineskip{\baselineskip=-1000pt\lineskip=0pt\lineskiplimit=\maxdimen}
+\def\normalbaselines{\baselineskip=\leading}
+\def\tightbaselines{\baselineskip=1.1em}
+
+% Skipping lines
+\def\skipline{\vskip\baselineskip}
+\def\skiphalfline{\vskip.5\baselineskip}
+
+% Making single line boxes
+\def\line{\hbox to\hsize}
+\def\leftline#1{\line{#1\hfil}}
+\def\centerline#1{\line{\hfil#1\hfil}}
+\def\rightline#1{\line{\hfil#1}}
+
+\lineskip=0pt % interline glue if \baselineskip isn't feasible
+\lineskiplimit=0pt % threshold where \baselineskip changes to \lineskip
+\leftskip=0pt % glue at left of justified lines
+\rightskip=0pt % glue at right of justified lines
+
+\def\baselinebox#1{
+  \setbox0=\vbox{#1}
+  \alignheight{\ht0}{\dimen0}
+  \vbox to \dimen0{\vfil \unvbox0}
+}
+
+\def\alignheight#1#2{%
+  #2=#1 % ht of box
+  \advance#2 by .5\leading
+  \divide#2 by \leading % line #
+  \multiply#2 by \leading
+  \advance#2 by \topskip
+}

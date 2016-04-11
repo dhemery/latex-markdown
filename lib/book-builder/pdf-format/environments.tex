@@ -1,0 +1,15 @@
+\def\begin#1{\begingroup \def\blockname{#1}\csname begin#1\endcsname\ignorespaces}
+\def\end#1{%
+  \def\test{#1}%
+  \ifx\test\blockname
+    \csname end#1\endcsname
+    \endgroup
+  \else\errmessage{You should have said \string\end{\blockname}}\fi}
+
+\def\newenvironment#1#2#3{%
+  \expandafter\def\csname begin#1\endcsname{#2}%
+  \expandafter\def\csname end#1\endcsname{#3}%
+}
+\newenvironment{dedication}{\bookinfo{} \line{} \skipline \centered \tightbaselines \it \obeylines}{\vskip0pt}
+\newenvironment{quote}{\skiphalfline \leftskip2\parindent \rightskip2\parindent \it \noindent}{\skiphalfline}
+\newenvironment{signature}{\skipline \raggedleft \tightbaselines \obeylines}{\vskip0pt}

@@ -1,0 +1,30 @@
+\def\previewtitleblock#1#2{{
+  \centeredheading{\booktitlefont}{#1}
+  \skipline
+  \centerline{\text by}
+  \skipline
+  \centeredheading{\authornamefont}{#2}
+}}
+
+\def\announce#1#2{
+  \nextrectopage
+  \line{}
+  \vfil
+  \centerline{\sc \the\publisher}
+  \centerline{proudly presents}
+  \vfil
+  \previewtitleblock{#1}{#2}
+  \vfil
+  \centerline{Turn the page for a preview}
+}
+
+\def\available#1#2{
+  \nextrectopage
+  \line{}
+  \vfil
+  \previewtitleblock{#1}{#2}
+  \vfil
+  \centerline{Available now at your favorite retailers}
+  \vfil
+  \centerline{\linelogo}
+}

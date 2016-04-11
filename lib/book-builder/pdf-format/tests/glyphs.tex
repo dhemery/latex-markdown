@@ -1,0 +1,159 @@
+\garamond
+\settextbase{10pt}{12pt}
+\settextblock{5in}{8in}{22pc}{30}{.5}{.5}{1pc}
+\setsink{.33333333}
+
+\newdimen\maxht \maxht=0pt
+\newdimen\maxdp \maxdp=0pt
+\newtoks\maxhtchar \maxhtchar={}
+\newtoks\maxdpchar \maxdpchar={}
+
+\newdimen\groupmaxht
+\newdimen\groupmaxdp
+\newtoks\groupmaxhtchar
+\newtoks\groupmaxdpchar
+\newtoks\groupname
+
+\def\resetgroupmax{
+  \global\groupmaxht=0pt
+  \global\groupmaxdp=0pt
+  \global\groupmaxhtchar={}
+  \global\groupmaxdpchar={}
+}
+
+\text
+
+\def\remembermax#1{
+  \ifdim\ht0>\maxht \global\maxht=\ht0 \global\maxhtchar={#1}H\fi
+  \ifdim\ht0>\groupmaxht \global\groupmaxht=\ht0 \global\groupmaxhtchar={#1}h\fi
+  \ifdim\dp0>\maxdp \global\maxdp=\dp0 \global\maxdpchar={#1}D\fi
+  \ifdim\dp0>\groupmaxdp \global\groupmaxdp=\dp0 \global\groupmaxdpchar={#1}d\fi
+}
+
+\def\group#1{
+  \groupname={#1}
+  \resetgroupmax
+  \vskip\leading
+  {\bf #1}
+  \par
+}
+
+\def\showglyph#1{
+  \setbox0=\hbox{#1}
+  \vbox{#1\ : \the\ht0 \ + \the\dp0 \remembermax{#1}}
+}
+
+\def\showlowercase{
+  \group{Lower Case}
+  \showglyph{a}
+  \showglyph{b}
+  \showglyph{c}
+  \showglyph{d}
+  \showglyph{e}
+  \showglyph{f}
+  \showglyph{g}
+  \showglyph{h}
+  \showglyph{i}
+  \showglyph{j}
+  \showglyph{k}
+  \showglyph{l}
+  \showglyph{m}
+  \showglyph{n}
+  \showglyph{o}
+  \showglyph{p}
+  \showglyph{q}
+  \showglyph{r}
+  \showglyph{s}
+  \showglyph{t}
+  \showglyph{u}
+  \showglyph{v}
+  \showglyph{w}
+  \showglyph{x}
+  \showglyph{y}
+  \showglyph{z}
+  \showgroupmax
+}
+\def\showuppercase{
+  \group{Upper Case}
+  \showglyph{A}
+  \showglyph{B}
+  \showglyph{C}
+  \showglyph{D}
+  \showglyph{E}
+  \showglyph{F}
+  \showglyph{G}
+  \showglyph{H}
+  \showglyph{I}
+  \showglyph{J}
+  \showglyph{K}
+  \showglyph{L}
+  \showglyph{M}
+  \showglyph{N}
+  \showglyph{O}
+  \showglyph{P}
+  \showglyph{Q}
+  \showglyph{R}
+  \showglyph{S}
+  \showglyph{T}
+  \showglyph{U}
+  \showglyph{V}
+  \showglyph{W}
+  \showglyph{X}
+  \showglyph{Y}
+  \showglyph{Z}
+  \showgroupmax
+}
+
+\def\showdigits{
+  \group{Digits}
+  \showglyph0
+  \showglyph1
+  \showglyph2
+  \showglyph3
+  \showglyph4
+  \showglyph5
+  \showglyph6
+  \showglyph7
+  \showglyph8
+  \showglyph9
+  \showgroupmax
+}
+\def\showpunct{
+  \group{Punctuation}
+  \showglyph (
+  \showglyph )
+  \showgroupmax
+}
+
+\def\showgroupmax{
+  \vskip\leading
+  {\bf \the\groupname\ Max\par}
+  max height: \the\groupmaxhtchar: \the\groupmaxht \par
+  max depth: \the\groupmaxdpchar: \the\groupmaxdp \par
+  \dimen0=\groupmaxht \advance\dimen0 by \groupmaxdp
+  extent: \the\dimen0 \par
+  \showoverallmax{after \the\groupname}
+}
+
+\def\showoverallmax#1{
+  \vskip\leading
+  {\bf Overall Max #1\par}
+  max height: \the\maxhtchar: \the\maxht \par
+  max depth: \the\maxdpchar: \the\maxdp \par
+  \dimen0=\maxht \advance\dimen0 by \maxdp
+  extent: \the\dimen0 \par
+}
+
+\showlowercase
+\showuppercase
+\showdigits
+\showpunct
+
+{\it
+\showlowercase
+\showuppercase
+\showdigits
+\showpunct
+\showoverallmax{All Groups}
+}
+\endbook

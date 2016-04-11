@@ -1,0 +1,35 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Garamond Titling and Text Fonts
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Garamond Premier Pro Optical Sizes
+% - Caption 8 (5.9-8.9)
+% - Regular 11 (8.9-14.9)
+% - Subhead 18 (14.9-22.9)
+% - Display 36 (22.9-72)
+
+\def\garamond{
+  \global\maxtextcharheightratio={.732} % .731 (
+  \global\maxtextchardepthratio={.299} % .298italic Q
+
+  \newtypeface{garamond}{GaramondPremrPro}{}{It}{Bd}{}
+
+  \newtypestyle{ahead}{garamond}{Disp}{\the\aheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{bhead}{garamond}{Disp}{\the\bheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{chead}{garamond}{Subh}{\the\cheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{text}{garamond}{}{\the\textsize}{rg}{rm}{nv}{po}
+  \newtypestyle{smalltext}{garamond}{}{\the\smalltextsize}{rg}{rm}{nv}{po}
+  \newtypestyle{caption}{garamond}{Capt}{\the\captionsize}{rg}{rm}{sc}{po}
+
+  \gdef\booktitlefont{\ahead}
+  \gdef\authornamefont{\bhead}
+  \gdef\parttitlefont{\ahead}
+  \gdef\chaptertitlefont{\chead}
+  \gdef\pageframefont{\caption}
+}
+
+% expand body and small fonts, but not others
+\def\ontextfontload#1{\pdffontexpand#1 30 30 1 autoexpand}
+\def\onsmalltextfontload#1{\pdffontexpand#1 30 30 1 autoexpand}

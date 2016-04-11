@@ -1,0 +1,9 @@
+defaults:
+  -
+    scope:
+      path: ''
+      type: 'pages'
+    values:
+      layout: 'page'
+      manifest: true
+exclude: [Rakefile]

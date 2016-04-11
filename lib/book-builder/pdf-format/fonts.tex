@@ -1,0 +1,129 @@
+\newcount\maxfontshrink
+\newcount\maxfontstretch
+\newcount\fontexpandstep
+
+\catcode`\@=11
+
+\def\fonttag{\typestyle \fontweight \fontslant \fontvariant \fontfigures \fontencoding}
+\def\fontspec{\fontfilename\optionalwithprefix{ at }{\fontsize}}
+\def\fontfilename{%
+  \typefaceftag%
+  \optionalwithprefix{-}{\fontshapeftag}%
+  -\fontfiguresftag%
+  \optionalwithprefix{-}{\fontvariantftag}%
+  -\fontencodingftag%
+}
+\def\fontshapeftag{\optionalwithdefault{\fontweightftag\fontslantftag\fontopticalsize}{\fontdefaultftag}}
+\def\fontweightftag{\csname @\typeface @\fontweight @ftag\endcsname}
+\def\fontslantftag{\csname @\typeface @\fontslant @ftag\endcsname}
+\def\fontvariantftag{\csname\fontvariant variantftag\endcsname}
+\def\fontfiguresftag{\csname\fontfigures figuresftag\endcsname}
+\def\fontencodingftag{\csname\fontencoding encodingftag\endcsname}
+\def\nvvariantftag{}
+\def\scvariantftag{sc}
+\def\swvariantftag{swash}
+\def\ttvariantftag{titling}
+\def\pofiguresftag{osf}
+\def\tofiguresftag{tosf}
+\def\plfiguresftag{lf}
+\def\tlfiguresftag{tlf}
+\def\txencodingftag{t1}
+\def\syencodingftag{ts1}
+
+% #1: typeface name
+% #2: ftag to select the typeface
+% #3: ftag (if any) to select the typeface's regular weight (rg)
+% #4: ftag to select the typeface's italic slant (it)
+% #5: ftag to select the typeface's bold weight (bf)
+% #6: ftag (if any) to select the typeface's regular weight, roman slant (rg, rm)
+\def\newtypeface#1#2#3#4#5#6{
+  \expandafter\xdef\csname @#1@ftag\endcsname{#2}
+  \expandafter\xdef\csname @#1@rg@ftag\endcsname{#3}
+  \expandafter\xdef\csname @#1@it@ftag\endcsname{#4}
+  \expandafter\xdef\csname @#1@bf@ftag\endcsname{#5}
+  \expandafter\xdef\csname @#1@default@ftag\endcsname{#6}
+  \expandafter\xdef\csname @#1@rm@ftag\endcsname{}
+}
+
+\def\withtypeface#1{%
+  \edef\typeface{#1}%
+  \edef\typefaceftag{\csname @\typeface @ftag\endcsname}%
+  \edef\fontrgftag{\csname @\typeface @rg@ftag\endcsname}%
+  \edef\fontbfftag{\csname @\typeface @bf@ftag\endcsname}%
+  \edef\fontitftag{\csname @\typeface @it@ftag\endcsname}%
+  \edef\fontdefaultftag{\csname @\typeface @default@ftag\endcsname}%
+}
+
+% #1: style name
+% #2: typeface name
+% #3: ftag (if any) for optical size
+% #4: font size
+% #5: default weight (rg or bf)
+% #6: default slant (rm or it)
+% #7: default variant (nv, sc, tt)
+% #8: default figure style (ls, lf, tf, lt)
+\def\newtypestyle#1#2#3#4#5#6#7#8{
+  \expandafter\gdef\csname#1\endcsname{%
+    \edef\typestyle{#1}%
+    \withtypeface{#2}%
+    \withfontopticalsize{#3}%
+    \withfontsize{#4}%
+    \withfontweight{#5}%
+    \withfontslant{#6}%
+    \withfontvariant{#7}%
+    \withfontfigures{#8}%
+    \withfontencoding{tx}%
+    \selectfont%
+  }
+}
+
+\def\withfontweight#1{\edef\fontweight{#1}}
+\def\withfontslant#1{\edef\fontslant{#1}}
+\def\withfontvariant#1{\edef\fontvariant{#1}}
+\def\withfontfigures#1{\edef\fontfigures{#1}}
+\def\withfontencoding#1{\edef\fontencoding{#1}}
+\def\withfontopticalsize#1{\edef\fontopticalsize{#1}}
+\def\withfontsize#1{\edef\fontsize{#1}}
+
+\def\loadfont#1{%
+  \ifcsname#1\endcsname%
+  \else%
+    \edef\new@font@name{\csname#1\endcsname}%
+    \global\expandafter\font\new@font@name=\fontspec%
+    \on@font@load{typeface}{\new@font@name}%
+    \on@font@load{typestyle}{\new@font@name}%
+  \fi%
+}
+
+\def\on@font@load#1#2{%
+  \edef\@scope{\csname#1\endcsname}%
+  \ifcsname on\@scope fontload\endcsname%
+    \csname on\@scope fontload\endcsname{#2}%
+  \fi%
+}
+
+\catcode`\@=12
+
+\def\selectfont{%
+  \xdef\selectedfonttag{\fonttag}%
+  \loadfont{\selectedfonttag}%
+  \csname\selectedfonttag\endcsname%
+}
+
+\def\rg{\withfontweight{rg}\selectfont}
+\def\bf{\withfontweight{bf}\selectfont}
+\def\rm{\withfontslant{rm}\selectfont}
+\def\it{\withfontslant{it}\selectfont}
+\def\nv{\withfontvariant{nv}\selectfont}
+\def\sc{\withfontvariant{sc}\selectfont}
+\def\sw{\withfontvariant{sw}\selectfont}
+\def\tt{\withfontvariant{tt}\selectfont}
+\def\po{\withfontfigures{po}\selectfont}
+\def\to{\withfontfigures{to}\selectfont}
+\def\pl{\withfontfigures{pl}\selectfont}
+\def\tl{\withfontfigures{tl}\selectfont}
+\def\tx{\withfontencoding{tx}\selectfont}
+\def\sy{\withfontencoding{sy}\selectfont}
+
+\pdfadjustspacing=2
+\pdfprotrudechars=0 % May not need this. It seems rare in novels.

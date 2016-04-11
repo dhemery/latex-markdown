@@ -1,0 +1,40 @@
+\newdimen\logotextsize
+\newdimen\logolinespacing
+\newdimen\logobarthickness
+
+\def\logobar{\hrule height\logobarthickness}
+\def\logolineskip{\vskip\logolinespacing}
+
+\def\logostack#1#2{
+  \halign{##&#1###2&##\cr
+    &DRISCOLL&\cr
+    &BROOK&\cr
+    &PRESS&\cr
+  }
+}
+
+\def\logo#1{
+  \begingroup
+  \logofont
+  \offinterlineskip
+  \lineskip=\logolinespacing
+  \vbox{
+    \logobar
+    \logolineskip
+    #1
+    \logolineskip
+    \logobar
+    }
+  \endgroup
+}
+
+\def\leftlogo{\logo{\logostack{}{\hss}}}
+\def\centerlogo{\logo{\logostack{\hss}{\hss}}}
+\def\rightlogo{\logo{\logostack{\hss}{}}}
+\def\linelogo{\logo{\hbox{DRISCOLL BROOK PRESS}}}
+
+\logotextsize=16pt
+\logolinespacing=.25\logotextsize
+\logobarthickness=0.25\logolinespacing
+\newtypeface{proxima}{ProximaNova}{Regular}{It}{Bold}{Regular}
+\newtypestyle{logofont}{proxima}{}{\the\logotextsize}{rg}{rm}{sc}{po}

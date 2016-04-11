@@ -1,0 +1,63 @@
+\newtoks\head
+\newtoks\foot
+\newtoks\normalhead
+\newtoks\normalrectohead
+\newtoks\normalversohead
+\newtoks\normalfoot
+\newtoks\clearedhead
+\newtoks\clearedfoot
+\newtoks\displayhead
+\newtoks\displayfoot
+\newtoks\emptyhead
+\newtoks\emptyfoot
+\newtoks\runninghead
+\newtoks\runningfoot
+
+\newdimen\headskip
+\newdimen\footskip
+
+\def\pageframe#1#2{
+  \global\head=#1
+  \global\foot=#2
+}
+
+\def\pageframes#1#2{
+  \global\runninghead=#1
+  \global\runningfoot=#2
+  \pageframe{#1}{#2}
+}
+
+\def\emptypageframes{\pageframes{\emptyhead}{\emptyfoot}}
+\def\normalpageframes{\pageframes{\normalhead}{\normalfoot}}
+
+\def\clearedframethispage{\pageframe{\clearedhead}{\clearedfoot}}
+\def\displayframethispage{\pageframe{\displayhead}{\displayfoot}}
+\def\emptyframethispage{\pageframe{\emptyhead}{\emptyfoot}}
+
+\runninghead={\hfil}
+\runningfoot={\hfil}
+
+% Running head and foot for cleared pages
+% (pages begun by \nextpage, \nextrectopage, and \nextversopage).
+\clearedhead={\hfil}
+\clearedfoot={\hfil}
+
+% Running head and foot for display pages
+% (pages that begin with a major display item such as a chapter heading)
+\displayhead={\hfil}
+\displayfoot={\hfil \number\pageno \hfil}
+
+% Running head and foot after user calls \emptypageframes.
+% By default, this format uses empty frames for frontmatter and backmatter pages.
+\emptyhead={\hfil}
+\emptyfoot={\hfil}
+
+% Running head and foot for most content pages.
+% We use different heads on verso and recto pages.
+\normalhead={\ifodd\pageno \the\normalrectohead \else \the\normalversohead \fi}
+% No foot on normal pages
+\normalfoot={\hfil}
+% Recto pages: title at spine margin, page number at edge margin
+\normalrectohead={\the\title \hfil \number\pageno}
+% Verso pages: page number at edge margin, author name at spine margin
+\normalversohead={\number\pageno \hfil \the\author}

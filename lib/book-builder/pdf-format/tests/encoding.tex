@@ -1,0 +1,62 @@
+\def\showcs#1{\string#1 & #1 & \meaning#1 \cr}
+\garamond
+\textfont
+\baselineskip=15pt
+
+{\bf Spaces}
+
+\halign{ # & # & # \cr
+\showcs\quad
+\showcs\nbsp
+\showcs~
+}
+
+{\bf Hyphens}
+
+\halign{ # & # & # \cr
+\showcs‐ % UTF hyphen (U+2010)
+\showcs-
+\showcs\-
+}
+
+{\bf Punctuation}
+
+\halign{ # & # & # \cr
+\showcs… % \ldots
+\showcs‚ % \clq
+\showcs‘ % \crq
+\showcs„ % \clqq
+\showcs“ % \crqq
+\showcs« % \flqq
+\showcs» % \frqq
+}
+
+{\bf European Letters}
+
+\halign{ # & # & # \cr
+\showcså
+\showcsÅ
+\showcsÆ
+\showcsø
+\showcsØ
+\showcsœ
+\showcsŒ
+\showcs{ß}
+}
+
+{\bf Symbols}
+
+\halign{ # & # & # \cr
+\showcs¶ % \P
+\showcs§
+\showcs£ % \pound
+\showcs\trademark
+% \showcs{™} % Encoding does not know this 3-byte sequence
+\showcs® % \registered
+\showcs© % \copyright
+\showcs† % \dag
+\showcs‡ % \ddag
+\showcs‰
+% \showcs{‱} % Encoding does not know this 3-byte sequence
+}
+\end

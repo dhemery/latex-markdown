@@ -1,0 +1,33 @@
+\def\timestamp{{
+  \count0=\time % Minutes since midnight
+  \divide\count0 by 60 % Hours since midnight
+  \count1=\count0 % Hours since midnight
+  \multiply\count0 by 60 % Minutes from midnight to top of hour
+  \count2=\time
+  \advance\count2 by -\count0 % Minutes since top of hour
+  \the\year-\twodigits{\month}-\twodigits{\day} \twodigits{\count1 }:\twodigits{\count2 }
+}}
+\def\twodigits#1{\ifnum#1<10 0\fi\the#1\relax}
+
+\def\optionalwithdefault#1#2{\if\relax#1\relax#2\else#1\fi}
+\def\optionalwithprefix#1#2{\if\relax#2\relax\else#1#2\fi}
+
+\def\tbd#1{\string#1 TBD}
+
+\let\bgroup={ \let\egroup=}
+\def\loop#1\repeat{\def\body{#1}\iterate}
+\def\iterate{\body \let\next\iterate \else\let\next\relax\fi \next}
+\let\repeat=\fi
+
+\def\showparam#1{\message{\string#1:\the#1}}
+
+\catcode`@=11
+\outer\def\newif#1{\count255=\escapechar \escapechar-1
+  \expandafter\expandafter\expandafter
+   \def\@if#1{true}{\let#1=\iftrue}%
+  \expandafter\expandafter\expandafter
+   \def\@if#1{false}{\let#1=\iffalse}%
+  \@if#1{false}\escapechar=\count255 }
+\def\@if#1#2{\csname\expandafter\if@\string#1#2\endcsname}
+{\uccode`1=`i \uccode`2=`f \uppercase{\gdef\if@12{}}}
+\catcode`@=12

@@ -1,0 +1,19 @@
+% For each glyph in the T1 font encoding, utf8-t1 maps the
+% corresponding UTF-8 character to the glyph's T1 character
+% code.
+
+\input utf8-t1
+
+% Some UTF-8 characters are commonly used in English text
+% but have no corresponding glyph in the T1 font encoding.
+% utf8-t1 maps those to control sequences. So define each
+% to  map to a TS1 glyph or a construct a sequence of
+% glyphs.
+\def\copyright{{\sy\char"A9}}
+\def\dag{{\sy\char"84}}
+\def\ddag{{\sy\char"85}}
+\def\ldots{.\nbthinspace.\nbthinspace.}
+\def\P{{\sy\char"B6}}
+\def\promile{{\sy\char"87}}
+\def\registered{{\sy\char"AE}}
+\def\trademark{{\sy\char"97}}

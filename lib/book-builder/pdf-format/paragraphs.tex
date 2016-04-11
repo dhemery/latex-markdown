@@ -1,0 +1,43 @@
+\def\headingalignment{\raggedspine}
+\def\headingspacing{\tightbaselines}
+\def\heading#1#2{{\headingalignment #1 \headingspacing #2 \par}}
+\def\centeredheading#1#2{{\centered #1 \headingspacing #2 \par}}
+
+\def\authorinfoheading#1{\centeredheading{}{\skipline \skipline \sc #1}}
+\def\authorinfoitem#1{\centeredheading{}{\skiphalfline #1}}
+\def\connect#1#2{\authorinfoheading{#1}\authorinfoitem{#2}}
+\def\genre#1{\authorinfoheading{#1}}
+\def\genrebook#1{\authorinfoitem{{\it #1}}}
+
+\def\longpar{\looseness1 }
+\def\shortpar{\looseness-1 }
+
+\def\raggedleft{\parindent=0pt\parfillskip=0pt\leftskip=0pt plus \hsize\relax}
+\def\raggedright{\parindent=0pt\parfillskip=0pt\rightskip=0pt plus \hsize\relax}
+\def\centered{\raggedleft\raggedright}
+\def\raggedspine{\ifodd\pageno \raggedleft\else\raggedright\fi}
+{\catcode`\^^M=13 % these lines must end with ‘%’
+  \gdef\obeylines{\catcode`\^^M=13 \let^^M=\par}%
+  \global\let^^M=\par} % this is in case ^^M appears in a \write
+
+\long\def\blockquote#1{{
+  \skiphalfline
+  \leftskip2\parindent \rightskip2\parindent \emph{\noindent #1}
+  \skiphalfline
+}}
+
+\parskip=0pt % extra glue just above paragraphs
+\parfillskip=0pt plus 1fil % additional rightskip at end of paragraphs
+\hangindent=0pt % amount of hanging indentation
+\hangafter=0 % hanging indentation changes after this many lines
+
+\pretolerance=100
+\tolerance=100
+\linepenalty=0
+\hyphenpenalty=10
+\exhyphenpenalty=50
+\binoppenalty=700
+\relpenalty=500
+\adjdemerits=10000
+\doublehyphendemerits=10000
+\finalhyphendemerits=5000

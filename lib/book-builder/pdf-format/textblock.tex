@@ -1,0 +1,68 @@
+\newcount\textlines
+\newdimen\textheight
+\newdimen\textheightadjustment
+\newcount\adjustedpagesremaining
+
+\newtoks\topmarginratio
+\newtoks\spinemarginratio
+\newdimen\spineoffset
+\newdimen\spinemargin
+\newdimen\edgemargin
+
+\def\leftmargin{\ifodd\pageno \spinemargin\else\edgemargin\fi}
+
+% 1 page width
+% 2 page height
+% 3 text width
+% 4 text lines
+% 5 top margin ratio
+% 6 spine margin ratio
+% 7 spine offset
+\def\settextblock#1#2#3#4#5#6#7{
+  \globaldefs=1
+  \pdfpagewidth=#1
+  \pdfpageheight=#2
+  \hsize=#3
+  \textlines=#4
+  \topmarginratio={#5}
+  \spinemarginratio={#6}
+  \spineoffset=#7
+  \dimen0=\pdfpagewidth
+    \advance\dimen0 by -\hsize % total horizontal margin
+    \advance\dimen0 by -\spineoffset % margin to divide between spine and edge
+  \spinemargin=\the\spinemarginratio\dimen0
+  \edgemargin=\dimen0
+    \advance\edgemargin by -\spinemargin
+  \advance\spinemargin by \spineoffset
+  \textheight=\dimexpr \textlines\leading - \leading + \topskip \relax
+  \adjusttextheight{0pt}{0}
+  \dimen0=\pdfpageheight
+    \advance\dimen0 by -\textheight % total vertical excess
+  \voffset=\the\topmarginratio\dimen0
+  \globaldefs=0
+  \showtextblock
+}
+
+\def\showtextblock{
+  \showparam\pdfpagewidth
+  \showparam\pdfpageheight
+  \showparam\hsize
+  \showparam\textlines
+  \showparam\textheight
+  \showparam\vsize
+  \showparam\topmarginratio
+  \showparam\voffset
+  \showparam\spinemarginratio
+  \showparam\spineoffset
+  \showparam\spinemargin
+  \showparam\edgemargin
+}
+
+\def\adjusttextheight#1#2{
+  \globaldefs=1
+  \textheightadjustment=#1
+  \vsize=\textheight
+    \advance\vsize\textheightadjustment
+  \adjustedpagesremaining=#2
+  \globaldefs=0
+}

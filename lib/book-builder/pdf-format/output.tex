@@ -1,0 +1,130 @@
+\newif\ifdrawpageguides
+\newif\ifdiagnosepagebreaks
+\newif\ifshippages
+\newcount\diagnosis
+
+\def\colorize#1#2{
+  \pdfcolorstack0 push {#1 rg}
+  #2
+  \pdfcolorstack0 pop {}
+}
+\def\pagenote#1{\ifdiagnosepagebreaks \colorize{0 0 1}{#1} \fi}
+\def\pagewarning#1{\ifdiagnosepagebreaks \colorize{1 0 0}{#1} \fi \message{#1}}
+
+\def\hruleat#1{\kern#1 \hrule height .2pt \kern-0.2pt \kern-#1 }
+
+\def\drawpageguides{
+  \hruleat{\dimexpr -\headskip + \topskip \relax} % headline
+  \hruleat{0pt} % top
+  \hruleat\topskip % first baseline
+  \hruleat{\dimexpr \textheight \relax} % last baseline
+  \hruleat{\dimexpr \textheight + \maxdepth \relax} % bottom
+  \hruleat{\dimexpr \textheight + \footskip \relax} % footline
+}
+
+\def\diagnosepageadjustment{
+  \ifnum\adjustedpagesremaining>0
+    \pagenote{(\the\textheightadjustment, \the\adjustedpagesremaining)}
+  \fi
+}
+
+\def\diagnosepagebreaks{
+  \diagnosis=\outputpenalty
+  \baselineskip=\leading
+  \line{
+    \pageframefont \nv
+    \pagenote{\the\vsize}
+    \diagnosepageadjustment
+    \hfil
+    \ifnum\diagnosis=-10000
+      \pagenote{new page}
+    \else
+      \ifnum\diagnosis=10000
+        \pagenote{broke between paragraphs}
+      \else
+        \ifnum\diagnosis=1
+          \pagenote{good paragraph break}
+        \else
+          \bf\sc
+          \divide\diagnosis by 2
+          \ifodd\diagnosis \pagewarning{club} \fi
+          \divide\diagnosis by 2
+          \ifodd\diagnosis \pagewarning{hyphen} \fi
+          \divide\diagnosis by 2
+          \ifodd\diagnosis \pagewarning{widow} \fi
+        \fi
+      \fi
+    \fi
+  }
+}
+
+\def\page{\vbox{
+  \ifdrawpageguides \drawpageguides \fi
+  \headline
+  \textblock
+  \footline
+  \diagnosepagebreaks
+}}
+
+\def\textblock{\box255 }
+
+\def\headline{
+  \kern-\headskip
+  \vbox to \headskip{
+    \vbox to \topskip{
+      \vfil
+      \line{\pageframefont \the\head}
+    }
+    \vfil
+  }
+  \nointerlineskip
+}
+
+\def\footline{
+  \baselineskip=\dimexpr \footskip - \textheightadjustment \relax
+  \lineskiplimit=0pt
+  \line{\pageframefont \the\foot}
+}
+
+\def\rebuildpage{\unvbox255 \penalty\outputpenalty}
+
+\def\setnextpagetextheight{
+  \ifcase\adjustedpagesremaining
+    % Already using normal text blocks
+  \or
+    \normalpages
+  \else
+    \global\advance\adjustedpagesremaining by -1
+  \fi
+}
+
+\def\afteroutput{
+  \advancepageno
+  \pageframes{\runninghead}{\runningfoot}
+  \setnextpagetextheight
+}
+
+\def\shiponepage{
+  \hoffset=\leftmargin
+  \shipout\page
+  \afteroutput
+}
+
+\def\adjustablepages{
+  \ifdim\ht255=\vsize
+    \ifshippages \shiponepage \else \discardonepage \fi
+  \else
+    % \vsize at end of page differed from \vsize at start.
+    % Rebuild using the ending \vsize
+    \rebuildpage
+  \fi
+}
+
+\def\discardonepage{
+  \setbox0=\box255
+  \afteroutput
+  \deadcycles=0
+}
+
+\output={\adjustablepages}
+\shippagestrue

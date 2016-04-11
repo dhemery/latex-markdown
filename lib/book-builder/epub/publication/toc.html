@@ -1,0 +1,10 @@
+---
+title: Contents
+guide: toc
+---
+{% assign publication = site.data.ebook %}
+{% assign manuscript = site.data.manuscript %}
+{% unless site.exclude contains 'cover' %}{% include toc-entry.html path=publication.cover.page %}{% endunless %}
+{% for path in publication.frontmatter %}{% include toc-entry.html path=path %}{% endfor %}
+{% for path in manuscript %}{% include toc-entry.html path=path %}{% endfor %}
+{% for path in publication.backmatter %}{% include toc-entry.html path=path %}{% endfor %}

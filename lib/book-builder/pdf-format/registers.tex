@@ -1,0 +1,12 @@
+% Allocate registers starting at 256, which is above any
+% register that TeX cares about.
+\countdef\nextcountregister=10 \nextcountregister=256
+\countdef\nextboxregister=11 \nextboxregister=256
+\countdef\nextdimenregister=12 \nextdimenregister=256
+\countdef\nextskipregister=13 \nextskipregister=256
+\countdef\nexttoksregister=14 \nexttoksregister=256
+
+\def\newcount#1{\global\countdef#1=\nextcountregister \global\advance\nextcountregister by 1 }
+\def\newdimen#1{\global\dimendef#1=\nextdimenregister \global\advance\nextdimenregister by 1 }
+\def\newskip#1{\global\skipdef#1=\nextskipregister \global\advance\nextskipregister by 1 }
+\def\newtoks#1{\global\toksdef#1=\nexttoksregister \global\advance\nexttoksregister by 1 }

@@ -1,0 +1,91 @@
+\newdimen\aheadsize
+\newdimen\bheadsize
+\newdimen\cheadsize
+\newdimen\textsize
+\newdimen\smalltextsize
+\newdimen\captionsize
+\newtoks\maxtextcharheightratio
+\newtoks\maxtextchardepthratio
+
+\def\hairspace{\hskip.1em\relax}
+  \def\nbhairspace{\kern.1em }
+\def\thinspace{\hskip.2em\relax}
+  \def\nbthinspace{\kern.2em }
+  \def\,{\thinspace}
+\def\space{ }
+\def\quad{\hskip1em\relax}
+\def\enspace{\hskip.5em\relax}
+  \def\nbenspace{\kern.5em }
+
+\def\leadin#1{\nobreak\noindent{\sc #1}}
+\def\emph#1{{\it #1\/}}
+
+\def\abbr#1{{\sc \tolower{#1}}}
+\def\titlecase#1{\toupper{#1}}
+\def\tolower#1{\lowercase\expandafter{#1}}
+\def\toupper#1{\uppercase\expandafter{#1}}
+\def\unbreakable#1{\hbox{#1}}
+
+\def\englishspacing{
+  \sfcode`\.=3000
+  \sfcode`\?=3000
+  \sfcode`\!=3000
+  \sfcode`\:=2000
+  \sfcode`\;=1500
+  \sfcode`\,=1250
+}
+
+\def\frenchspacing{
+  \sfcode`\.=1000
+  \sfcode`\?=1000
+  \sfcode`\!=1000
+  \sfcode`\:=1000
+  \sfcode`\;=1000
+  \sfcode`\,=1000
+}
+
+% 1 text size
+% 2 leading
+\def\settextbase#1#2{
+  \globaldefs=1
+  \textsize=#1
+  \leading=#2
+  \topskip=\the\maxtextcharheightratio\textsize
+  \splittopskip=\topskip
+  \maxdepth=\the\maxtextchardepthratio\textsize
+  \splitmaxdepth=\maxdepth
+  \dimen0=\topskip
+    \advance\dimen0 by \maxdepth
+  \ifdim\leading<\dimen0
+    \message{ADJUSTING LEADING: \the\leading < \the\dimen0 (\the\topskip+\the\maxdepth) }
+    \leading=\dimen0
+  \fi
+  \headskip=2\leading
+  \footskip=2\leading
+  \globaldefs=0
+  \showtextbase
+}
+
+\def\showtextbase{
+  \showparam\textsize
+  \showparam\leading
+  \showparam\aheadsize
+  \showparam\bheadsize
+  \showparam\cheadsize
+  \showparam\smalltextsize
+  \showparam\captionsize
+  \showparam\maxtextcharheightratio
+  \showparam\maxtextchardepthratio
+  \showparam\topskip
+  \showparam\splittopskip
+  \showparam\maxdepth
+  \showparam\splitmaxdepth
+  \showparam\headskip
+  \showparam\footskip
+}
+
+\aheadsize=36pt
+\bheadsize=24pt
+\cheadsize=18pt
+\smalltextsize=10pt
+\captionsize=8pt

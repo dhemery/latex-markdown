@@ -1,0 +1,84 @@
+\newtoks\sinkratio
+\newdimen\sinkheight
+\countdef\partno=2
+\countdef\chapterno=3
+
+\def\frontmatter{
+  \global\pageno=1
+  \global\pagecount=1
+  \normalpages
+  \emptypageframes
+  \normalbaselines
+}
+
+\def\mainmatter{
+  \nextrectopage
+  \global\pageno=1
+  \normalpages
+  \normalpageframes
+  \normalbaselines
+}
+
+\def\backmatter{
+  \nextrectopage
+  \global\pageno=\pagecount
+  \normalpages
+  \emptypageframes
+  \normalbaselines
+}
+
+\def\part#1{
+  \global\advance\partno by 1
+  \partpage
+  \partpageframe
+  \partheading{#1}
+  \afterpartheading
+}
+\def\partpage{\nextrectopage}
+\def\partpageframe{\emptyframethispage}
+\def\partheading#1{\sink{\heading{\parttitlefont}{#1}}}
+\def\afterpartheading{\nextrectopage}
+
+\def\chapter#1{
+  \global\advance\chapterno by 1
+  \chapterpage
+  \chapterpageframe
+  \chapterheading{#1}
+  \afterchapterheading
+}
+\def\chapterpage{\nextpage}
+\def\chapterpageframe{\displayframethispage}
+\def\chapterheading#1{\sink{\heading{\chaptertitlefont}{#1}}}
+\def\afterchapterheading{\skipline}
+
+% \bookinfo is division in frontmatter or backmatter.
+\def\bookinfo#1{
+  \bookinfopage
+  \bookinfopageframe
+  \bookinfoheading{#1}
+  \afterbookinfoheading
+}
+\def\bookinfopage{\nextpage}
+\def\bookinfopageframe{}
+\def\bookinfotitlefont{\chaptertitlefont}
+\def\bookinfoheading#1{\baselinebox{\centeredheading{\bookinfotitlefont}{#1}}}
+\def\afterbookinfoheading{\skipline}
+
+\def\introduction#1{\chapter{#1}}
+\def\story#1{\part{#1}}
+\def\note#1{\bookinfo{\emph{#1}}}
+
+\def\sink#1{\vbox to \sinkheight{\vfil#1}}
+
+\def\setsink#1{
+  \global\sinkratio={#1}
+  \dimen0=\the\textlines\leading % text extent
+  \dimen0=\the\sinkratio\dimen0 % unaligned sink position
+  \alignheight{\dimen0}{\sinkheight}
+  \showsink
+}
+
+\def\showsink{
+  \showparam\sinkratio
+  \showparam\sinkheight
+}
