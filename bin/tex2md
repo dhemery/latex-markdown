@@ -1,3 +1,2 @@
 #!/usr/bin/env ruby
-
-require 'tex2md'
+require 'dbp/tex2md'
