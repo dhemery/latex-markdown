@@ -8,9 +8,9 @@ require 'pathname'
 VISIBLE_BUILDER_DIR = 'book-builder'
 HIDDEN_BUILDER_DIR = ".#{VISIBLE_BUILDER_DIR}"
 
-books_bin_dir = Pathname(__FILE__).dirname
-books_dir = books_bin_dir.dirname
-default_builder_dir = books_dir / HIDDEN_BUILDER_DIR
+gem_data_dir = Pathname(__FILE__) + '../../data'
+default_builder_dir = gem_data_dir / 'book-builder'
+
 book_dir = Pathname.pwd
 builder_dirs = [ book_dir / VISIBLE_BUILDER_DIR, book_dir / HIDDEN_BUILDER_DIR, default_builder_dir ].uniq
 
