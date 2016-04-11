@@ -42,7 +42,7 @@ module TeX2md
     ] + COPY_ARGUMENT_COMMANDS + DISCARD_ARGUMENT_COMMANDS + DO_NOTHING_COMMANDS + WRAP_IN_SPAN_COMMANDS + WRITE_PAGE_METADATA_COMMANDS + WRITE_TEXT_COMMANDS
 
     def initialize(stack = [])
-      @commands = COMMANDS.reduce({}){|h,c| h[c.name]= c; h}
+      @commands = {}.tap { |h| COMMANDS.each { |c| h[c.name] = c } }
       @stack = stack
     end
 
