@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.version        = TeX2md::VERSION
   spec.authors        = ['Dale Emery']
   spec.email          = ['dale@dhemery.com']
-  spec.homepage       = 'https://github.com/dhemery/tex2md/'
+  spec.homepage       = 'https://github.com/driscoll-brook-press/tex2md/'
   spec.license        = 'MIT'
 
   spec.files          = `git ls-files -z`.split("\x0")
@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.test_files     = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths  = ['lib']
 
+  spec.add_runtime_dependency 'rake', '~> 11.0'
+  spec.add_runtime_dependency 'nokogiri', '~> 1.6'
   spec.add_development_dependency 'minitest-reporters', '~> 1.0', '>= 1.0.8'
-  spec.add_development_dependency 'rake'
 end
