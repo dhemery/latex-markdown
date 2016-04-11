@@ -1,2 +1,6 @@
 #!/usr/bin/env ruby
 require 'dbp/tex2md'
+
+options = DBP::TeX2md::CommandLine.parse
+command = DBP::TeX2md::App.new(options)
+command.run

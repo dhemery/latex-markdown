@@ -1,47 +1,48 @@
 require_relative 'translator'
 require 'strscan'
+require 'rake'
+require 'rake/ext/pathname'
 
 module DBP::TeX2md
   class App
-
     def initialize(options)
-      @source = Pathname(options.source)
-      @dest_dir = Pathname(options.dest)
-      @translator = Translator.new
+      source = options.source
+      @tex_file_pattern = tex_file_pattern(source)
+      @tex_path_to_md_path = "%{^#{source_dir(source)},#{options.dest}}X.md"
     end
 
     def run
-      validate_args
+      tex_files.each { |tex_in| translate(tex_in) }
+    end
 
-      @dest_dir.mkpath unless @dest_dir.exist?
+    private
 
-      source_files.each do |source_file|
-        dest_file = dest_file(source_file)
-        reader = StringScanner.new(source_file.read)
-        dest_file.open('w') do |writer|
-          @translator.translate(reader, writer)
-        end
+    def md_out(tex_in)
+      tex_in.pathmap(@tex_path_to_md_path)
+    end
+
+    def scanner(tex_in)
+      StringScanner.new(tex_in.read)
+    end
+
+    def source_dir(source)
+      source.directory? ? source : source.dirname
+    end
+
+    def tex_file_pattern(source)
+      source.file? ? source : source / '**.*.tex'
+    end
+
+    def tex_files
+      Pathname.glob(@tex_file_pattern)
+    end
+
+    def translate(tex_in)
+      md_out = md_out(tex_in)
+      md_out.dirname.mkpath
+      md_out.open('w') do |writer|
+        Translator.new.translate(scanner(tex_in), writer)
       end
-    end
-
-    def dest_file(source_file)
-      Pathname.new("#{@dest_dir / source_file.basename('.tex')}.md")
-    end
-
-    def tex_files_in(source)
-      Dir.glob(source / '**/*.tex').map { |p| Pathname.new(p) }
-    end
-
-    def source_files
-      return [@source] if @source.file?
-      tex_files_in(@source) if @source.directory?
-    end
-
-    def validate_args
-      errors = []
-      errors << "#{@source}: no such file or directory" unless @source.exist?
-      errors << "#{@dest_dir}: is a file" if @dest_dir.file?
-      abort(errors) unless errors.empty?
     end
   end
 end
