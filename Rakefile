@@ -9,17 +9,17 @@ require 'rake/testtask'
 
 desc "Build the #{gemname} gem"
 task build: [:test] do
-  system 'gem', 'build', gemspec
+  sh 'gem', 'build', gemspec
 end
 
 desc "Install the #{gemname} gem"
 task install: [:build] do
-  system 'gem', 'install', '--local', gemfile
+  sh 'gem', 'install', '--local', gemfile
 end
 
 desc "Uninstall the #{gemname} gem"
 task :uninstall do
-  system 'gem', 'uninstall', '-a', '-x', gemname
+  sh 'gem', 'uninstall', '-a', '-x', gemname
 end
 
 desc 'Run all tests'
