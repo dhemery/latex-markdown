@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+pandoc = ['pandoc', '-f', 'html', '-t', 'latex', '--no-tex-ligatures']
+pandoc << ARGV[0] unless ARGV[0].nil?
+system *pandoc

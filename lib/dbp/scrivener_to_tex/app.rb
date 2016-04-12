@@ -33,17 +33,9 @@ module DBP
       private
 
       def tex_content(document)
-        html_to_tex(rtf_to_html(document.rtf_path))
+        capture2('rtf2tex', document.rtf_path.to_s).first
       end
 
-      def html_to_tex(html)
-        tex, _ = capture2('pandoc', '-f', 'html', '-t', 'latex', '--no-tex-ligatures', stdin_data: html)
-        tex.gsub /\\ldots\{\}/, '…'
-      end
-
-      def rtf_to_html(rtf_path)
-        capture2('rtf2html', rtf_path.to_s).first
-      end
 
       def tex_path(document)
         @manuscript_dir / document.path.sub_ext('.tex')

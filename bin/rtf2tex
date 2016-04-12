@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'open3'
+
+rtf_to_html = ['rtf2html'] + ARGV
+out, _ = Open3.pipeline_r(rtf_to_html, 'html2tex')
+puts out.read
+out.close
