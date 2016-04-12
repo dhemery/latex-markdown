@@ -1,9 +1,13 @@
-require_relative 'convert'
 require 'dbp/scrivener/project'
+require 'open3'
+require 'yaml'
 
 module DBP
   module ScrivenerToTex
     class App
+      include Open3
+      HEADINGS = %w(wtf chapter scene)
+
       def initialize(options)
         @scrivener_file = options.scrivener_file
         @manuscript_dir = options.output_dir / 'manuscript'
@@ -16,19 +20,54 @@ module DBP
       end
 
       def write_tex_files(scrivener)
-        # Each doc
-        # - convert doc RTF content to HTML. Maybe { path:, header:, html: }
-        # - convert doc header and doc HTML content to TeX
-        # - write TeX file
-        converter = DBP::ScrivenerToTex::Convert.new
-        scrivener.documents.each { |document| write_tex_file(converter, document) }
+        scrivener.documents.each { |document| write_tex_file(document) }
       end
 
-      def write_tex_file(converter, document)
-        converter.write(content_dir: @manuscript_dir, document: document)
+      def write_tex_file(document)
+        tex_path(document).open('w') do |f|
+          f.puts tex_header(document)
+          f.write tex_content(document)
+        end
       end
 
       private
+
+      def tex_content(document)
+        html_to_tex(rtf_to_html(document.rtf_path))
+      end
+
+      def html_to_tex(html)
+        tex, _ = capture2('pandoc', '-f', 'html', '-t', 'latex', '--no-tex-ligatures', stdin_data: html)
+        tex.gsub /\\ldots\{\}/, '…'
+      end
+
+      def rtf_to_html(rtf_path)
+        html, _ = capture2('textutil', '-convert', 'html', '-excludedelements', '(span)', '-strip', '-stdout', rtf_path.to_s)
+        html
+      end
+
+      def tex_path(document)
+        @manuscript_dir / document.path.sub_ext('.tex')
+      end
+
+      def tex_header(document)
+        header = document.header
+        [
+            '\markdown{---}',
+            guide(header),
+            heading(header),
+            '\markdown{---}',
+            ''
+        ]
+      end
+
+      def heading(header)
+        "\\#{HEADINGS[header['depth']]}{#{header['title']}}"
+      end
+
+      def guide(header)
+        '\\markdown{guide: start}' if header['position'] == 1 && header['depth'] == 1
+      end
 
       def write_listing_file(scrivener)
         listing_file = @manuscript_dir / 'listing.yaml'
