@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
     Driscoll Brook Press uses a specialized dialect of TeX (DBPTeX) to maintain the 'canonical' text of each manuscript.
 
-    scrivener_to_tex translates a Scrivener file into DBPTeX manuscript files.
+    scrivener_to_tex translates a scrivener file into DBPTeX manuscript files.
 
     tex_to_markdown translates files from DBPTeX to markdown.
 
@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     Requires the following tools to be installed and accessible in the command path:
       - epubcheck to validate epub files
       - kindlegen to compile a mobi file from an epub file.
-      - pandoc to translate Scrivener's RTF files to TeX.
+      - pandoc to translate scrivener's RTF files to TeX.
       - pdftex to compile a pdf file from a set of DBPTeX files.
   EOM
   spec.platform       = Gem::Platform::RUBY

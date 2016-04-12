@@ -3,8 +3,8 @@ require 'nokogiri'
 require 'pathname'
 
 module DBP
-  module ScrivenerToTex
-    class Scrivener
+  module Scrivener
+    class Project
       attr_reader :documents, :path
 
       def initialize(path)
@@ -15,9 +15,12 @@ module DBP
         scrivx_file = scrivx_path.open
         scrivx = Nokogiri::XML(scrivx_file)
 
-        @metadata_fields = scrivx.xpath('.//CustomMetaDataSettings/MetaDataField').inject({}) do |fields, field|
-          fields[field['ID']] = field.content
-          fields
+        @rtf_dir = path / 'Files' / 'Docs'
+
+        @metadata_fields = {}.tap do |fields|
+          scrivx.xpath('.//CustomMetaDataSettings/MetaDataField').each do |field|
+            fields[field['ID']] = field.content
+          end
         end
 
         root = OpenStruct.new 'path' => Pathname.new('')
@@ -29,7 +32,7 @@ module DBP
 
       def gather_documents(documents:, parent_node:, parent_document:)
         parent_node.xpath('./Children/BinderItem').each_with_index do |node, index|
-          document = Document.new(node: node, parent_path: parent_document.path, position: index + 1)
+          document = Document.new(rtf_dir: @rtf_dir, node: node, parent_path: parent_document.path, position: index + 1)
           documents << document
           gather_documents(documents: documents, parent_node: node, parent_document: document)
         end

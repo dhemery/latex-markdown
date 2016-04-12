@@ -8,17 +8,8 @@ module DBP
       include Open3
       HEADINGS = %w(wtf chapter scene)
 
-      def initialize(scrivener)
-        @scrivener = scrivener
-        @docs = @scrivener.path / 'Files' / 'Docs'
-      end
-
-      def write_to(content_dir)
-        @scrivener.documents.each { |document| write(content_dir: content_dir, document: document) }
-      end
-
       def write(content_dir:, document:)
-        rtf_path = rtf_path(document)
+        rtf_path = document.rtf_path
         return unless rtf_path.file?
         tex_path = content_dir / document.path.sub_ext('.tex')
         tex_path.parent.mkpath
@@ -40,10 +31,6 @@ module DBP
       def rtf_to_html(rtf_path)
         html, _ = capture2('textutil', '-convert', 'html', '-excludedelements', '(span)', '-strip', '-stdout', rtf_path.to_s)
         html
-      end
-
-      def rtf_path(document)
-        (@docs / document.id.to_s).sub_ext('.rtf')
       end
 
       def write_header(header, file)

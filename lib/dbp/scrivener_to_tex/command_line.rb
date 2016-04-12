@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'optparse'
 
 module DBP
   module ScrivenerToTex
@@ -25,7 +26,7 @@ module DBP
         options.scrivener_file = Pathname(ARGV[0])
         options.output_dir = Pathname(ARGV[1])
 
-        abort "No such Scrivener file: #{options.scrivener_file}" unless options.scrivener_file.directory?
+        abort "No such scrivener file: #{options.scrivener_file}" unless options.scrivener_file.directory?
 
         options
       end
