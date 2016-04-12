@@ -8,12 +8,7 @@ module DBP::TexToMarkdown
     subject { WritePageMetadata.new(macro) }
     let(:translator) do
       Object.new.tap do |allowing|
-        def allowing.copy_argument;
-        end
-
-        def allowing.write_text(_)
-          ;
-        end
+        [:copy_argument].each { |m| allowing.define_singleton_method(m) {} }
       end
     end
     let(:macro) { 'mypagemacro' }
@@ -29,12 +24,6 @@ module DBP::TexToMarkdown
       subject.execute(translator, reader, writer)
 
       _(reader.rest).must_equal 'the page title}'
-    end
-
-    it 'writes a YAML document marker line' do
-      subject.execute(translator, reader, writer)
-
-      _(writer.string.lines.first.chomp).must_equal '---'
     end
 
     it 'writes its name as a YAML style attribute' do
@@ -53,8 +42,7 @@ module DBP::TexToMarkdown
       let(:translator) { MiniTest::Mock.new }
       after { translator.verify }
 
-      it 'copy the argument and write a YAML document marker on a new line' do
-        translator.expect :write_text, nil, [['', '---'].join($/)]
+      it 'copy the argument' do
         translator.expect :copy_argument, nil
 
         subject.execute(translator, reader, writer)

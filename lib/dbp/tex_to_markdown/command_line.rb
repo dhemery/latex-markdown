@@ -5,7 +5,7 @@ require 'pathname'
 require 'dbp/book_compiler/version'
 
 module DBP
-  module TeX2md
+  module TexToMarkdown
     class CommandLine
       class << self
         def parse
