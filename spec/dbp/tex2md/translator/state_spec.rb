@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/translator'
+require 'dbp/tex_to_markdown/translator'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe Translator, 'state' do
     subject { Translator.new(stack) }
     let(:stack) { MiniTest::Mock.new }

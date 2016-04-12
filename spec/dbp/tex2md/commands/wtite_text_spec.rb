@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/write_text'
+require 'dbp/tex_to_markdown'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe WriteText do
     subject { WriteText.new(macro, text) }
     let(:macro) { 'mywritetextmacro' }

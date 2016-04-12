@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/copy_text'
+require 'dbp/tex_to_markdown/copy_text'
 
 require 'strscan'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe CopyText do
     subject { CopyText.new(pattern) }
     let(:pattern) { /[[:alnum:]]*/ }

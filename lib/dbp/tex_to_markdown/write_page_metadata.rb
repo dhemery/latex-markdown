@@ -1,23 +1,24 @@
 require_relative 'command.rb'
 
 module DBP
-  module TeX2md
-    class WrapArgumentInSpan
+  module TexToMarkdown
+    class WritePageMetadata
       include Command
       attr_reader :text
 
       def initialize(name)
         @name = name
         @pattern = /{/
-        @text = "<span class='#{name}'>"
+        @text = "style: #{name}#{$/}title: "
       end
 
       def write(writer, _)
+        writer.puts('---')
         writer.write(text)
       end
 
       def transition(translator, _)
-        translator.write_text('</span>')
+        translator.write_text(['', '---'].join($/))
         translator.copy_argument
       end
 

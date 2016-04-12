@@ -1,5 +1,5 @@
 module DBP
-  module TeX2md
+  module TexToMarkdown
     module Command
       attr_reader :name, :pattern
       alias :eql? :==

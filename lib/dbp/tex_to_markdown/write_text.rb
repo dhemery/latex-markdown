@@ -1,7 +1,7 @@
 require_relative 'command.rb'
 
 module DBP
-  module TeX2md
+  module TexToMarkdown
     class WriteText
       include Command
       attr_reader :text

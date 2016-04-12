@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/enter_environment'
+require 'dbp/tex_to_markdown/enter_environment'
 
 require 'strscan'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe EnterEnvironment do
     subject { EnterEnvironment.new }
     let(:argument) { 'myenvironment' }

@@ -3,7 +3,7 @@ require 'strscan'
 require 'rake'
 require 'rake/ext/pathname'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   class App
     def initialize(options)
       source = options.source

@@ -11,9 +11,9 @@ Gem::Specification.new do |spec|
 
     Driscoll Brook Press uses a specialized dialect of TeX (DBPTeX) to maintain the 'canonical' text of each manuscript.
 
-    scriv2tex translates a Scrivener file into DBPTeX manuscript files.
+    scrivener_to_tex translates a Scrivener file into DBPTeX manuscript files.
 
-    tex2md translates files from DBPTeX to markdown.
+    tex_to_markdown translates files from DBPTeX to markdown.
 
     bb compiles epub, mobi, and pdf books from publication and manuscript files.
 

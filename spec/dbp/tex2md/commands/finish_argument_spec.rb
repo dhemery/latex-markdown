@@ -1,8 +1,8 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/finish_argument'
+require 'dbp/tex_to_markdown/finish_argument'
 
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe FinishArgument do
     subject { FinishArgument.new }
     let(:translator) do

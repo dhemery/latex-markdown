@@ -28,7 +28,7 @@ MARKDOWN_PATH = "%{^#{MANUSCRIPT_SOURCE_DIR}/,#{MANUSCRIPT_DIR}/}X.md"
 EPUB_PUBLICATION_FILES = files_copied(from: PUBLICATION_SOURCE_DIR / 'epub', to: '.')
 
 MANUSCRIPT_FILES = files_created(from_each: MANUSCRIPT_SOURCE_DIR / '**/*.tex', as: MARKDOWN_PATH) do |dep|
-  sh 'tex2md', dep[:source], dep[:dir]
+  sh 'tex_to_markdown', dep[:source], dep[:dir]
 end
 
 BUILD_DIR = Pathname('_site')

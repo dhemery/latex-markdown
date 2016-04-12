@@ -1,13 +1,12 @@
 require_relative 'command.rb'
 
 module DBP
-  module TeX2md
-    class DiscardArgument
+  module TexToMarkdown
+    class DoNothing
       include Command
 
       def initialize(name)
         @name = name
-        @pattern = /[^}]*}/
       end
 
       def to_s

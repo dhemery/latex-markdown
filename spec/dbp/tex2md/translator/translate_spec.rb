@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/translator'
+require 'dbp/tex_to_markdown/translator'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe Translator do
     subject { Translator.new }
     let(:reader) { StringScanner.new(input) }

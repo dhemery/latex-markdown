@@ -12,7 +12,7 @@ require_relative 'write_page_metadata'
 require_relative 'write_text'
 
 module DBP
-  module TeX2md
+  module TexToMarkdown
     class Translator
       ARGUMENT = /[^~\\}]*/
       OPERATOR = /[~\\}]/

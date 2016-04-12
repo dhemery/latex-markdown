@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/copy_argument'
+require 'dbp/tex_to_markdown/copy_argument'
 
 require 'strscan'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe CopyArgument do
     subject { CopyArgument.new(macro_name) }
     let(:macro_name) { 'mymacro' }

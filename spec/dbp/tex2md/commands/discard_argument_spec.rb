@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/discard_argument'
+require 'dbp/tex_to_markdown/discard_argument'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe DiscardArgument do
     subject { DiscardArgument.new(macro) }
     let(:macro) { 'myskipargumentmacro' }

@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/execute_command'
+require 'dbp/tex_to_markdown/execute_command'
 
 require 'strscan'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe ExecuteCommand do
     subject { ExecuteCommand.new(pattern) }
     let(:input) { 'foo123' }

@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
-require 'dbp/tex2md'
+require 'dbp/tex_to_markdown'
 
-options = DBP::TeX2md::CommandLine.parse
-command = DBP::TeX2md::App.new(options)
-command.run
+options = DBP::TexToMarkdown::CommandLine.parse
+DBP::TexToMarkdown::App.new(options).run

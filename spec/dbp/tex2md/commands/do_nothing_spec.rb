@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/do_nothing'
+require 'dbp/tex_to_markdown/do_nothing'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe DoNothing do
     subject { DoNothing.new(macro) }
     let(:macro) { 'mydonothing' }

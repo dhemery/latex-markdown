@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/exit_environment'
+require 'dbp/tex_to_markdown/exit_environment'
 
 require 'strscan'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe ExitEnvironment do
     subject { ExitEnvironment.new }
     let(:input) { '{environment}remaining text' }

@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex2md/write_page_metadata'
+require 'dbp/tex_to_markdown/write_page_metadata'
 
 require 'strscan'
 
-module DBP::TeX2md
+module DBP::TexToMarkdown
   describe WritePageMetadata do
     subject { WritePageMetadata.new(macro) }
     let(:translator) do
