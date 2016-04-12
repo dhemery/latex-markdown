@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+input = ARGV[0] || '-stdin'
+system 'textutil', '-convert', 'html', '-excludedelements', '(span)', '-strip', '-stdout', input

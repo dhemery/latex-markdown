@@ -42,8 +42,7 @@ module DBP
       end
 
       def rtf_to_html(rtf_path)
-        html, _ = capture2('textutil', '-convert', 'html', '-excludedelements', '(span)', '-strip', '-stdout', rtf_path.to_s)
-        html
+        capture2('rtf2html', rtf_path.to_s).first
       end
 
       def tex_path(document)
