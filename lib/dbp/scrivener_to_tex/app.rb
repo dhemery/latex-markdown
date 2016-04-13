@@ -47,8 +47,7 @@ module DBP
             '\markdown{---}',
             guide(header),
             heading(header),
-            '\markdown{---}',
-            ''
+            '\markdown{---}'
         ]
       end
 

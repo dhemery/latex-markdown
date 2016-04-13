@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
+require 'pathname'
 
-pandoc = ['pandoc', '-f', 'html', '-t', 'latex', '--no-tex-ligatures']
-pandoc << ARGV[0] unless ARGV[0].nil?
-system *pandoc
+data_dir = Pathname(__FILE__) + '../../data'
+sed_dir = data_dir / 'sed'
+html_to_tex_sed_command_file = (sed_dir / 'html2tex.sed').to_s
+system 'sed', '-f', html_to_tex_sed_command_file

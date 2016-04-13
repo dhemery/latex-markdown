@@ -18,10 +18,11 @@ Gem::Specification.new do |spec|
     bb compiles epub, mobi, and pdf books from publication and manuscript files.
 
     Requires the following tools to be installed and accessible in the command path:
+      - textutil to translate Scrivener's RTF files to simplified HTML
+      - sed to translate the simplified HTML files to TeX.
+      - pdftex to compile a pdf file from a set of DBPTeX files.
       - epubcheck to validate epub files
       - kindlegen to compile a mobi file from an epub file.
-      - pandoc to translate scrivener's RTF files to TeX.
-      - pdftex to compile a pdf file from a set of DBPTeX files.
   EOM
   spec.platform       = Gem::Platform::RUBY
   spec.version        = DBP::BookCompiler::VERSION::STRING
