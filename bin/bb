@@ -14,6 +14,4 @@ builder_dirs = [ book_dir / VISIBLE_BUILDER_DIR, book_dir / HIDDEN_BUILDER_DIR, 
 rakefile = builder_dirs.map { |d| d / 'Rakefile' }.find { |r| r.file? }
 abort "Could not find builder in #{builder_dirs.join(' ')}" unless rakefile
 
-rake_args = ARGV.unshift
-
-system 'rake', '-f', rakefile.to_s, *rake_args
+system 'rake', '-f', rakefile.to_s, *ARGV
