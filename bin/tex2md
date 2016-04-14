@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-require 'dbp/tex_to_markdown'
+require 'dbp/tex_to_markdown/command_line'
+require 'dbp/tex_to_markdown/app'
 
 options = DBP::TexToMarkdown::CommandLine.parse
 DBP::TexToMarkdown::App.new(options).run

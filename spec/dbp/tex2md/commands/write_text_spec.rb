@@ -1,5 +1,5 @@
 require_relative '../../../spec_helper'
-require 'dbp/tex_to_markdown'
+require 'dbp/tex_to_markdown/write_text'
 
 module DBP::TexToMarkdown
   describe WriteText do

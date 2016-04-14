@@ -1,5 +1,5 @@
 module DBP
-  module BookCompiler
+  module Compile
     module VERSION
       MAJOR = 0
       MINOR = 0

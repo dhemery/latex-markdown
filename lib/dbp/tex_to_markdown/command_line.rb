@@ -1,8 +1,8 @@
+require 'dbp/compile/version'
+
 require 'optparse'
 require 'ostruct'
 require 'pathname'
-
-require 'dbp/book_compiler/version'
 
 module DBP
   module TexToMarkdown
@@ -20,12 +20,17 @@ module DBP
             end
 
             opts.on_tail('--version', 'print the version') do
-              puts DBP::BookCompiler::VERSION::STRING
+              puts DBP::Compile::VERSION::STRING
               exit
             end
           end
 
-          parser.parse!(ARGV)
+          begin
+            parser.parse! ARGV
+          rescue
+            puts parser
+            exit
+          end
 
           unless ARGV.length == 2
             puts parser

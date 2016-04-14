@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require 'dbp/init/command_line'
+require 'dbp/init/app'
+
+options = DBP::Init::CommandLine.parse
+DBP::Init::App.new(options).run

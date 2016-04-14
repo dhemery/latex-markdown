@@ -1,8 +1,8 @@
 gemname = 'dbp-book_compiler'
-require_relative 'lib/dbp/book_compiler/version'
+require_relative 'lib/dbp/compile/version'
 
 gemspec = "#{gemname}.gemspec"
-gemfile = "#{gemname}-#{DBP::BookCompiler::VERSION::STRING}.gem"
+gemfile = "#{gemname}-#{DBP::Compile::VERSION::STRING}.gem"
 
 require 'rake/clean'
 require 'rake/testtask'

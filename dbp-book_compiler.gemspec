@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'dbp/book_compiler/version'
+require 'dbp/compile/version'
 
 Gem::Specification.new do |spec|
   spec.name           = 'dbp-book_compiler'
@@ -11,13 +11,13 @@ Gem::Specification.new do |spec|
 
     Driscoll Brook Press uses a specialized dialect of TeX (DBPTeX) to maintain the 'canonical' text of each manuscript.
 
-    bb compiles epub, mobi, and pdf books from publication and manuscript files.
+    dbpcompile compiles epub, mobi, and pdf books from publication and manuscript files.
   EOM
   spec.platform       = Gem::Platform::RUBY
-  spec.version        = DBP::BookCompiler::VERSION::STRING
+  spec.version        = DBP::Compile::VERSION::STRING
   spec.authors        = ['Dale Emery']
   spec.email          = ['dale@dhemery.com']
-  spec.homepage       = 'https://github.com/driscoll-brook-press/formats/'
+  spec.homepage       = 'https://github.com/driscoll-brook-press/book-compiler/'
   spec.license        = 'MIT'
 
   spec.files          = Dir['bin/**/*', 'lib/**/*', 'data/**/*']
