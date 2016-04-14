@@ -17,17 +17,17 @@ categories:
     slug: funhouse
   - title: Refund
     slug: refund
-  - title: Tailor's Tears
+  - title: Tailor’s Tears
     slug: tailors-tears
   - title: Winding Unwinding (Collection)
     slug: winding-unwinding
-  - title: Yantriels Privy
+  - title: Yantriel’s Privy
     slug: yantriels-privy
 - name: Crime Fiction
   books:
   - title: Double or Nothing
     slug: double-or-nothing
-  - title: The Last Whiskey Bacon Cheddar Burger at Saint Florian's Abbey
+  - title: The Last Whiskey Bacon Cheddar Burger at Saint Florian’s Abbey
     slug: saint-florians-abbey
 ---
 
