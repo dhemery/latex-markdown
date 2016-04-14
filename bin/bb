@@ -2,16 +2,12 @@
 require 'fileutils'
 require 'pathname'
 
-VISIBLE_BUILDER_DIR = 'book-builder'
-HIDDEN_BUILDER_DIR = ".#{VISIBLE_BUILDER_DIR}"
-
-gem_data_dir = Pathname(__FILE__) + '../../data'
-default_builder_dir = gem_data_dir / 'book-builder'
+gem_data = Pathname(__FILE__) + '../../data'
 
 book_dir = Pathname.pwd
-builder_dirs = [ book_dir / VISIBLE_BUILDER_DIR, book_dir / HIDDEN_BUILDER_DIR, default_builder_dir ].uniq
+format_dirs = [ book_dir / 'format', book_dir / '.format', gem_data / 'formats' ]
 
-rakefile = builder_dirs.map { |d| d / 'Rakefile' }.find { |r| r.file? }
-abort "Could not find builder in #{builder_dirs.join(' ')}" unless rakefile
+rakefile = format_dirs.map { |d| d / 'Rakefile' }.find { |r| r.file? }
+abort "Could not find compiler (Rakefile) in #{builder_dirs.join(' ')}" unless rakefile
 
 system 'rake', '-f', rakefile.to_s, *ARGV

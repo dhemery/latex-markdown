@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.version        = DBP::BookCompiler::VERSION::STRING
   spec.authors        = ['Dale Emery']
   spec.email          = ['dale@dhemery.com']
-  spec.homepage       = 'https://github.com/driscoll-brook-press/book-compiler/'
+  spec.homepage       = 'https://github.com/driscoll-brook-press/formats/'
   spec.license        = 'MIT'
 
   spec.files          = Dir['bin/**/*', 'lib/**/*', 'data/**/*']
