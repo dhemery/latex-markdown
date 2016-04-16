@@ -5,7 +5,7 @@ require_relative 'pub/init'
 
 module DBP
   module Pub
-    COMMANDS = [DBP::Pub::Compile.new, DBP::Pub::Init.new].map { |app| CLI.new(app) }
+    COMMANDS = [DBP::Pub::Compile.new, DBP::Pub::Init.new]
 
     class << self
       def run

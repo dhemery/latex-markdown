@@ -6,40 +6,30 @@ require 'pathname'
 
 module DBP
   module Pub
-    class CLI
-      def initialize(app)
-        @app = app
-        @parser = parser
-      end
-
+    module CLI
       def help
-        @parser.help
-      end
-
-      def name
-        @app.name
+        parser.help
       end
 
       def banner
-        @parser.banner
+        parser.banner
       end
 
-      def run
-        parse_command_line
-        @app.run
+      def version
+        DBP::Pub::VERSION::STRING
       end
 
       private
 
       def parse_command_line
         begin
-          @parser.parse! ARGV
+          parser.parse! ARGV
         rescue
           complain
         end
-        @app.assign_unparsed_options
+        assign_unparsed_options
         errors = []
-        @app.check_options(errors)
+        check_options(errors)
         complain(errors) unless errors.empty?
       end
 
@@ -50,22 +40,22 @@ module DBP
       end
 
       def parser
-        OptionParser.new.tap do |parser|
-          parser.program_name = "#{Pathname($0).basename} #{name}"
+        @parser ||= OptionParser.new.tap do |p|
+          p.program_name = "#{Pathname($0).basename} #{name}"
 
-          parser.accept(Pathname) { |p| Pathname(p) }
+          p.accept(Pathname) { |p| Pathname(p) }
 
-          parser.on_tail('--help', 'print this message') do
-            puts parser
+          p.on_tail('--help', 'print this message') do
+            puts p
             exit
           end
 
-          parser.on_tail('--version', 'print the version') do
-            puts @app.version
+          p.on_tail('--version', 'print the version') do
+            puts version
             exit
           end
 
-          @app.declare_options(parser)
+          declare_options(p)
         end
       end
     end

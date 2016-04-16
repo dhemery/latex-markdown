@@ -1,6 +1,9 @@
+require_relative 'cli'
+
 module DBP
   module Pub
     class Init
+      include CLI
       TEMPLATES = %w[short-story]
 
       attr_reader :name
@@ -10,15 +13,12 @@ module DBP
       end
 
       def run
+        parse_command_line
         puts 'This command is not yet implemented. If it were implemented it would:'
         puts "    Delete #{@pub_dir}" if @pub_dir.directory?
         puts "    Create #{@pub_dir}"
         puts "    Copy the #{@template} template to #{@pub_dir}"
         puts "    Add files from #{@scriv} to #{@pub_dir}" if @scriv
-      end
-
-      def version
-        DBP::Pub::VERSION::STRING
       end
 
       def declare_options(parser)

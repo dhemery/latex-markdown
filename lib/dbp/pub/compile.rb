@@ -1,4 +1,6 @@
 require_relative 'version'
+require_relative 'cli'
+
 require 'rake'
 require 'rake/file_utils'
 
@@ -6,6 +8,7 @@ module DBP
   module Pub
     class Compile
       include FileUtils
+      include CLI
       attr_reader :name
 
       def initialize
@@ -13,16 +16,13 @@ module DBP
       end
 
       def run
+        parse_command_line
         env = {
             DBP_PUBLICATION_DIR: @pub_dir,
             DBP_BUILD_DIR: @tmp_dir,
             DBP_OUT_DIR: @out_dir,
         }.map { |k, v| "#{k}=#{v.to_s}" }
         sh 'rake', '-f', @rakefile.to_s, *@targets, *env
-      end
-
-      def version
-        DBP::Pub::VERSION::STRING
       end
 
       def declare_options(parser)
