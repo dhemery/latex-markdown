@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'dbp/pub'
+
+DBP::Pub.run

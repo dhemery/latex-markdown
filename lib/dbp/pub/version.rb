@@ -1,5 +1,5 @@
 module DBP
-  module Compile
+  module Pub
     module VERSION
       MAJOR = 0
       MINOR = 0

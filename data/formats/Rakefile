@@ -3,23 +3,21 @@ require 'pathname'
 require 'yaml'
 require 'rake/ext/pathname'
 
+require_relative 'utils'
+
 TEMPLATE_DIR = Pathname(__FILE__).dirname
-UTILS = TEMPLATE_DIR / 'utils'
 
-require UTILS
+PUBLICATION_DIR = Pathname(ENV['DBP_PUBLICATION_DIR'])
+DBP_BUILD_DIR = Pathname(ENV['DBP_BUILD_DIR'])
+OUT_DIR = Pathname(ENV['DBP_OUT_DIR'])
 
-BOOK_DIR = Pathname(ENV.fetch('DBP_BOOK_DIR', Pathname.pwd)).expand_path
-
-PUBLICATION_DIR = BOOK_DIR / 'publication'
 PUBLICATION_DATA_FILE = PUBLICATION_DIR / 'publication.yaml'
 
 PUBLICATION = YAML.load_file(PUBLICATION_DATA_FILE)
 SLUG = PUBLICATION['slug']
 
-DBP_BUILD_DIR = Pathname('/var/tmp/dbp')
 BOOK_BUILD_DIR = DBP_BUILD_DIR + SLUG
 
-OUT_DIR = BOOK_DIR / 'uploads'
 directory OUT_DIR
 
 def output_file(medium)
@@ -38,7 +36,7 @@ def produce(medium:, prereqs: [], **env)
   file output_file => [PUBLICATION_DATA_FILE, OUT_DIR]
 
   task output_file do |t|
-    subrake dir: build_dir, create: output_file, DBP_PUBLICATION_DIR: PUBLICATION_DIR, **env
+    rake dir: build_dir, create: output_file, DBP_PUBLICATION_DIR: PUBLICATION_DIR.expand_path, **env
   end
 
   desc "Build the #{medium} file"
@@ -53,10 +51,10 @@ PDF_FORMAT_TEMPLATE_FILES = files_copied(from: PDF_FORMAT_TEMPLATE_DIR, to: PDF_
 PDF_FORMAT_FILE = (BOOK_BUILD_DIR / 'dbp.fmt').expand_path
 
 file PDF_FORMAT_FILE => PDF_FORMAT_TEMPLATE_FILES do |t|
-  subrake dir: PDF_FORMAT_BUILD_DIR, create: t.name
+  rake dir: PDF_FORMAT_BUILD_DIR, create: t.name
 end
 
-produce(medium: :pdf, prereqs: PDF_FORMAT_FILE, DBP_PDF_FORMAT_FILE: PDF_FORMAT_FILE )
+produce(medium: :pdf, prereqs: PDF_FORMAT_FILE, DBP_PDF_FORMAT_FILE: PDF_FORMAT_FILE.expand_path )
 produce(medium: :epub)
 
 MOBI_FILE = output_file(:mobi)
@@ -71,10 +69,6 @@ task all: [:mobi]
 
 desc 'Build the mobi file'
 task mobi: MOBI_FILE
-
-def subrake(dir:, create:, **env)
-  cd(dir) { sh 'rake', '-r', UTILS.to_s, "DBP_OUTPUT_FILE=#{create}", *env.map { |k,v| "#{k}=#{v}" } }
-end
 
 CLEAN.include BOOK_BUILD_DIR
 CLOBBER.include OUT_DIR

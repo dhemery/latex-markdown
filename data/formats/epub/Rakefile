@@ -79,12 +79,12 @@ end
 task default: [:all]
 
 desc 'Build and check the epub file (default)'
-task all: [:check]
+task all: [:check_options]
 
 desc 'Build the epub file'
 task epub: [EPUB_FILE]
 
 desc 'Check the epub file'
-task check: [EPUB_CHECK_REPORT]
+task check_options: [EPUB_CHECK_REPORT]
 
 CLEAN.include BUILD_DIR
