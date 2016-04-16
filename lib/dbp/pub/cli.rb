@@ -6,51 +6,41 @@ require 'pathname'
 
 module DBP
   module Pub
-    class Command
+    class CLI
       def initialize(app)
         @app = app
-        @options = OpenStruct.new
         @parser = parser
       end
 
       def help
-        @parser.to_s
+        @parser.help
       end
 
       def name
         @app.name
       end
 
-      def options
-        parse_command_line unless @parsed
-        @options
+      def banner
+        @parser.banner
       end
 
       def run
-        @app.run(options)
+        parse_command_line
+        @app.run
       end
 
       private
 
-      def assign_unparsed_options
-        @app.assign_unparsed_options(@options)
-      end
-
-      def check_options
-        errors = []
-        @app.check_options(@options, errors)
-        complain(errors) unless errors.empty?
-      end
-
       def parse_command_line
         begin
-          parser.parse! ARGV
+          @parser.parse! ARGV
         rescue
           complain
         end
-        @parsed = true
-        assign_unparsed_options
-        check_options
+        @app.assign_unparsed_options
+        errors = []
+        @app.check_options(errors)
+        complain(errors) unless errors.empty?
       end
 
       def complain(errors=[])
@@ -66,16 +56,16 @@ module DBP
           parser.accept(Pathname) { |p| Pathname(p) }
 
           parser.on_tail('--help', 'print this message') do
-            puts @options
+            puts parser
             exit
           end
 
           parser.on_tail('--version', 'print the version') do
-            puts DBP::Pub::VERSION::STRING
+            puts @app.version
             exit
           end
 
-          @app.declare_options(parser, @options)
+          @app.declare_options(parser)
         end
       end
     end
