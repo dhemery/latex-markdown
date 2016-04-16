@@ -27,7 +27,7 @@ module DBP
         rescue
           complain
         end
-        assign_unparsed_options
+        yield ARGV if block_given?
         errors = []
         check_options(errors)
         complain(errors) unless errors.empty?

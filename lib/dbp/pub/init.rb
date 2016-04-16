@@ -13,7 +13,10 @@ module DBP
       end
 
       def run
-        parse_command_line
+        parse_command_line do |operands|
+          @template = operands.shift
+          @pub_dir = operands.shift&.instance_eval { |d| Pathname(d) } || Pathname.pwd / 'publication'
+        end
         puts 'This command is not yet implemented. If it were implemented it would:'
         puts "    Delete #{@pub_dir}" if @pub_dir.directory?
         puts "    Create #{@pub_dir}"
@@ -35,11 +38,6 @@ module DBP
         parser.on('--list', 'list available templates') do |list|
           @list = list
         end
-      end
-
-      def assign_unparsed_options
-        @template = ARGV.shift
-        @pub_dir = ARGV.shift&.instance_eval { |d| Pathname(d) } || Pathname.pwd / 'publication'
       end
 
       def check_options(errors)

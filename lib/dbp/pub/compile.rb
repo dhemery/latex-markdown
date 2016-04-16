@@ -9,20 +9,46 @@ module DBP
     class Compile
       include FileUtils
       include CLI
-      attr_reader :name
+      attr_reader :name, :targets
 
       def initialize
         @name = 'compile'
       end
 
       def run
-        parse_command_line
+        parse_command_line do |operands|
+          @targets = operands
+        end
         env = {
-            DBP_PUBLICATION_DIR: @pub_dir,
-            DBP_BUILD_DIR: @tmp_dir,
-            DBP_OUT_DIR: @out_dir,
+            DBP_PUBLICATION_DIR: pub_dir,
+            DBP_BUILD_DIR: tmp_dir,
+            DBP_OUT_DIR: out_dir,
         }.map { |k, v| "#{k}=#{v.to_s}" }
-        sh 'rake', '-f', @rakefile.to_s, *@targets, *env
+        sh 'rake', *env, '-f', rakefile.to_s, *targets
+      end
+
+      def book_dir
+        @book_dir ||= Pathname.pwd
+      end
+
+      def format_dir
+        @format_dir ||= format_dirs.find { |d| d.directory? }
+      end
+
+      def out_dir
+        @out_dir ||= book_dir / 'compiled'
+      end
+
+      def pub_dir
+        @pub_dir ||= book_dir / 'publication'
+      end
+
+      def rakefile
+        @rakefile = format_dir / 'Rakefile'
+      end
+
+      def tmp_dir
+        @tmp_dir ||= Pathname('/var/tmp/dbp')
       end
 
       def declare_options(parser)
@@ -49,29 +75,16 @@ module DBP
         end
       end
 
-      def assign_unparsed_options
-        @book_dir ||= Pathname.pwd
-        @tmp_dir ||= Pathname('/var/tmp/dbp')
-
-        @pub_dir ||= @book_dir / 'publication'
-        @out_dir ||= @book_dir / 'compiled'
-
-        @format_dir ||= format_dirs.find { |d| d.directory? }
-        @rakefile = @format_dir / 'Rakefile'
-
-        @targets = ARGV
-      end
-
       def check_options(errors)
-        errors << "Publication directory not found: #{@pub_dir}" unless @pub_dir.directory?
-        errors << "No Rakefile in format directory: #{@format_dir}" unless @rakefile.file?
+        errors << "Publication directory not found: #{pub_dir}" unless pub_dir.directory?
+        errors << "No Rakefile in format directory: #{rakefile.dirname}" unless rakefile.file?
       end
 
       def format_dirs
         gem_data = Pathname(__FILE__) + '../../../../data'
         [
-            @book_dir / 'format',
-            @book_dir / '.format',
+            book_dir / 'format',
+            book_dir / '.format',
             gem_data / 'formats',
         ]
       end
