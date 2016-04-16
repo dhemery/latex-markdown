@@ -23,7 +23,7 @@ module DBP
 
       def parse_command_line
         begin
-          parser.parse! ARGV
+          parser.parse!
         rescue
           complain
         end
@@ -40,7 +40,7 @@ module DBP
       end
 
       def parser
-        @parser ||= OptionParser.new.tap do |p|
+        @parser ||= ARGV.options.tap do |p|
           p.program_name = "#{Pathname($0).basename} #{name}"
 
           p.accept(Pathname) { |p| Pathname(p) }
