@@ -12,7 +12,8 @@ module DBP
     end
 
     class App
-      COMMANDS = [DBP::Pub::Compile.new, DBP::Pub::Init.new]
+      NAME = Pathname($0).basename
+      COMMANDS = [DBP::Pub::Compile.new(NAME), DBP::Pub::Init.new(NAME)]
 
       def run
         command_name = (ARGV.shift || '')

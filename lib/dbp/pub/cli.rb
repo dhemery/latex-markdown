@@ -7,6 +7,13 @@ require 'pathname'
 module DBP
   module Pub
     module CLI
+      attr_reader :name
+
+      def initialize(*names)
+        @full_name = names.reject { |n| n.nil? }.join(' ')
+        @name = names.last
+      end
+
       def help
         "Usage: #{parser.help}"
       end
@@ -42,11 +49,8 @@ module DBP
       def parser
 
         @parser ||= OptionParser.new do |p|
-          script_name = Pathname($0).basename
-          prefix = script_name == name ? '' : "#{script_name} "
-          full_name = "#{prefix}#{name}"
-          p.program_name = full_name
-          p.banner = "#{full_name} [options]"
+          p.program_name = @full_name
+          p.banner = "#{@full_name} [options]"
 
           p.accept(Pathname) { |p| Pathname(p) }
 

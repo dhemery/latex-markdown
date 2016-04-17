@@ -9,10 +9,10 @@ module DBP
     class Compile
       include FileUtils
       include CLI
-      attr_reader :name, :targets
+      attr_reader :name, :full_name, :targets
 
-      def initialize
-        @name = 'compile'
+      def initialize(command = nil)
+        super command, 'compile'
       end
 
       def run

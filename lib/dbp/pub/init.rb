@@ -6,10 +6,8 @@ module DBP
       include CLI
       TEMPLATES = %w[short-story]
 
-      attr_reader :name
-
-      def initialize
-        @name = 'init'
+      def initialize(command = nil)
+        super command, 'init'
       end
 
       def run
