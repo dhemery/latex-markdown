@@ -4,7 +4,7 @@ require 'optparse'
 require 'pathname'
 
 module DBP
-  module Pub
+  module BookCompiler
     module CLI
       attr_reader :name
 
