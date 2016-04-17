@@ -40,7 +40,7 @@ module DBP
       end
 
       def parser
-        @parser ||= ARGV.options.tap do |p|
+        @parser ||= OptionParser.new.tap do |p|
           p.program_name = "#{Pathname($0).basename} #{name}"
 
           p.accept(Pathname) { |p| Pathname(p) }
