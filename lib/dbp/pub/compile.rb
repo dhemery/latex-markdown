@@ -1,5 +1,4 @@
 require 'dbp'
-require_relative 'version'
 require_relative 'cli'
 
 require 'rake'

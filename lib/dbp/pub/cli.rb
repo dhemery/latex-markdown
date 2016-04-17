@@ -1,6 +1,5 @@
-require 'dbp/pub/version'
+require 'dbp/book_compiler/version'
 
-require 'ostruct'
 require 'optparse'
 require 'pathname'
 
@@ -23,7 +22,7 @@ module DBP
       end
 
       def version
-        DBP::Pub::VERSION::STRING
+        DBP::BookCompiler::VERSION::STRING
       end
 
       private

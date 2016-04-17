@@ -1,4 +1,4 @@
-require 'dbp/pub/version'
+require 'dbp/book_compiler/version'
 
 require 'optparse'
 require 'ostruct'
@@ -20,7 +20,7 @@ module DBP
             end
 
             opts.on_tail('--version', 'print the version') do
-              puts DBP::Pub::VERSION::STRING
+              puts DBP::BookCompiler::VERSION::STRING
               exit
             end
           end
