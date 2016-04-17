@@ -25,6 +25,12 @@ module DBP
         DBP::BookCompiler::VERSION::STRING
       end
 
+      def declare_options(parser)
+      end
+
+      def check_options(errors)
+      end
+
       private
 
       def parse_command_line

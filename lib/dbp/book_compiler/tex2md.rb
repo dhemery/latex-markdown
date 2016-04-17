@@ -3,16 +3,34 @@ require 'strscan'
 require 'rake'
 require 'rake/ext/pathname'
 
+require 'dbp/book_compiler/util/cli'
+
 module DBP::BookCompiler::TexToMarkdown
   class App
-    def initialize(options)
-      source = options.source
-      @tex_file_pattern = tex_file_pattern(source)
-      @tex_path_to_md_path = "%{^#{source_dir(source)},#{options.dest}}X.md"
+    include DBP::BookCompiler::CLI
+
+    def initialize
+      super 'tex2md'
     end
 
     def run
+      parse_command_line do |operands|
+        complain unless operands.length == 2
+        @source = operands.shift&.instance_eval { |s| Pathname(s) }
+        @dest= operands.shift&.instance_eval { |s| Pathname(s) }
+      end
+      @tex_file_pattern = tex_file_pattern(@source)
+      @tex_path_to_md_path = "%{^#{source_dir(@source)},#{@dest}}X.md"
       tex_files.each { |tex_in| translate(tex_in) }
+    end
+
+    def declare_options(p)
+      p.banner << ' source dest'
+    end
+
+    def check_options(errors)
+      errors << "#{@source}: no such file or directory" unless @source&.exist?
+      errors << "#{@dest}: is a file" if @dest&.file?
     end
 
     private
