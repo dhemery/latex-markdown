@@ -8,7 +8,7 @@ module DBP
   module Pub
     module CLI
       def help
-        parser.help
+        "Usage: #{parser.help}"
       end
 
       def banner
@@ -24,8 +24,8 @@ module DBP
       def parse_command_line
         begin
           parser.parse!
-        rescue
-          complain
+        # rescue
+        #   complain
         end
         yield ARGV if block_given?
         errors = []
@@ -40,8 +40,13 @@ module DBP
       end
 
       def parser
-        @parser ||= OptionParser.new.tap do |p|
-          p.program_name = "#{Pathname($0).basename} #{name}"
+
+        @parser ||= OptionParser.new do |p|
+          script_name = Pathname($0).basename
+          prefix = script_name == name ? '' : "#{script_name} "
+          full_name = "#{prefix}#{name}"
+          p.program_name = full_name
+          p.banner = "#{full_name} [options]"
 
           p.accept(Pathname) { |p| Pathname(p) }
 

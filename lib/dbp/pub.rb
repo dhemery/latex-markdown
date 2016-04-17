@@ -5,18 +5,22 @@ require_relative 'pub/init'
 
 module DBP
   module Pub
-    COMMANDS = [DBP::Pub::Compile.new, DBP::Pub::Init.new]
-
     class << self
+      def application
+        App.new
+      end
+    end
+
+    class App
+      COMMANDS = [DBP::Pub::Compile.new, DBP::Pub::Init.new]
+
       def run
         command_name = (ARGV.shift || '')
-        command = COMMANDS.find { |c| c.name == command_name }
-        abort help.join($/) unless command
-        command.run
+        COMMANDS.find(-> { abort help } ) { |c| c.name == command_name }.run
       end
 
       def help
-        COMMANDS.map { |command| "#{command.banner}" }
+        (['Usage:'] + COMMANDS.map { |command| "   #{command.banner}" }).join($/)
       end
     end
   end
