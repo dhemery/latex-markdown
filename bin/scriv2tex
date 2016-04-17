@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-require 'dbp/scrivener_to_tex/command_line'
-require 'dbp/scrivener_to_tex/app'
+require 'dbp/book_compiler/scriv2tex'
 
-options = DBP::ScrivenerToTex::CommandLine.parse
-DBP::ScrivenerToTex::App.new(options).run
+DBP::BookCompiler::ScrivenerToTex::App.new.run
