@@ -1,3 +1,4 @@
+require 'dbp'
 require_relative 'version'
 require_relative 'cli'
 
@@ -81,11 +82,10 @@ module DBP
       end
 
       def format_dirs
-        gem_data = Pathname(__FILE__) + '../../../../data'
         [
             book_dir / 'format',
             book_dir / '.format',
-            gem_data / 'formats',
+            DBP.data_dir / 'formats',
         ]
       end
     end

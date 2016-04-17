@@ -1,4 +1,4 @@
-require_relative '../../../spec_helper'
+require_relative '_helper'
 require 'dbp/tex_to_markdown/enter_environment'
 
 require 'strscan'

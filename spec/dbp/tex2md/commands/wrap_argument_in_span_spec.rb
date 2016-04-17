@@ -1,4 +1,4 @@
-require_relative '../../../spec_helper'
+require_relative '_helper'
 require 'dbp/tex_to_markdown/wrap_argument_in_span'
 
 require 'strscan'
