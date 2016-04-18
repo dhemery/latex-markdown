@@ -1,4 +1,4 @@
-require 'dbp/tex_to_markdown/translator'
+require 'dbp/book_compiler/tex_to_markdown/translator'
 require 'strscan'
 require 'rake'
 require 'rake/ext/pathname'

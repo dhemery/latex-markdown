@@ -1,5 +1,5 @@
 require_relative '_helper'
-require 'dbp/tex_to_markdown/do_nothing'
+require 'dbp/book_compiler/tex_to_markdown/do_nothing'
 
 module DBP::TexToMarkdown
   describe DoNothing do

@@ -1,5 +1,5 @@
 require_relative '_helper'
-require 'dbp/tex_to_markdown/enter_environment'
+require 'dbp/book_compiler/tex_to_markdown/enter_environment'
 
 require 'strscan'
 

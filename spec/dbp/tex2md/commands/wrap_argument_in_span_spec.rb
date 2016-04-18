@@ -1,5 +1,5 @@
 require_relative '_helper'
-require 'dbp/tex_to_markdown/wrap_argument_in_span'
+require 'dbp/book_compiler/tex_to_markdown/wrap_argument_in_span'
 
 require 'strscan'
 
