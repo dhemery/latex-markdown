@@ -3,7 +3,7 @@ require 'dbp/book_compiler/tex_to_markdown/exit_environment'
 
 require 'strscan'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe ExitEnvironment do
     subject { ExitEnvironment.new }
     let(:input) { '{environment}remaining text' }

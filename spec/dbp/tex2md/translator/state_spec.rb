@@ -1,7 +1,7 @@
 require_relative '_helper'
 require 'dbp/book_compiler/tex_to_markdown/translator'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe Translator, 'state' do
     subject { Translator.new(stack) }
     let(:stack) { MiniTest::Mock.new }

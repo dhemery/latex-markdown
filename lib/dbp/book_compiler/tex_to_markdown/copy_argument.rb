@@ -1,22 +1,20 @@
 require_relative 'command.rb'
 
-module DBP
-  module TexToMarkdown
-    class CopyArgument
-      include Command
+module DBP::BookCompiler::TexToMarkdown
+  class CopyArgument
+    include Command
 
-      def initialize(name)
-        @name = name
-        @pattern = /{/
-      end
+    def initialize(name)
+      @name = name
+      @pattern = /{/
+    end
 
-      def transition(translator, _)
-        translator.copy_argument
-      end
+    def transition(translator, _)
+      translator.copy_argument
+    end
 
-      def to_s
-        "#{self.class}(#{name})"
-      end
+    def to_s
+      "#{self.class}(#{name})"
     end
   end
 end

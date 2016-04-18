@@ -2,7 +2,7 @@ require_relative '_helper'
 require 'dbp/book_compiler/tex_to_markdown/finish_document'
 
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe FinishDocument do
     subject { FinishDocument.new }
     let(:translator) do

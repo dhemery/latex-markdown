@@ -3,7 +3,7 @@ require 'dbp/book_compiler/tex_to_markdown/wrap_argument_in_span'
 
 require 'strscan'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe WrapArgumentInSpan do
     subject { WrapArgumentInSpan.new(macro) }
     let(:macro) { 'myspanmacro' }

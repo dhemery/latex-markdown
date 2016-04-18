@@ -1,7 +1,7 @@
 require_relative '_helper'
 require 'dbp/book_compiler/tex_to_markdown/discard_argument'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe DiscardArgument do
     subject { DiscardArgument.new(macro) }
     let(:macro) { 'myskipargumentmacro' }

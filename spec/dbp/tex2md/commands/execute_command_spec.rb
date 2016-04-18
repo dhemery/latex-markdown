@@ -3,7 +3,7 @@ require 'dbp/book_compiler/tex_to_markdown/execute_command'
 
 require 'strscan'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe ExecuteCommand do
     subject { ExecuteCommand.new(pattern) }
     let(:input) { 'foo123' }

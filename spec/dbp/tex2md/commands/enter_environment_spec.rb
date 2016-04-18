@@ -3,7 +3,7 @@ require 'dbp/book_compiler/tex_to_markdown/enter_environment'
 
 require 'strscan'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe EnterEnvironment do
     subject { EnterEnvironment.new }
     let(:argument) { 'myenvironment' }

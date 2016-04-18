@@ -3,7 +3,7 @@ require 'dbp/book_compiler/tex_to_markdown/copy_text'
 
 require 'strscan'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe CopyText do
     subject { CopyText.new(pattern) }
     let(:pattern) { /[[:alnum:]]*/ }

@@ -1,7 +1,7 @@
 require_relative '_helper'
 require 'dbp/book_compiler/tex_to_markdown/do_nothing'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe DoNothing do
     subject { DoNothing.new(macro) }
     let(:macro) { 'mydonothing' }

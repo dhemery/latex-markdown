@@ -60,7 +60,7 @@ module DBP
         md_out = md_out(tex_in)
         md_out.dirname.mkpath
         md_out.open('w') do |writer|
-          DBP::TexToMarkdown::Translator.new.translate(scanner(tex_in), writer)
+          TexToMarkdown::Translator.new.translate(scanner(tex_in), writer)
         end
       end
     end

@@ -1,7 +1,7 @@
 require_relative '_helper'
 require 'dbp/book_compiler/tex_to_markdown/translator'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe Translator do
     subject { Translator.new }
     let(:reader) { StringScanner.new(input) }

@@ -3,7 +3,7 @@ require 'dbp/book_compiler/tex_to_markdown/copy_argument'
 
 require 'strscan'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe CopyArgument do
     subject { CopyArgument.new(macro_name) }
     let(:macro_name) { 'mymacro' }

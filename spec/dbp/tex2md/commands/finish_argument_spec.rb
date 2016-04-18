@@ -2,7 +2,7 @@ require_relative '_helper'
 require 'dbp/book_compiler/tex_to_markdown/finish_argument'
 
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe FinishArgument do
     subject { FinishArgument.new }
     let(:translator) do

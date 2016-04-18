@@ -1,7 +1,7 @@
 require_relative '_helper'
 require 'dbp/book_compiler/tex_to_markdown/write_text'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe WriteText do
     subject { WriteText.new(macro, text) }
     let(:macro) { 'mywritetextmacro' }

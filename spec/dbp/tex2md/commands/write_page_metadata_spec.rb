@@ -3,7 +3,7 @@ require 'dbp/book_compiler/tex_to_markdown/write_page_metadata'
 
 require 'strscan'
 
-module DBP::TexToMarkdown
+module DBP::BookCompiler::TexToMarkdown
   describe WritePageMetadata do
     subject { WritePageMetadata.new(macro) }
     let(:translator) do
