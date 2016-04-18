@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'dbp/book_compiler/scriv2tex'
 
-DBP::BookCompiler::ScrivenerToTex::App.new.run
+DBP::BookCompiler::Scriv2TeX.new.run

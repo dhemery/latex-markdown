@@ -9,7 +9,7 @@ module DBP
     module Pub
       class Compile
         include FileUtils
-        include CLI
+        include BookCompiler::CLI
         attr_reader :name, :full_name, :targets
 
         def initialize(command = nil)

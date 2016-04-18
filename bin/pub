@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'dbp/book_compiler/pub'
 
-DBP::BookCompiler::Pub.application.run
+DBP::BookCompiler::Pub.run

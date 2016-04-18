@@ -4,7 +4,7 @@ module DBP
   module BookCompiler
     module Pub
       class Init
-        include CLI
+        include BookCompiler::CLI
         TEMPLATES = %w[short-story]
 
         def initialize(command = nil)

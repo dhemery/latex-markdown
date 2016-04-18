@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'dbp/book_compiler/tex2md'
 
-DBP::BookCompiler::TexToMarkdown::App.new.run
+DBP::BookCompiler::TeX2Md.new.run

@@ -6,12 +6,6 @@ module DBP
   module BookCompiler
     module Pub
       class << self
-        def application
-          App.new
-        end
-      end
-
-      class App
         NAME = Pathname($0).basename
         COMMANDS = [Compile.new(NAME), Init.new(NAME)]
 
