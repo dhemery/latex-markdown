@@ -10,7 +10,7 @@ module DBP
       class Compile
         include FileUtils
         include BookCompiler::CLI
-        attr_reader :name, :full_name, :targets
+        attr_reader :targets
 
         def initialize(command = nil)
           super command, 'compile'
