@@ -8,8 +8,8 @@ module DBP::BookCompiler::TexToMarkdown
     subject { CopyArgument.new(macro_name) }
     let(:macro_name) { 'mymacro' }
     let(:translator) do
-      Object.new.tap do |allowing|
-        [:copy_argument].each { |m| allowing.define_singleton_method(m) {} }
+      Object.new.tap do |t|
+        [:copy_argument_text].each { |m| t.define_singleton_method(m) {} }
       end
     end
     let(:reader) { StringScanner.new(input) }
@@ -31,7 +31,7 @@ module DBP::BookCompiler::TexToMarkdown
       after { translator.verify }
 
       it 'copy the argument' do
-        translator.expect :copy_argument, nil
+        translator.expect :copy_argument_text, nil
 
         subject.execute(translator, reader, writer)
       end

@@ -10,17 +10,17 @@ module DBP::BookCompiler::TexToMarkdown
 
     describe 'copy argument' do
       it 'pushes CopyText with the argument pattern' do
-        stack.expect :push, nil, [CopyText.new(Translator::ARGUMENT)]
+        stack.expect :push, nil, [CopyText.new(Translator::ARGUMENT_TEXT)]
 
-        subject.copy_argument
+        subject.copy_argument_text
       end
     end
 
     describe 'copy text' do
       it 'pushes CopyText with the text pattern' do
-        stack.expect :push, nil, [CopyText.new(Translator::TEXT)]
+        stack.expect :push, nil, [CopyText.new(Translator::OUTER_TEXT)]
 
-        subject.copy_text
+        subject.copy_outer_text
       end
 
       describe 'execute operator' do

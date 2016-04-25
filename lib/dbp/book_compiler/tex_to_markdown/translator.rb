@@ -13,13 +13,13 @@ require_relative 'write_text'
 
 module DBP::BookCompiler::TexToMarkdown
   class Translator
-    ARGUMENT = /[^~\\}]*/
+    ARGUMENT_TEXT = /[^~\\}]*/
     OPERATOR = /[~\\}]/
     MACRO_NAME = /[[:alpha:]]+|[$]/
-    TEXT = /[^~\\]*/
+    OUTER_TEXT = /[^~\\]*/
 
-    COPY_TEXT = CopyText.new(TEXT)
-    COPY_ARGUMENT = CopyText.new(ARGUMENT)
+    COPY_OUTER_TEXT = CopyText.new(OUTER_TEXT)
+    COPY_ARGUMENT_TEXT = CopyText.new(ARGUMENT_TEXT)
     EXECUTE_OPERATOR = ExecuteCommand.new(OPERATOR)
 
     COPY_ARGUMENT_COMMANDS = %w(markdown).map { |name| CopyArgument.new(name) }
@@ -47,16 +47,16 @@ module DBP::BookCompiler::TexToMarkdown
     end
 
     def translate(reader, writer)
-      copy_text
+      copy_outer_text
       @stack.pop.execute(self, reader, writer) until @stack.empty?
     end
 
-    def copy_argument
-      @stack.push(COPY_ARGUMENT)
+    def copy_argument_text
+      @stack.push(COPY_ARGUMENT_TEXT)
     end
 
-    def copy_text
-      @stack.push(COPY_TEXT)
+    def copy_outer_text
+      @stack.push(COPY_OUTER_TEXT)
     end
 
     def execute_command(name)

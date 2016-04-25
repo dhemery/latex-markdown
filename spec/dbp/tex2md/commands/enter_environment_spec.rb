@@ -9,9 +9,8 @@ module DBP::BookCompiler::TexToMarkdown
     let(:argument) { 'myenvironment' }
     let(:input) { "{#{argument}}some text\end{#{argument}}" }
     let(:translator) do
-      Object.new.tap do |allowing|
-        def allowing.copy_text;
-        end
+      Object.new.tap do |t|
+        [:copy_outer_text].each { |m| t.define_singleton_method(m) {} }
       end
     end
     let(:reader) { StringScanner.new(input) }
@@ -38,7 +37,7 @@ module DBP::BookCompiler::TexToMarkdown
       after { translator.verify }
 
       it 'copy text' do
-        translator.expect :copy_text, nil
+        translator.expect :copy_outer_text, nil
 
         subject.execute(translator, reader, writer)
       end

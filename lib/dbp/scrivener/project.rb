@@ -1,6 +1,7 @@
 require_relative 'document'
 require 'nokogiri'
 require 'pathname'
+require 'ostruct'
 
 module DBP
   module Scrivener

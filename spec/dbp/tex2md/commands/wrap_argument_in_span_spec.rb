@@ -9,13 +9,9 @@ module DBP::BookCompiler::TexToMarkdown
     let(:macro) { 'myspanmacro' }
     let(:input) { '{argument}' }
     let(:translator) do
-      Object.new.tap do |allowing|
-        def allowing.copy_argument;
-        end
-
-        def allowing.write_text(_)
-          ;
-        end
+      Object.new.tap do |t|
+        [:copy_argument_text].each { |m| t.define_singleton_method(m) {} }
+        [:write_text].each { |m| t.define_singleton_method(m) {|_|} }
       end
     end
     let(:reader) { StringScanner.new(input) }
@@ -43,7 +39,7 @@ module DBP::BookCompiler::TexToMarkdown
 
       it 'copy the argument and write the end span tag' do
         translator.expect :write_text, nil, ['</span>']
-        translator.expect :copy_argument, nil
+        translator.expect :copy_argument_text, nil
 
         subject.execute(translator, reader, writer)
       end

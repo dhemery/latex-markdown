@@ -14,7 +14,7 @@ module DBP::BookCompiler::TexToMarkdown
     end
 
     def transition(translator, _)
-      translator.copy_text
+      translator.copy_outer_text
     end
 
     def to_s

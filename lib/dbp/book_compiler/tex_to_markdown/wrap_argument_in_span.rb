@@ -17,7 +17,7 @@ module DBP::BookCompiler::TexToMarkdown
 
     def transition(translator, _)
       translator.write_text('</span>')
-      translator.copy_argument
+      translator.copy_argument_text
     end
 
     def to_s
