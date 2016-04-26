@@ -79,6 +79,18 @@ module DBP::BookCompiler::TexToMarkdown
           end
         end
       end
+
+      %w[looseness].each do |macro|
+        describe "\\#{macro}" do
+          let(:input) { "Before \\#{macro}-2 after" }
+
+          it 'and its numeric argument' do
+            subject.translate(reader, writer)
+
+            _(writer.string).must_equal 'Before  after'
+          end
+        end
+      end
     end
 
     %w(abbr emph leadin unbreakable).each do |macro|

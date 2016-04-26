@@ -1,14 +1,13 @@
 require_relative '_helper'
-require 'dbp/book_compiler/tex_to_markdown/discard_argument'
+require 'dbp/book_compiler/tex_to_markdown/discard_numeric_argument'
 
 module DBP::BookCompiler::TexToMarkdown
-  describe DiscardArgument do
-    subject { DiscardArgument.new(macro) }
+  describe DiscardNumericArgument do
+    subject { DiscardNumericArgument.new(macro) }
     let(:macro) { 'myskipargumentmacro' }
-    let(:input) { '{argument text}additional text' }
+    let(:input) { '-321additional text' }
     let(:translator) do
       Object.new.tap do |t|
-        [:skip_argument].each { |m| t.define_singleton_method(m) {} }
       end
     end
     let(:reader) { StringScanner.new input }

@@ -1,6 +1,7 @@
 require_relative 'copy_argument'
 require_relative 'copy_text'
 require_relative 'discard_argument'
+require_relative 'discard_numeric_argument'
 require_relative 'do_nothing'
 require_relative 'enter_environment'
 require_relative 'execute_command'
@@ -24,6 +25,7 @@ module DBP::BookCompiler::TexToMarkdown
 
     COPY_ARGUMENT_COMMANDS = %w(markdown).map { |name| CopyArgument.new(name) }
     DISCARD_ARGUMENT_COMMANDS = %w(longpages shortpages).map { |name| DiscardArgument.new(name) }
+    DISCARD_NUMERIC_ARGUMENT_COMMANDS = %w[looseness].map { |name| DiscardNumericArgument.new(name) }
     DO_NOTHING_COMMANDS = %w(longpar longpage shortpage shortpar).map { |name| DoNothing.new(name) }
     WRAP_IN_SPAN_COMMANDS = %w(abbr emph leadin unbreakable).map { |style| WrapArgumentInSpan.new(style) }
     WRITE_PAGE_METADATA_COMMANDS = %w(chapter introduction note story).map { |style| WritePageMetadata.new(style) }
@@ -39,7 +41,14 @@ module DBP::BookCompiler::TexToMarkdown
         EnterEnvironment.new,
         ExitEnvironment.new,
         ExecuteCommand.new(MACRO_NAME),
-    ] + COPY_ARGUMENT_COMMANDS + DISCARD_ARGUMENT_COMMANDS + DO_NOTHING_COMMANDS + WRAP_IN_SPAN_COMMANDS + WRITE_PAGE_METADATA_COMMANDS + WRITE_TEXT_COMMANDS
+    ] +
+        COPY_ARGUMENT_COMMANDS +
+        DISCARD_ARGUMENT_COMMANDS +
+        DISCARD_NUMERIC_ARGUMENT_COMMANDS +
+        DO_NOTHING_COMMANDS +
+        WRAP_IN_SPAN_COMMANDS +
+        WRITE_PAGE_METADATA_COMMANDS +
+        WRITE_TEXT_COMMANDS
 
     def initialize(stack = [])
       @commands = {}.tap { |h| COMMANDS.each { |c| h[c.name] = c } }
