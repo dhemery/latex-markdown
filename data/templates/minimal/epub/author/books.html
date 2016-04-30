@@ -1,0 +1,8 @@
+---
+title: Books by the Author
+body: centered block
+...
+
+<ul class='plain-list'>
+    {% for book in site.data.books %}<li>{% include book-link.html book=book %}</li>{% endfor %}
+</ul>

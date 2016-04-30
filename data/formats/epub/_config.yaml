@@ -1,9 +1,14 @@
 defaults:
-  -
-    scope:
-      path: ''
-      type: 'pages'
-    values:
-      layout: 'page'
-      manifest: true
+-
+  scope:
+    path: ''
+  values:
+    layout: titled-page
+    style: normal
+    body: left indented
+-
+  scope:
+    path: 'stylesheets'
+  values:
+    layout:
 exclude: [Rakefile]

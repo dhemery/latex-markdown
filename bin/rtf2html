@@ -4,7 +4,7 @@ require 'rake/file_utils'
 
 # Excluding these HTML elements produces a file with only <p>, <i>, and <b> elements.
 # A reasonably simple sed command can translate the resulting HTML to DBP TeX.
-EXCLUDED_ELEMENTS = %w[body font head html span xml]
+EXCLUDED_ELEMENTS = %w[a body font head html span xml]
 EXCLUSION_OPTION = ['-excludedelements', "(#{EXCLUDED_ELEMENTS.join(',')})"]
 RTF_TO_HTML_COMMAND = %w[textutil -stdout -convert html] + EXCLUSION_OPTION + ARGV
 sh *RTF_TO_HTML_COMMAND

@@ -1,0 +1,26 @@
+---
+---
+@import 'base';
+
+$title-size: $heading-1-size * $heading-scale * $heading-scale;
+
+p { margin: 1em 0; }
+
+.book-title, .book-author, .book-publisher {
+  font-variant: small-caps;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.book-author, .book-publisher {
+  margin-top: 2em;
+}
+.book-title {
+  font-size: $title-size;
+  margin-top: 0;
+}
+.book-author {
+  font-size: $heading-1-size;
+}
+.book-publisher {
+  font-size: $heading-2-size;
+}

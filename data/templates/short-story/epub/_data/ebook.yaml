@@ -1,0 +1,10 @@
+frontmatter:
+  - publication/cover.html
+  - publication/title.html
+  - publication/toc.html
+backmatter:
+  - author/about.html
+  - author/books.html
+  - author/connect.html
+  - preview/preview-slug.html
+  - publication/copyright.html

@@ -11,5 +11,9 @@ module DBP
     def data_dir
       root_dir / 'data'
     end
+
+    def templates_dir
+      data_dir / 'templates'
+    end
   end
 end

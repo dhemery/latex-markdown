@@ -1,0 +1,75 @@
+$text-size: 100%;
+$heading-scale: 1.2;
+$heading-2-size: $text-size * $heading-scale;
+$heading-1-size: $heading-2-size * $heading-scale;
+
+body { font-size: $text-size; }
+
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+  margin: 2em 0 1em;
+}
+
+h1 { font-size: $heading-1-size; }
+h2 { font-size: $heading-2-size; }
+h3, h4, h5, h6 { font-size: $text-size; }
+
+h1, h2, h3, h4 { font-weight: bold; }
+h4, h5 { font-style: italic; }
+
+.block p {
+  text-indent: 0;
+  margin: 1em 0;
+}
+
+.showcase {
+  font-style: italic;
+  font-variant: small-caps;
+}
+
+.abbr {
+  text-transform: lowercase;
+  font-variant: small-caps;
+}
+
+.centered { text-align: center; }
+
+.emph {
+  font-style: italic;
+  .emph {
+    font-style: normal;
+    .emph {
+      font-style: italic;
+    }
+  }
+}
+
+.leadin { font-variant: small-caps; }
+
+.left { text-align: left; }
+
+.indented p {
+  margin: 0;
+  text-align: left;
+  text-indent: 0;
+  & + p { text-indent: 1.5em; }
+}
+
+.page-heading {
+  text-indent: 0;
+  text-align: center;
+  font-size: $heading-1-size;
+  font-style: italic;
+}
+
+.plain-list {
+  margin: 1em 0;
+  padding: 0;
+  list-style-type: none;
+  text-indent: 0;
+  li {
+    margin: 0.5em 0;
+    padding: 0;
+    line-height: 1;
+  }
+}

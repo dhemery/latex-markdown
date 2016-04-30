@@ -1,0 +1,16 @@
+---
+title: Title Page
+layout: page
+body: centered
+style: title
+guide: title-page
+...
+{% assign publication = site.data.publication %}
+{% assign text_copyright = publication.rights | where: 'material', 'Text' | first %}
+
+<p class='book-title'>{{ publication.title }}</p>
+<p class='book-author'>Dale Hartley Emery</p>
+<p class='book-publisher'>Driscoll Brook Press</p>
+
+<p>© {{ text_copyright.date }} {{ text_copyright.owner }}</p>
+<p><a href='copyright.html'>Copyright Page</a></p>

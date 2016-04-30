@@ -1,9 +1,8 @@
 ---
 title: About the Author
-style: about
-toc: back-matter
----
-{% assign author = site.data.author %}
+body: left block
+...
+
 Dale Hartley Emery
 has worked as a failed shoemaker,
 reluctant dairy farmer,
@@ -20,4 +19,6 @@ Colleagues in Dale’s industry once created a special award for him for being r
 
 Dale lives in California with his wife.
 
-Visit [{{ author.site }}]({{ author.url }}) to learn more.
+Visit
+[DaleHartleyEmery.com](http://DaleHartleyEmery.com)
+to learn more.

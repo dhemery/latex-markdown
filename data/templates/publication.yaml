@@ -1,0 +1,27 @@
+slug: book-slug
+title: Book Title
+author:
+  name: Dale Hartley Emery
+  sort: Emery, Dale Hartley
+isbn:
+  print: 000-0-00000-000-0
+  ebook: 111-1-11111-111-1
+date: 2020
+version: 1
+rights:
+  -
+    material: Text
+    date: 2020
+    owner: Dale Hartley Emery
+  -
+    material: Cover design
+    date: 2020
+    owner: Driscoll Brook Press
+  -
+    material: Cover art
+    owner: XXX
+subjects:
+  - Fiction
+genres:
+  - Genre1
+  - Genre2

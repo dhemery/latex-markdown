@@ -73,7 +73,7 @@ end
 
 EPUB_CHECK_REPORT = EPUB_FILE.ext('json')
 file EPUB_CHECK_REPORT => EPUB_FILE do |t|
-  sh 'epubcheck', t.source, '--json', t.name
+  sh 'epubcheck', t.source, '--warn', '--json', t.name
 end
 
 task default: [:all]

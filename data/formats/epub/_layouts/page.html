@@ -9,23 +9,9 @@
     {% assign path_to_root = path_to_root | append: '..' %}
   {% endfor %}
   {% assign path_to_root = path_to_root | remove_last: '/' %}
-  <link rel='stylesheet' type='text/css'  href='{{ path_to_root }}/stylesheets/styles.css'/>
+  <link rel='stylesheet' type='text/css'  href='{{ path_to_root }}/stylesheets/{{ page.style }}.css'/>
 </head>
-{% if page.style %}
-  {% assign style = page.style %}
-{% elsif page.guide %}
-  {% assign style = page.guide %}
-{% endif %}
-{% if style %}
-  {% capture body_attrs %} class='{{ style }}'{% endcapture %}
-{% endif %}
-<body{{ body_attrs }}>
-{% if page.add_header == null %}
-  {% assign add_header = true %}
-{% else %}
-  {% assign add_header = page.add_header %}
-{% endif %}
-{% if add_header == true %}<h1>{{ page.title }}</h1>{% endif %}
+<body class='{{ page.body }}'>
 {{ content }}
 </body>
 </html>

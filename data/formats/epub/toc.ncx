@@ -17,7 +17,6 @@ layout:
   </docAuthor>
   <navMap>
     {% assign play_order = 1 %}
-    {% unless site.exclude contains 'cover' %}{% include ncx-entry.xml path=ebook.cover.page play_order=play_order %}{% assign play_order = play_order | plus: 1 %}{% endunless %}
     {% for path in ebook.frontmatter %}{% include ncx-entry.xml path=path play_order=play_order %}{% assign play_order = play_order | plus: 1 %}{% endfor %}
     {% for path in manuscript %}{% include ncx-entry.xml path=path play_order=play_order %}{% assign play_order = play_order | plus: 1 %}{% endfor %}
     {% for path in ebook.backmatter %}{% include ncx-entry.xml path=path play_order=play_order %}{% assign play_order = play_order | plus: 1 %}{% endfor %}
