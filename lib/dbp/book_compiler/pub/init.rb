@@ -1,7 +1,8 @@
-require 'dbp'
-require 'dbp/book_compiler/util/cli'
+require 'pathname'
 require 'rake'
 require 'rake/file_utils'
+require 'dbp'
+require 'dbp/book_compiler/util/cli'
 
 module DBP
   module BookCompiler
@@ -12,101 +13,100 @@ module DBP
 
         TEMPLATES_DIR = DBP.templates_dir
         PUBLICATION_YAML_TEMPLATE = TEMPLATES_DIR / 'publication.yaml'
-        MINIMAL_TEMPLATE = TEMPLATES_DIR / 'minimal'
+        MINIMAL_TEMPLATE = 'minimal'
+
+        SLUG = Pathname.pwd.dirname.basename
+        DEFAULT_MSS_FILE = Pathname('mss') / SLUG.sub_ext('.scriv')
+        PUBLICATION_DIR = Pathname('publication')
+        PUBLICATION_YAML_FILE = PUBLICATION_DIR / 'publication.yaml'
 
         def initialize(command = nil)
           super command, 'init'
         end
 
         def run
-          parse_command_line do |operands|
-            @pub_dir = operands.shift&.instance_eval { |pub_dir| Pathname(pub_dir) }
-          end
-
-          @pub_dir&.mkpath
-          init_template unless @template_name.nil?
-          init_yaml if @pub_yaml
-          init_manuscript if @scrivener_file&.directory?
+          parse_command_line
+          create_publication_dir if @template || @yaml || @mss_file
+          copy_template if @template
+          copy_publication_yaml_file if @yaml
+          translate_manuscript if @mss_file
         end
 
         def list_templates
           TEMPLATES_DIR.each_child.select(&:directory?).each { |e| puts "   #{e.basename}" }
         end
 
-        def init_manuscript
-          sh 'scriv2tex', @scrivener_file.to_s, @pub_dir.to_s
+        def create_publication_dir
+          PUBLICATION_DIR.mkpath
         end
 
-        def init_yaml
-          FileUtils.cp PUBLICATION_YAML_TEMPLATE, @pub_dir
+        def translate_manuscript
+          sh 'scriv2tex', @mss_file.to_s, PUBLICATION_DIR.to_s
         end
 
-        def init_template
-          @pub_dir.mkpath
-          ['minimal', @template_name].each do |template_name|
-            FileUtils.cp_r "#{TEMPLATES_DIR / template_name}/.", @pub_dir
+        def copy_publication_yaml_file
+          FileUtils.cp PUBLICATION_YAML_TEMPLATE.to_s, PUBLICATION_DIR.to_s
+        end
+
+        def copy_template
+          [MINIMAL_TEMPLATE, @template].uniq.each do |template|
+            FileUtils.cp_r "#{TEMPLATES_DIR / template}/.", PUBLICATION_DIR.to_s
           end
         end
 
         def declare_options(parser)
-          parser.banner << ' [pub_dir]'
-
           parser.on('--force', 'overwrite existing files') do |force|
             @force = force
           end
 
-          parser.on('--list', 'list available templates') do |list|
+          parser.on('--list', 'list available templates') do |_|
             list_templates
-            @query_options_specified ||= list
           end
 
-          parser.on('--scriv SCRIV', Pathname, 'create manuscript files from a Scrivener file') do |scrivener_file|
-            @scrivener_file = scrivener_file
+          parser.on('--mss [SCRIV]', Pathname, "create manuscript files by translating a Scrivener file  #{DEFAULT_MSS_FILE}") do |mss_file|
+            @mss_file = mss_file || DEFAULT_MSS_FILE
           end
 
-          parser.on('--template TEMPLATE', 'create publication files from a template') do |template_name|
-            @template_name = template_name
+          parser.on('--template [TEMPLATE]', "copy files from a template (default: #{MINIMAL_TEMPLATE})") do |template|
+            @template = template || MINIMAL_TEMPLATE
           end
 
-          parser.on('--yaml', 'create a skeleton publication.yaml file ') do |pub_yaml|
-            @pub_yaml = pub_yaml
+          parser.on('--yaml', 'create a skeleton publication.yaml file ') do |yaml|
+            @yaml = yaml
           end
         end
 
         def check_options(errors)
+          check_publication_dir(errors)
+          check_publication_yaml_file(errors)
           check_template(errors)
-          check_pub_dir(errors)
-          check_pub_yaml(errors)
-          check_scrivener_file(errors)
+          check_mss_file(errors)
         end
 
-        def check_scrivener_file(errors)
-          return if @scrivener_file.nil?
-          errors << "No such scrivener file: #{@scrivener_file}" unless @scrivener_file.directory?
-          scrivx = @scrivener_file / @scrivener_file.basename.sub_ext('.scrivx')
-          errors << "Invalid scrivener file: #{@scrivener_file}" unless scrivx.file?
+        def check_mss_file(errors)
+          return if @mss_file.nil?
+          return errors << "No such scrivener file: #{@mss_file}" unless @mss_file.exist?
+          return errors << "Invalid scrivener file: #{@mss_file}" unless @mss_file.directory?
+          scrivx = @mss_file / @mss_file.basename.sub_ext('.scrivx')
+          errors << "Invalid scrivener file: #{@mss_file}" unless scrivx.file?
         end
 
-        def check_pub_dir(errors)
-          errors << 'no pub_dir specified' unless @pub_dir || @query_options_specified
-          return if @pub_dir.nil?
-          errors << "pub_dir '#{@pub_dir}' already exists and is a file" if @pub_dir&.file?
+        def check_publication_dir(errors)
+          errors << "#{PUBLICATION_DIR} is a file" if PUBLICATION_DIR.file?
           return if @force
-          errors << "pub_dir '#{@pub_dir}' directory already exists (use --force to override)" if @pub_dir&.directory?
+          errors << "Use --force to write into existing directory: #{PUBLICATION_DIR}" if PUBLICATION_DIR.directory?
         end
 
-        def check_pub_yaml(errors)
-          return if @pub_dir.nil?
-          publication_yaml_file = @pub_dir / PUBLICATION_YAML_TEMPLATE.basename
-          errors << "'#{publication_yaml_file}' is a directory" if publication_yaml_file&.directory?
+        def check_publication_yaml_file(errors)
+          errors << "#{PUBLICATION_YAML_FILE} is a directory" if PUBLICATION_YAML_FILE.directory?
           return if @force
-          errors << "'#{publication_yaml_file}' file already exists (use --force to override)" if publication_yaml_file.file?
+          errors << "Use --force to overwrite existing file: #{PUBLICATION_YAML_FILE}" if PUBLICATION_YAML_FILE.file?
         end
 
         def check_template(errors)
-          return unless @template_name
-          template_dir = TEMPLATES_DIR / @template_name
-          errors << "No such template: #{@template_name}" unless template_dir.directory?
+          return unless @template
+          template_dir = TEMPLATES_DIR / @template
+          errors << "No such template: #{@template}" unless template_dir.directory?
         end
       end
     end
