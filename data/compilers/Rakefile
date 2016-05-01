@@ -2,10 +2,15 @@ require 'rake/clean'
 require 'pathname'
 require 'yaml'
 require 'rake/ext/pathname'
+require 'dbp'
 
 require_relative 'utils'
 
-TEMPLATE_DIR = Pathname(__FILE__).dirname
+COMPILERS_DIR = DBP.compilers_dir
+FORMATS_DIR = DBP.formats_dir
+
+puts "COMPILERS_DIR: #{COMPILERS_DIR}"
+puts "FORMATS_DIR  : #{FORMATS_DIR}"
 
 PUBLICATION_DIR = Pathname(ENV['DBP_PUBLICATION_DIR'])
 DBP_BUILD_DIR = Pathname(ENV['DBP_BUILD_DIR'])
@@ -25,12 +30,12 @@ def output_file(medium)
 end
 
 def produce(medium:, prereqs: [], **env)
-  template_dir = TEMPLATE_DIR / medium.to_s
-  build_dir = BOOK_BUILD_DIR / template_dir.basename
+  compiler_dir = COMPILERS_DIR / medium.to_s
+  build_dir = BOOK_BUILD_DIR / 'compilers' / compiler_dir.basename
   output_file = output_file(medium)
 
   file output_file => prereqs
-  file output_file => files_copied(from: template_dir, to: build_dir)
+  file output_file => files_copied(from: compiler_dir, to: build_dir)
   file output_file => FileList[PUBLICATION_DIR / "#{medium}/**/*"]
   file output_file => FileList[PUBLICATION_DIR / 'manuscript' / '**/*']
   file output_file => [PUBLICATION_DATA_FILE, OUT_DIR]
@@ -45,12 +50,12 @@ def produce(medium:, prereqs: [], **env)
   task all: medium
 end
 
-PDF_FORMAT_TEMPLATE_DIR = TEMPLATE_DIR / 'pdf-format'
-PDF_FORMAT_BUILD_DIR = BOOK_BUILD_DIR / PDF_FORMAT_TEMPLATE_DIR.basename
-PDF_FORMAT_TEMPLATE_FILES = files_copied(from: PDF_FORMAT_TEMPLATE_DIR, to: PDF_FORMAT_BUILD_DIR)
+PDF_FORMAT_SOURCE_DIR = FORMATS_DIR / 'pdf'
+PDF_FORMAT_BUILD_DIR = BOOK_BUILD_DIR / 'formats' /PDF_FORMAT_SOURCE_DIR.basename
+PDF_FORMAT_SOURCE_FILES = files_copied(from: PDF_FORMAT_SOURCE_DIR, to: PDF_FORMAT_BUILD_DIR)
 PDF_FORMAT_FILE = (BOOK_BUILD_DIR / 'dbp.fmt').expand_path
 
-file PDF_FORMAT_FILE => PDF_FORMAT_TEMPLATE_FILES do |t|
+file PDF_FORMAT_FILE => PDF_FORMAT_SOURCE_FILES do |t|
   rake dir: PDF_FORMAT_BUILD_DIR, create: t.name
 end
 

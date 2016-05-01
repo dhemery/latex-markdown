@@ -12,6 +12,14 @@ module DBP
       root_dir / 'data'
     end
 
+    def compilers_dir
+      data_dir / 'compilers'
+    end
+
+    def formats_dir
+      data_dir / 'formats'
+    end
+
     def templates_dir
       data_dir / 'templates'
     end

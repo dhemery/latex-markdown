@@ -83,9 +83,9 @@ module DBP
 
         def format_dirs
           [
-              book_dir / 'format',
-              book_dir / '.format',
-              DBP.data_dir / 'formats',
+              book_dir / 'compilers',
+              book_dir / '.compilers',
+              DBP.data_dir / 'compilers',
           ]
         end
       end
