@@ -15,7 +15,7 @@ module DBP
         PUBLICATION_YAML_TEMPLATE = TEMPLATES_DIR / 'publication.yaml'
         MINIMAL_TEMPLATE = 'minimal'
 
-        SLUG = Pathname.pwd.dirname.basename
+        SLUG = Pathname.pwd.basename
         DEFAULT_MSS_FILE = Pathname('mss') / SLUG.sub_ext('.scriv')
         PUBLICATION_DIR = Pathname('publication')
         PUBLICATION_YAML_FILE = PUBLICATION_DIR / 'publication.yaml'
