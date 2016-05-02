@@ -17,8 +17,11 @@ module DBP
 
         SLUG = Pathname.pwd.basename
         DEFAULT_MSS_FILE = Pathname('mss') / SLUG.sub_ext('.scriv')
+        DEFAULT_COVER_IMAGE_FILE = Pathname("covers/#{SLUG}-cover-2400.jpg")
+
         PUBLICATION_DIR = Pathname('publication')
         PUBLICATION_YAML_FILE = PUBLICATION_DIR / 'publication.yaml'
+        PUBLICATION_COVER_IMAGE_FILE = PUBLICATION_DIR / 'epub/publication/cover.jpg'
 
         def initialize(command = nil)
           super command, 'init'
@@ -26,9 +29,10 @@ module DBP
 
         def run
           parse_command_line
-          create_publication_dir if @template || @yaml || @mss_file
+          create_publication_dir
           copy_template if @template
-          copy_publication_yaml_file if @yaml
+          copy_publication_yaml_file
+          copy_cover_image_file if @cover_image_file
           translate_manuscript if @mss_file
         end
 
@@ -37,25 +41,49 @@ module DBP
         end
 
         def create_publication_dir
+          return if PUBLICATION_DIR.directory?
           PUBLICATION_DIR.mkpath
+          puts "Created #{PUBLICATION_DIR}"
         end
 
         def translate_manuscript
           sh 'scriv2tex', @mss_file.to_s, PUBLICATION_DIR.to_s
+          puts "Translated #{@mss_file}"
         end
 
         def copy_publication_yaml_file
+          return if PUBLICATION_YAML_FILE.file?
           FileUtils.cp PUBLICATION_YAML_TEMPLATE.to_s, PUBLICATION_DIR.to_s
+          puts "Created #{PUBLICATION_YAML_FILE}"
+        end
+
+        def copy_cover_image_file
+          PUBLICATION_COVER_IMAGE_FILE.dirname.mkpath
+          FileUtils.cp @cover_image_file.to_s, PUBLICATION_COVER_IMAGE_FILE.to_s
+          puts "Copied cover image file from #{@cover_image_file}"
         end
 
         def copy_template
           [MINIMAL_TEMPLATE, @template].uniq.each do |template|
             FileUtils.cp_r "#{TEMPLATES_DIR / template}/.", PUBLICATION_DIR.to_s
           end
+          puts "Copied template #{@template}"
         end
 
         def declare_options(parser)
-          parser.on('--force', 'overwrite existing files') do |force|
+          parser.on('--template [TEMPLATE]', "copy files from a template (default: #{MINIMAL_TEMPLATE})") do |template|
+            @template = template || MINIMAL_TEMPLATE
+          end
+
+          parser.on('--cover [COVER_IMAGE]', Pathname, "copy a cover image file (default: #{DEFAULT_COVER_IMAGE_FILE})") do |cover_image_file|
+            @cover_image_file = cover_image_file || DEFAULT_COVER_IMAGE_FILE
+          end
+
+          parser.on('--mss [SCRIVENER_FILE]', Pathname, "translate a Scrivener file as a manuscript (default: #{DEFAULT_MSS_FILE})") do |mss_file|
+            @mss_file = mss_file || DEFAULT_MSS_FILE
+          end
+
+          parser.on('--force', 'write into existing publication directory') do |force|
             @force = force
           end
 
@@ -63,23 +91,13 @@ module DBP
             list_templates
           end
 
-          parser.on('--mss [SCRIV]', Pathname, "create manuscript files by translating a Scrivener file  #{DEFAULT_MSS_FILE}") do |mss_file|
-            @mss_file = mss_file || DEFAULT_MSS_FILE
-          end
-
-          parser.on('--template [TEMPLATE]', "copy files from a template (default: #{MINIMAL_TEMPLATE})") do |template|
-            @template = template || MINIMAL_TEMPLATE
-          end
-
-          parser.on('--yaml', 'create a skeleton publication.yaml file ') do |yaml|
-            @yaml = yaml
-          end
         end
 
         def check_options(errors)
           check_publication_dir(errors)
           check_publication_yaml_file(errors)
           check_template(errors)
+          check_cover_image_file(errors)
           check_mss_file(errors)
         end
 
@@ -97,10 +115,14 @@ module DBP
           errors << "Use --force to write into existing directory: #{PUBLICATION_DIR}" if PUBLICATION_DIR.directory?
         end
 
+        def check_cover_image_file(errors)
+          return if @cover_image_file.nil?
+          return errors << "No such cover image file: #{@cover_image_file}" unless @cover_image_file.exist?
+          errors << "#{@cover_image_file} is a directory" if @cover_image_file.directory?
+        end
+
         def check_publication_yaml_file(errors)
           errors << "#{PUBLICATION_YAML_FILE} is a directory" if PUBLICATION_YAML_FILE.directory?
-          return if @force
-          errors << "Use --force to overwrite existing file: #{PUBLICATION_YAML_FILE}" if PUBLICATION_YAML_FILE.file?
         end
 
         def check_template(errors)
