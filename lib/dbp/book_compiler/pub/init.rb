@@ -33,10 +33,10 @@ module DBP
         def run
           parse_command_line
           create_publication_dir
-          copy_template if @template
           copy_publication_yaml_file
-          copy_cover_image_file if @cover_image_file
-          translate_manuscript if @mss_scrivener_file
+          copy_template if @template
+          copy_cover_image_file if @cover
+          translate_manuscript if @mss
         end
 
         def list_templates
@@ -67,24 +67,28 @@ module DBP
         end
 
         def copy_template
-          [MINIMAL_TEMPLATE, @template_name].uniq.each do |template|
-            FileUtils.cp_r "#{TEMPLATES_DIR / template}/.", PUBLICATION_DIR.to_s
+          [MINIMAL_TEMPLATE, template_name].uniq.each do |template_name|
+            FileUtils.cp_r "#{TEMPLATES_DIR / template_name}/.", PUBLICATION_DIR.to_s
           end
-          puts "Copied template #{@template_name}"
+          puts "Copied template #{template_name}"
+        end
+
+        def template_name
+          @template_name ||= MINIMAL_TEMPLATE
         end
 
         def declare_options(parser)
-          parser.on('--template [NAME]', "copy files from a template (default: #{MINIMAL_TEMPLATE})") do |name|
+          parser.on('--template [NAME]', 'copy files from a template') do |name|
             @template = true
-            @template_name = name || MINIMAL_TEMPLATE
+            @template_name = name
           end
 
-          parser.on('--cover [IMAGE_FILE]', Pathname, "copy a cover image file (default: #{@default_cover_image_file})") do |image_file|
+          parser.on('--cover [IMAGE_FILE]', Pathname, 'copy a cover image file') do |image_file|
             @cover = true
             @cover_image_file = image_file || @default_cover_image_file
           end
 
-          parser.on('--mss [SCRIVENER_FILE]', Pathname, "translate a Scrivener file as a manuscript (default: #{DEFAULT_MSS_FILE})") do |scrivener_file|
+          parser.on('--mss [SCRIVENER_FILE]', Pathname, 'translate a Scrivener file as a manuscript') do |scrivener_file|
             @mss = true
             @mss_scrivener_file = scrivener_file || DEFAULT_MSS_FILE
           end
@@ -133,8 +137,8 @@ module DBP
 
         def check_template(errors)
           return unless @template
-          template_dir = TEMPLATES_DIR / @template_name
-          errors << "No such template: #{@template_name}" unless template_dir.directory?
+          template_dir = TEMPLATES_DIR / template_name
+          errors << "No such template: #{template_name}" unless template_dir.directory?
         end
       end
     end
