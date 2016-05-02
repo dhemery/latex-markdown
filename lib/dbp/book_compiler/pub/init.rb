@@ -13,11 +13,11 @@ module DBP
 
         TEMPLATES_DIR = DBP.templates_dir
         PUBLICATION_YAML_TEMPLATE = TEMPLATES_DIR / 'publication.yaml'
+        COVER_IMAGE_TEMPLATE = TEMPLATES_DIR / 'cover.jpg'
         MINIMAL_TEMPLATE = 'minimal'
 
         SLUG = Pathname.pwd.basename
         DEFAULT_MSS_FILE = Pathname('mss') / SLUG.sub_ext('.scriv')
-        DEFAULT_COVER_IMAGE_FILE = Pathname("covers/#{SLUG}-cover-2400.jpg")
 
         PUBLICATION_DIR = Pathname('publication')
         PUBLICATION_YAML_FILE = PUBLICATION_DIR / 'publication.yaml'
@@ -25,6 +25,9 @@ module DBP
 
         def initialize(command = nil)
           super command, 'init'
+          local_cover_image_path = Pathname("covers/#{SLUG}-cover-2400.jpg")
+          @default_cover_image_file = local_cover_image_path if local_cover_image_path.file?
+          @default_cover_image_file ||= COVER_IMAGE_TEMPLATE
         end
 
         def run
@@ -75,8 +78,8 @@ module DBP
             @template = template || MINIMAL_TEMPLATE
           end
 
-          parser.on('--cover [COVER_IMAGE]', Pathname, "copy a cover image file (default: #{DEFAULT_COVER_IMAGE_FILE})") do |cover_image_file|
-            @cover_image_file = cover_image_file || DEFAULT_COVER_IMAGE_FILE
+          parser.on('--cover [COVER_IMAGE]', Pathname, "copy a cover image file (default: #{@default_cover_image_file})") do |cover_image_file|
+            @cover_image_file = cover_image_file || @default_cover_image_file
           end
 
           parser.on('--mss [SCRIVENER_FILE]', Pathname, "translate a Scrivener file as a manuscript (default: #{DEFAULT_MSS_FILE})") do |mss_file|
