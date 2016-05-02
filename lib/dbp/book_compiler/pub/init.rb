@@ -92,6 +92,7 @@ module DBP
 
           parser.on('--list', 'list available templates') do |_|
             list_templates
+            exit
           end
 
         end
