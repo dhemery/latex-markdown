@@ -34,30 +34,31 @@ module DBP
         def init_pub_dir
           return if PUBLICATION_DIR.directory?
           PUBLICATION_DIR.mkpath
-          puts "Created #{PUBLICATION_DIR}"
+          puts 'Created directory', "   #{PUBLICATION_DIR}"
         end
 
         def init_mss
           sh 'scriv2tex', mss_source.to_s, PUBLICATION_DIR.to_s
-          puts 'Translated manuscript', "   from #{mss_source}"
+          puts 'Extracted manuscript', "   from #{mss_source}", "   into #{PUBLICATION_DIR}/manuscript"
         end
 
         def init_yaml
           return puts "Already present, left unchanged: #{yaml_dest}" if yaml_dest.file?
           FileUtils.cp YAML_SOURCE.to_s, yaml_dest.to_s
-          puts "Created #{yaml_dest}"
+          puts 'Created file', "   #{yaml_dest}"
         end
 
         def init_cover
           cover_dest.dirname.mkpath
           FileUtils.cp cover_source.to_s, cover_dest.to_s
-          puts 'Copied cover image file', "   from #{cover_source}", "   to #{cover_dest}"
+          puts 'Copied cover image', "   from #{cover_source}", "   to #{cover_dest}"
         end
 
         def init_template
           [MINIMAL_TEMPLATE, template_name].uniq.each do |template_name|
-            FileUtils.cp_r "#{template_dir(template_name)}/.", PUBLICATION_DIR.to_s
-            puts "Copied template #{template_name}"
+            template_dir = template_dir(template_name)
+            FileUtils.cp_r "#{template_dir}/.", PUBLICATION_DIR.to_s
+            puts "Copied #{template_name} template files", "   from #{template_dir}", "   to #{PUBLICATION_DIR}"
           end
         end
 
@@ -81,7 +82,7 @@ module DBP
             @template_name = name
           end
 
-          parser.on('--source DIR', Pathname, 'look in DIR for mss and cover files') do |dir|
+          parser.on('--book DIR', Pathname, 'look in DIR for book mss and cover files') do |dir|
             @source_dir = dir
           end
 
@@ -104,8 +105,8 @@ module DBP
         end
 
         def check_cover_source(errors)
-          return errors << "No such cover image file: #{cover_source}" unless cover_source.exist?
-          errors << "Cover source is a directory: #{cover_source}" if cover_source.directory?
+          return errors << "No such image file: #{cover_source}" unless cover_source.exist?
+          errors << "Invalid image file: #{cover_source}" unless cover_source.file?
         end
 
         def check_mss_source(errors)
@@ -115,13 +116,15 @@ module DBP
         end
 
         def check_publication_dir(errors)
-          errors << "#{PUBLICATION_DIR} is a file" if PUBLICATION_DIR.file?
+          return unless PUBLICATION_DIR.exist?
+          return errors << "Invalid publication directory: #{PUBLICATION_DIR}" unless PUBLICATION_DIR.directory?
           return if @force
           errors << "Use --force to write into existing directory: #{PUBLICATION_DIR}" if PUBLICATION_DIR.directory?
         end
 
         def check_source_dir(errors)
-          errors << "No such source directory: #{source_dir}" unless source_dir.directory?
+          return errors << "No such source directory: #{source_dir}" unless source_dir.exist?
+          errors << "Invalid source directory: #{source_dir}" unless source_dir.directory?
         end
 
         def check_template(errors)
@@ -129,7 +132,8 @@ module DBP
         end
 
         def check_yaml_dest(errors)
-          errors << "#{yaml_dest} is a directory" if yaml_dest.directory?
+          return unless yaml_dest.exist?
+          errors << "Existing publication.yaml file invalid: #{yaml_dest}" unless yaml_dest.file?
         end
 
         def cover_dest
