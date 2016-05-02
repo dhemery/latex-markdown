@@ -50,8 +50,8 @@ module DBP
         end
 
         def translate_manuscript
-          sh 'scriv2tex', @mss_scrivener_file.to_s, PUBLICATION_DIR.to_s
-          puts "Translated manuscript from: #{@mss_scrivener_file}"
+          sh 'scriv2tex', mss_scrivener_file.to_s, PUBLICATION_DIR.to_s
+          puts "Translated manuscript from: #{mss_scrivener_file}"
         end
 
         def copy_publication_yaml_file
@@ -81,6 +81,10 @@ module DBP
           @cover_image_file ||= @default_cover_image_file
         end
 
+        def mss_scrivener_file
+          @mss_scrivener_file ||= DEFAULT_MSS_FILE
+        end
+
         def declare_options(parser)
           parser.on('--template [NAME]', 'copy files from a template') do |name|
             @template = true
@@ -94,7 +98,7 @@ module DBP
 
           parser.on('--mss [SCRIVENER_FILE]', Pathname, 'translate a Scrivener file as a manuscript') do |scrivener_file|
             @mss = true
-            @mss_scrivener_file = scrivener_file || DEFAULT_MSS_FILE
+            @mss_scrivener_file = scrivener_file
           end
 
           parser.on('--force', 'write into existing publication directory') do |force|
@@ -117,10 +121,9 @@ module DBP
 
         def check_mss_file(errors)
           return unless @mss
-          return errors << "No such scrivener file: #{@mss_scrivener_file}" unless @mss_scrivener_file.exist?
-          return errors << "Invalid scrivener file: #{@mss_scrivener_file}" unless @mss_scrivener_file.directory?
-          scrivx = @mss_scrivener_file / @mss_scrivener_file.basename.sub_ext('.scrivx')
-          errors << "Invalid scrivener file: #{@mss_scrivener_file}" unless scrivx.file?
+          return errors << "No such scrivener file: #{mss_scrivener_file}" unless mss_scrivener_file.exist?
+          scrivx = mss_scrivener_file / mss_scrivener_file.basename.sub_ext('.scrivx')
+          errors << "Invalid scrivener file: #{mss_scrivener_file}" unless scrivx.file?
         end
 
         def check_publication_dir(errors)
