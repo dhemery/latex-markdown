@@ -22,9 +22,6 @@ module DBP
 
         def initialize(command = nil)
           super command, 'init'
-          local_cover_image_path = Pathname("covers/#{slug}-cover-2400.jpg")
-          @default_cover_image_file = local_cover_image_path if local_cover_image_path.file?
-          @default_cover_image_file ||= COVER_IMAGE_TEMPLATE
         end
 
         def run
@@ -74,8 +71,16 @@ module DBP
           @template_name ||= MINIMAL_TEMPLATE
         end
 
+        def local_cover_image_file
+          [Pathname("covers/#{slug}-cover-2400.jpg")].select(&:file?).first
+        end
+
         def cover_image_file
-          @cover_image_file ||= @default_cover_image_file
+          @cover_image_file ||= default_cover_image_file
+        end
+
+        def default_cover_image_file
+          local_cover_image_file || COVER_IMAGE_TEMPLATE
         end
 
         def slug
