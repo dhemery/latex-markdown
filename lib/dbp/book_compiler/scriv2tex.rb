@@ -19,11 +19,11 @@ module DBP
       def run
         parse_command_line do |operands|
           complain unless operands.length == 2
-          @mss_file = Pathname(operands.shift)
+          @mss_scrivener_file = Pathname(operands.shift)
           @manuscript_dir = Pathname(operands.shift) / 'manuscript'
         end
 
-        scrivener = DBP::Scrivener::Project.new(@mss_file)
+        scrivener = DBP::Scrivener::Project.new(@mss_scrivener_file)
         write_listing_file(scrivener)
         write_tex_files(scrivener)
       end
@@ -33,7 +33,7 @@ module DBP
       end
 
       def check_options(errors)
-        errors << "No such scrivener file: #{@mss_file}" unless @mss_file.directory?
+        errors << "No such scrivener file: #{@mss_scrivener_file}" unless @mss_scrivener_file.directory?
       end
 
       def write_tex_files(scrivener)
