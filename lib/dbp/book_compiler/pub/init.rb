@@ -39,7 +39,7 @@ module DBP
 
         def init_mss
           sh 'scriv2tex', mss_source.to_s, PUBLICATION_DIR.to_s
-          puts "Translated manuscript from: #{mss_source}"
+          puts 'Translated manuscript', "   from #{mss_source}"
         end
 
         def init_yaml
@@ -67,11 +67,6 @@ module DBP
         end
 
         def declare_options(parser)
-          parser.on('--template [NAME]', 'copy files from a template') do |name|
-            @template = true
-            @template_name = name
-          end
-
           parser.on('--cover [IMAGE_FILE]', Pathname, 'copy a cover image file') do |image_file|
             @cover = true
             @cover_source = image_file
@@ -80,6 +75,15 @@ module DBP
           parser.on('--mss [SCRIVENER_FILE]', Pathname, 'translate a Scrivener file as a manuscript') do |scrivener_file|
             @mss = true
             @mss_source = scrivener_file
+          end
+
+          parser.on('--template [NAME]', 'copy files from a template') do |name|
+            @template = true
+            @template_name = name
+          end
+
+          parser.on('--source [DIR]', Pathname, 'look in DIR for mss and cover') do |dir|
+            @source_dir = dir
           end
 
           parser.on('--force', 'write into existing publication directory') do |force|
@@ -117,6 +121,10 @@ module DBP
           errors << "Use --force to write into existing directory: #{PUBLICATION_DIR}" if PUBLICATION_DIR.directory?
         end
 
+        def check_source_dir(errors)
+          errors << "No such source directory: #{source_dir}" unless source_dir.directory?
+        end
+
         def check_template(errors)
           template_dir = TEMPLATES_DIR / template_name
           errors << "No such template: #{template_name}" unless template_dir.directory?
@@ -131,23 +139,27 @@ module DBP
         end
 
         def cover_source
-          @cover_source ||= cover_local_source || COVER_DEFAULT_SOURCE
-        end
-
-        def cover_local_source
-          [Pathname("covers/#{slug}-cover-2400.jpg")].select(&:file?).first
+          @cover_source ||= source_dir_cover || COVER_DEFAULT_SOURCE
         end
 
         def mss_source
-          @mss_source ||= mss_local_source
-        end
-
-        def mss_local_source
-          Pathname('mss') / slug.sub_ext('.scriv')
+          @mss_source ||= source_dir_mss
         end
 
         def slug
-          @slug ||= Pathname.pwd.basename
+          @slug ||= source_dir.basename
+        end
+
+        def source_dir
+          @source_dir ||= Pathname.pwd
+        end
+
+        def source_dir_cover
+          [source_dir / 'covers' /"#{slug}-cover-2400.jpg"].select(&:file?).first
+        end
+
+        def source_dir_mss
+          source_dir / 'mss' / slug.sub_ext('.scriv')
         end
 
         def template_name
