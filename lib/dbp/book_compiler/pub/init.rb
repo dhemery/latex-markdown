@@ -12,8 +12,8 @@ module DBP
         include FileUtils
 
         TEMPLATES_DIR = DBP.templates_dir
-        PUBLICATION_YAML_SOURCE = TEMPLATES_DIR / 'publication.yaml'
         COVER_DEFAULT_SOURCE = TEMPLATES_DIR / 'cover.jpg'
+        YAML_SOURCE = TEMPLATES_DIR / 'publication.yaml'
         MINIMAL_TEMPLATE = 'minimal'
 
         PUBLICATION_DIR = Pathname('publication')
@@ -43,21 +43,20 @@ module DBP
         end
 
         def init_yaml
-          return if yaml_dest.file?
-          FileUtils.cp PUBLICATION_YAML_SOURCE.to_s, yaml_dest.to_s
+          return puts "Already present, left unchanged: #{yaml_dest}" if yaml_dest.file?
+          FileUtils.cp YAML_SOURCE.to_s, yaml_dest.to_s
           puts "Created #{yaml_dest}"
         end
 
         def init_cover
           cover_dest.dirname.mkpath
           FileUtils.cp cover_source.to_s, cover_dest.to_s
-
           puts 'Copied cover image file', "   from #{cover_source}", "   to #{cover_dest}"
         end
 
         def init_template
           [MINIMAL_TEMPLATE, template_name].uniq.each do |template_name|
-            FileUtils.cp_r "#{TEMPLATES_DIR / template_name}/.", PUBLICATION_DIR.to_s
+            FileUtils.cp_r "#{template_dir(template_name)}/.", PUBLICATION_DIR.to_s
             puts "Copied template #{template_name}"
           end
         end
@@ -67,22 +66,22 @@ module DBP
         end
 
         def declare_options(parser)
-          parser.on('--cover [IMAGE_FILE]', Pathname, 'copy a cover image file') do |image_file|
+          parser.on('--cover [IMAGE_FILE]', Pathname, 'copy the ebook cover image') do |image_file|
             @cover = true
             @cover_source = image_file
           end
 
-          parser.on('--mss [SCRIVENER_FILE]', Pathname, 'translate a Scrivener file as a manuscript') do |scrivener_file|
+          parser.on('--mss [SCRIVENER_FILE]', Pathname, 'extract the mss from the Scrivener file') do |scrivener_file|
             @mss = true
             @mss_source = scrivener_file
           end
 
-          parser.on('--template [NAME]', 'copy files from a template') do |name|
+          parser.on('--template [NAME]', 'copy files from the template') do |name|
             @template = true
             @template_name = name
           end
 
-          parser.on('--source [DIR]', Pathname, 'look in DIR for mss and cover') do |dir|
+          parser.on('--source DIR', Pathname, 'look in DIR for mss and cover files') do |dir|
             @source_dir = dir
           end
 
@@ -126,8 +125,7 @@ module DBP
         end
 
         def check_template(errors)
-          template_dir = TEMPLATES_DIR / template_name
-          errors << "No such template: #{template_name}" unless template_dir.directory?
+          errors << "No such template: #{template_name}" unless template_dir(template_name).directory?
         end
 
         def check_yaml_dest(errors)
@@ -160,6 +158,10 @@ module DBP
 
         def source_dir_mss
           source_dir / 'mss' / slug.sub_ext('.scriv')
+        end
+
+        def template_dir(template_name)
+          TEMPLATES_DIR / template_name
         end
 
         def template_name
