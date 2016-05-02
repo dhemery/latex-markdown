@@ -12,12 +12,11 @@ module DBP
         include FileUtils
 
         TEMPLATES_DIR = DBP.templates_dir
-        PUBLICATION_YAML_TEMPLATE = TEMPLATES_DIR / 'publication.yaml'
-        COVER_IMAGE_TEMPLATE = TEMPLATES_DIR / 'cover.jpg'
+        PUBLICATION_YAML_SOURCE = TEMPLATES_DIR / 'publication.yaml'
+        COVER_DEFAULT_SOURCE = TEMPLATES_DIR / 'cover.jpg'
         MINIMAL_TEMPLATE = 'minimal'
 
         PUBLICATION_DIR = Pathname('publication')
-        PUBLICATION_YAML_FILE = PUBLICATION_DIR / 'publication.yaml'
 
         def initialize(command = nil)
           super command, 'init'
@@ -25,74 +24,46 @@ module DBP
 
         def run
           parse_command_line
-          create_publication_dir
-          copy_publication_yaml_file
-          copy_template if @template
-          copy_cover_image_file if @cover
-          translate_manuscript if @mss
+          init_pub_dir
+          init_yaml
+          init_template if @template
+          init_cover if @cover
+          init_mss if @mss
         end
 
-        def list_templates
-          TEMPLATES_DIR.each_child.select(&:directory?).each { |e| puts "   #{e.basename}" }
-        end
-
-        def create_publication_dir
+        def init_pub_dir
           return if PUBLICATION_DIR.directory?
           PUBLICATION_DIR.mkpath
           puts "Created #{PUBLICATION_DIR}"
         end
 
-        def translate_manuscript
-          sh 'scriv2tex', mss_scrivener_file.to_s, PUBLICATION_DIR.to_s
-          puts "Translated manuscript from: #{mss_scrivener_file}"
+        def init_mss
+          sh 'scriv2tex', mss_source.to_s, PUBLICATION_DIR.to_s
+          puts "Translated manuscript from: #{mss_source}"
         end
 
-        def copy_publication_yaml_file
-          return if PUBLICATION_YAML_FILE.file?
-          FileUtils.cp PUBLICATION_YAML_TEMPLATE.to_s, PUBLICATION_DIR.to_s
-          puts "Created #{PUBLICATION_YAML_FILE}"
+        def init_yaml
+          return if yaml_dest.file?
+          FileUtils.cp PUBLICATION_YAML_SOURCE.to_s, yaml_dest.to_s
+          puts "Created #{yaml_dest}"
         end
 
-        def copy_cover_image_file
-          cover_image_dest = PUBLICATION_DIR / 'epub/publication/cover.jpg'
-          cover_image_dest.dirname.mkpath
-          cover_image_dest.to_s
-          FileUtils.cp cover_image_source.to_s, cover_image_dest.to_s
+        def init_cover
+          cover_dest.dirname.mkpath
+          FileUtils.cp cover_source.to_s, cover_dest.to_s
 
-          puts 'Copied cover image file', "   from #{cover_image_source}", "   to #{cover_image_dest}"
+          puts 'Copied cover image file', "   from #{cover_source}", "   to #{cover_dest}"
         end
 
-        def copy_template
+        def init_template
           [MINIMAL_TEMPLATE, template_name].uniq.each do |template_name|
             FileUtils.cp_r "#{TEMPLATES_DIR / template_name}/.", PUBLICATION_DIR.to_s
+            puts "Copied template #{template_name}"
           end
-          puts "Copied template #{template_name}"
         end
 
-        def template_name
-          @template_name ||= MINIMAL_TEMPLATE
-        end
-
-        def local_cover_image_file
-          [Pathname("covers/#{slug}-cover-2400.jpg")].select(&:file?).first
-        end
-
-        def cover_image_source
-          @cover_image_source ||= default_cover_image_file
-        end
-
-        def default_cover_image_file
-          local_cover_image_file || COVER_IMAGE_TEMPLATE
-        end
-
-        def slug
-          @slug ||= Pathname.pwd.basename
-        end
-
-        def mss_scrivener_file
-          return @mss_scrivener_file unless @mss_scrivener_file.nil?
-          default_mss_file = Pathname('mss') / slug.sub_ext('.scriv')
-          @mss_scrivener_file = default_mss_file
+        def list_templates
+          TEMPLATES_DIR.each_child.select(&:directory?).each { |e| puts "   #{e.basename}" }
         end
 
         def declare_options(parser)
@@ -103,12 +74,12 @@ module DBP
 
           parser.on('--cover [IMAGE_FILE]', Pathname, 'copy a cover image file') do |image_file|
             @cover = true
-            @cover_image_source = image_file
+            @cover_source = image_file
           end
 
           parser.on('--mss [SCRIVENER_FILE]', Pathname, 'translate a Scrivener file as a manuscript') do |scrivener_file|
             @mss = true
-            @mss_scrivener_file = scrivener_file
+            @mss_source = scrivener_file
           end
 
           parser.on('--force', 'write into existing publication directory') do |force|
@@ -123,17 +94,21 @@ module DBP
 
         def check_options(errors)
           check_publication_dir(errors)
-          check_publication_yaml_file(errors)
-          check_template(errors)
-          check_cover_image_file(errors)
-          check_mss_file(errors)
+          check_cover_source(errors) if @cover
+          check_mss_source(errors) if @mss
+          check_template(errors) if @template
+          check_yaml_dest(errors)
         end
 
-        def check_mss_file(errors)
-          return unless @mss
-          return errors << "No such scrivener file: #{mss_scrivener_file}" unless mss_scrivener_file.exist?
-          scrivx = mss_scrivener_file / mss_scrivener_file.basename.sub_ext('.scrivx')
-          errors << "Invalid scrivener file: #{mss_scrivener_file}" unless scrivx.file?
+        def check_cover_source(errors)
+          return errors << "No such cover image file: #{cover_source}" unless cover_source.exist?
+          errors << "Cover source is a directory: #{cover_source}" if cover_source.directory?
+        end
+
+        def check_mss_source(errors)
+          return errors << "No such scrivener file: #{mss_source}" unless mss_source.exist?
+          scrivx = mss_source / mss_source.basename.sub_ext('.scrivx')
+          errors << "Invalid scrivener file: #{mss_source}" unless scrivx.file?
         end
 
         def check_publication_dir(errors)
@@ -142,20 +117,45 @@ module DBP
           errors << "Use --force to write into existing directory: #{PUBLICATION_DIR}" if PUBLICATION_DIR.directory?
         end
 
-        def check_cover_image_file(errors)
-          return unless @cover
-          return errors << "No such cover image file: #{cover_image_source}" unless cover_image_source.exist?
-          errors << "#{cover_image_source} is a directory" if cover_image_source.directory?
-        end
-
-        def check_publication_yaml_file(errors)
-          errors << "#{PUBLICATION_YAML_FILE} is a directory" if PUBLICATION_YAML_FILE.directory?
-        end
-
         def check_template(errors)
-          return unless @template
           template_dir = TEMPLATES_DIR / template_name
           errors << "No such template: #{template_name}" unless template_dir.directory?
+        end
+
+        def check_yaml_dest(errors)
+          errors << "#{yaml_dest} is a directory" if yaml_dest.directory?
+        end
+
+        def cover_dest
+          @cover_dest ||= PUBLICATION_DIR / 'epub/publication/cover.jpg'
+        end
+
+        def cover_source
+          @cover_source ||= cover_local_source || COVER_DEFAULT_SOURCE
+        end
+
+        def cover_local_source
+          [Pathname("covers/#{slug}-cover-2400.jpg")].select(&:file?).first
+        end
+
+        def mss_source
+          @mss_source ||= mss_local_source
+        end
+
+        def mss_local_source
+          Pathname('mss') / slug.sub_ext('.scriv')
+        end
+
+        def slug
+          @slug ||= Pathname.pwd.basename
+        end
+
+        def template_name
+          @template_name ||= MINIMAL_TEMPLATE
+        end
+
+        def yaml_dest
+          @yaml_dest ||= PUBLICATION_DIR / 'publication.yaml'
         end
       end
     end
