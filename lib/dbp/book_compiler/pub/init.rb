@@ -16,16 +16,13 @@ module DBP
         COVER_IMAGE_TEMPLATE = TEMPLATES_DIR / 'cover.jpg'
         MINIMAL_TEMPLATE = 'minimal'
 
-        SLUG = Pathname.pwd.basename
-        DEFAULT_MSS_FILE = Pathname('mss') / SLUG.sub_ext('.scriv')
-
         PUBLICATION_DIR = Pathname('publication')
         PUBLICATION_YAML_FILE = PUBLICATION_DIR / 'publication.yaml'
         PUBLICATION_COVER_IMAGE_FILE = PUBLICATION_DIR / 'epub/publication/cover.jpg'
 
         def initialize(command = nil)
           super command, 'init'
-          local_cover_image_path = Pathname("covers/#{SLUG}-cover-2400.jpg")
+          local_cover_image_path = Pathname("covers/#{slug}-cover-2400.jpg")
           @default_cover_image_file = local_cover_image_path if local_cover_image_path.file?
           @default_cover_image_file ||= COVER_IMAGE_TEMPLATE
         end
@@ -81,8 +78,14 @@ module DBP
           @cover_image_file ||= @default_cover_image_file
         end
 
+        def slug
+          @slug ||= Pathname.pwd.basename
+        end
+
         def mss_scrivener_file
-          @mss_scrivener_file ||= DEFAULT_MSS_FILE
+          return @mss_scrivener_file unless @mss_scrivener_file.nil?
+          default_mss_file = Pathname('mss') / slug.sub_ext('.scriv')
+          @mss_scrivener_file = default_mss_file
         end
 
         def declare_options(parser)
