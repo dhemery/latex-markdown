@@ -62,8 +62,8 @@ module DBP
 
         def copy_cover_image_file
           PUBLICATION_COVER_IMAGE_FILE.dirname.mkpath
-          FileUtils.cp @cover_image_file.to_s, PUBLICATION_COVER_IMAGE_FILE.to_s
-          puts "Copied cover image file from: #{@cover_image_file}"
+          FileUtils.cp cover_image_file.to_s, PUBLICATION_COVER_IMAGE_FILE.to_s
+          puts "Copied cover image file from: #{cover_image_file}"
         end
 
         def copy_template
@@ -77,6 +77,10 @@ module DBP
           @template_name ||= MINIMAL_TEMPLATE
         end
 
+        def cover_image_file
+          @cover_image_file ||= @default_cover_image_file
+        end
+
         def declare_options(parser)
           parser.on('--template [NAME]', 'copy files from a template') do |name|
             @template = true
@@ -85,7 +89,7 @@ module DBP
 
           parser.on('--cover [IMAGE_FILE]', Pathname, 'copy a cover image file') do |image_file|
             @cover = true
-            @cover_image_file = image_file || @default_cover_image_file
+            @cover_image_file = image_file
           end
 
           parser.on('--mss [SCRIVENER_FILE]', Pathname, 'translate a Scrivener file as a manuscript') do |scrivener_file|
@@ -127,8 +131,8 @@ module DBP
 
         def check_cover_image_file(errors)
           return unless @cover
-          return errors << "No such cover image file: #{@cover_image_file}" unless @cover_image_file.exist?
-          errors << "#{@cover_image_file} is a directory" if @cover_image_file.directory?
+          return errors << "No such cover image file: #{cover_image_file}" unless cover_image_file.exist?
+          errors << "#{cover_image_file} is a directory" if cover_image_file.directory?
         end
 
         def check_publication_yaml_file(errors)
