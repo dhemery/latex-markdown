@@ -59,12 +59,12 @@ module DBP
 
           p.accept(Pathname) { |p| Pathname(p) }
 
-          p.on_tail('--help', 'print this message') do
+          p.on_tail('--help', 'print this message and exit') do
             puts p
             exit
           end
 
-          p.on_tail('--version', 'print the version') do
+          p.on_tail('--version', 'print the version and exit') do
             puts version
             exit
           end

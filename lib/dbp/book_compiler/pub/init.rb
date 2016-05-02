@@ -90,11 +90,10 @@ module DBP
             @force = force
           end
 
-          parser.on('--list', 'list available templates') do |_|
+          parser.on('--list', 'list available templates and exit') do |_|
             list_templates
             exit
           end
-
         end
 
         def check_options(errors)
