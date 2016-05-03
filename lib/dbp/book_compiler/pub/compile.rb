@@ -55,23 +55,23 @@ module DBP
         def declare_options(parser)
           parser.banner << ' [target ...]'
 
-          parser.on('--book BOOKDIR', Pathname, 'book directory') do |book_dir|
+          parser.on('--book BOOKDIR', Pathname, 'Book directory') do |book_dir|
             @book_dir = book_dir
           end
 
-          parser.on('--pub PUBDIR', Pathname, 'publication directory') do |pub_dir|
+          parser.on('--pub PUBDIR', Pathname, 'Publication directory') do |pub_dir|
             @pub_dir = pub_dir
           end
 
-          parser.on('--format FORMATDIR', Pathname, 'format directory') do |format_dir|
+          parser.on('--format FORMATDIR', Pathname, 'Format directory') do |format_dir|
             @format_dir = format_dir
           end
 
-          parser.on('--tmp TMPDIR', Pathname, 'temporary build directory') do |tmp_dir|
+          parser.on('--tmp TMPDIR', Pathname, 'Temporary build directory') do |tmp_dir|
             @tmp_dir = tmp_dir
           end
 
-          parser.on('--out OUTDIR', Pathname, 'output directory') do |out_dir|
+          parser.on('--out OUTDIR', Pathname, 'Output directory') do |out_dir|
             @out_dir = out_dir
           end
         end

@@ -36,8 +36,8 @@ module DBP
       def parse_command_line
         begin
           parser.parse!
-        # rescue
-        #   complain
+        rescue
+          complain
         end
         yield ARGV if block_given?
         errors = []
@@ -53,23 +53,23 @@ module DBP
 
       def parser
 
-        @parser ||= OptionParser.new do |p|
-          p.program_name = @full_name
-          p.banner = "#{@full_name} [options]"
+        @parser ||= OptionParser.new do |parser|
+          parser.program_name = @full_name
+          parser.banner = "#{@full_name} [options]"
 
-          p.accept(Pathname) { |p| Pathname(p) }
+          parser.accept(Pathname) { |path| Pathname(path) }
 
-          p.on_tail('--help', 'print this message and exit') do
-            puts p
+          parser.on_tail('--help', 'Print this message and exit') do
+            puts parser
             exit
           end
 
-          p.on_tail('--version', 'print the version and exit') do
+          parser.on_tail('--version', 'Print the version and exit') do
             puts version
             exit
           end
 
-          declare_options(p)
+          declare_options(parser)
         end
       end
     end
