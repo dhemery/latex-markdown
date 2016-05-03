@@ -21,38 +21,41 @@ module DBP
         end
 
         def run
-          parse_command_line
-          init_pub_dir
-          init_yaml
-          init_template if @template
-          init_cover if @cover
-          init_mss if @mss
+          parse_command_line do |operands|
+            @book_dir = operands.shift&.instance_eval { |d| Pathname(d) }
+          end
+
+          create_publication_dir
+          create_yaml
+          copy_template if @template
+          copy_cover if @cover
+          extract_mss if @mss
         end
 
-        def init_pub_dir
+        def create_publication_dir
           return if publication_dir.directory?
           publication_dir.mkpath
           puts 'Created directory', "   #{publication_dir}"
         end
 
-        def init_mss
+        def extract_mss
           sh 'scriv2tex', mss_source.to_s, publication_dir.to_s
           puts 'Extracted manuscript', "   from #{mss_source}", "   into #{publication_dir}/manuscript"
         end
 
-        def init_yaml
+        def create_yaml
           return puts "Already present, left unchanged: #{yaml_dest}" if yaml_dest.file?
           FileUtils.cp YAML_SOURCE.to_s, yaml_dest.to_s
           puts 'Created file', "   #{yaml_dest}"
         end
 
-        def init_cover
+        def copy_cover
           cover_dest.dirname.mkpath
           FileUtils.cp cover_source.to_s, cover_dest.to_s
           puts 'Copied cover image', "   from #{cover_source}", "   to #{cover_dest}"
         end
 
-        def init_template
+        def copy_template
           [MINIMAL_TEMPLATE, template_name].uniq.each do |template_name|
             template_dir = template_dir(template_name)
             FileUtils.cp_r "#{template_dir}/.", publication_dir.to_s
@@ -65,6 +68,8 @@ module DBP
         end
 
         def declare_options(parser)
+          parser.banner << ' [BOOK_DIR]'
+
           parser.on('--cover [IMAGE_FILE]', Pathname, 'copy the ebook cover image') do |image_file|
             @cover = true
             @cover_source = image_file
@@ -80,7 +85,7 @@ module DBP
             @template_name = name
           end
 
-          parser.on('--book DIR', Pathname, 'look in DIR for book mss and cover files') do |dir|
+          parser.on('--source DIR', Pathname, 'look in DIR for book mss and cover files') do |dir|
             @source_dir = dir
           end
 
@@ -134,6 +139,10 @@ module DBP
           errors << "Existing publication.yaml file invalid: #{yaml_dest}" unless yaml_dest.file?
         end
 
+        def book_dir
+          @book_dir ||= Pathname.pwd
+        end
+
         def cover_dest
           @cover_dest ||= publication_dir / 'epub/publication/cover.jpg'
         end
@@ -147,7 +156,7 @@ module DBP
         end
 
         def publication_dir
-          @publication_dir ||= Pathname('publication')
+          @publication_dir ||= book_dir / 'publication'
         end
 
         def slug
@@ -155,7 +164,7 @@ module DBP
         end
 
         def source_dir
-          @source_dir ||= Pathname.pwd
+          @source_dir ||= book_dir
         end
 
         def source_dir_cover
