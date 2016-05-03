@@ -16,8 +16,6 @@ module DBP
         YAML_SOURCE = TEMPLATES_DIR / 'publication.yaml'
         MINIMAL_TEMPLATE = 'minimal'
 
-        PUBLICATION_DIR = Pathname('publication')
-
         def initialize(command = nil)
           super command, 'init'
         end
@@ -32,14 +30,14 @@ module DBP
         end
 
         def init_pub_dir
-          return if PUBLICATION_DIR.directory?
-          PUBLICATION_DIR.mkpath
-          puts 'Created directory', "   #{PUBLICATION_DIR}"
+          return if publication_dir.directory?
+          publication_dir.mkpath
+          puts 'Created directory', "   #{publication_dir}"
         end
 
         def init_mss
-          sh 'scriv2tex', mss_source.to_s, PUBLICATION_DIR.to_s
-          puts 'Extracted manuscript', "   from #{mss_source}", "   into #{PUBLICATION_DIR}/manuscript"
+          sh 'scriv2tex', mss_source.to_s, publication_dir.to_s
+          puts 'Extracted manuscript', "   from #{mss_source}", "   into #{publication_dir}/manuscript"
         end
 
         def init_yaml
@@ -57,8 +55,8 @@ module DBP
         def init_template
           [MINIMAL_TEMPLATE, template_name].uniq.each do |template_name|
             template_dir = template_dir(template_name)
-            FileUtils.cp_r "#{template_dir}/.", PUBLICATION_DIR.to_s
-            puts "Copied #{template_name} template files", "   from #{template_dir}", "   to #{PUBLICATION_DIR}"
+            FileUtils.cp_r "#{template_dir}/.", publication_dir.to_s
+            puts "Copied #{template_name} template files", "   from #{template_dir}", "   to #{publication_dir}"
           end
         end
 
@@ -116,10 +114,10 @@ module DBP
         end
 
         def check_publication_dir(errors)
-          return unless PUBLICATION_DIR.exist?
-          return errors << "Invalid publication directory: #{PUBLICATION_DIR}" unless PUBLICATION_DIR.directory?
+          return unless publication_dir.exist?
+          return errors << "Invalid publication directory: #{publication_dir}" unless publication_dir.directory?
           return if @force
-          errors << "Use --force to write into existing directory: #{PUBLICATION_DIR}" if PUBLICATION_DIR.directory?
+          errors << "Use --force to write into existing directory: #{publication_dir}" if publication_dir.directory?
         end
 
         def check_source_dir(errors)
@@ -137,7 +135,7 @@ module DBP
         end
 
         def cover_dest
-          @cover_dest ||= PUBLICATION_DIR / 'epub/publication/cover.jpg'
+          @cover_dest ||= publication_dir / 'epub/publication/cover.jpg'
         end
 
         def cover_source
@@ -146,6 +144,10 @@ module DBP
 
         def mss_source
           @mss_source ||= source_dir_mss
+        end
+
+        def publication_dir
+          @publication_dir ||= Pathname('publication')
         end
 
         def slug
@@ -173,7 +175,7 @@ module DBP
         end
 
         def yaml_dest
-          @yaml_dest ||= PUBLICATION_DIR / 'publication.yaml'
+          @yaml_dest ||= publication_dir / 'publication.yaml'
         end
       end
     end
