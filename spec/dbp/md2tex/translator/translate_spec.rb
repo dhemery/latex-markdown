@@ -7,10 +7,10 @@ module DBP::BookCompiler::MarkdownToTex
     let(:reader) { StringScanner.new(input) }
     let(:writer) { StringIO.new }
 
-    describe 'unwraps' do
+    describe 'extracts' do
       let(:input) { '<!-- \somecommand{some argument} -->' }
 
-      it 'comments' do
+      it 'comment content' do
         subject.translate(reader, writer)
 
         _(writer.string).must_equal '\somecommand{some argument}'
