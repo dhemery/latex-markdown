@@ -1,7 +1,7 @@
 require_relative 'command.rb'
 
 module DBP::BookCompiler::MarkdownToTex
-  class CopyOuterText
+  class CopyText
     include Command
     OUTER_TEXT = /[^<]*/
 

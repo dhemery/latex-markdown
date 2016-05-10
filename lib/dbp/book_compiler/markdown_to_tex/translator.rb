@@ -1,17 +1,19 @@
 require_relative 'comment'
-require_relative 'copy_outer_text'
+require_relative 'copy_text'
 require_relative 'finish_document'
 require_relative 'read_tag'
 require_relative 'open_span'
+require_relative 'write_text'
 
 module DBP::BookCompiler::MarkdownToTex
   class Translator
-    COPY_OUTER_TEXT = CopyOuterText.new
+    COPY_OUTER_TEXT = CopyText.new
     READ_TAG= ReadTag.new
     COMMANDS = [
-        FinishDocument.new,
         Comment.new,
+        FinishDocument.new,
         OpenSpan.new,
+        WriteText.new('</span>', '}')
     ]
 
     def initialize(stack = [])

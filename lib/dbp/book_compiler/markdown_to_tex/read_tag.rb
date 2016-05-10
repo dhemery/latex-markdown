@@ -3,7 +3,7 @@ require_relative 'command.rb'
 module DBP::BookCompiler::MarkdownToTex
   class ReadTag
     include Command
-    TAG_PATTERN = /<!--|<[a-zA-Z]+/
+    TAG_PATTERN = /<!--|<[a-zA-Z]+|<\/[a-zA-Z]+>/
 
     def initialize
       @name = self.to_s

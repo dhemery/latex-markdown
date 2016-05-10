@@ -21,7 +21,7 @@ module DBP::BookCompiler::MarkdownToTex
       _(reader.rest).must_equal 'after'
     end
 
-    it 'writes the stripped comment' do
+    it 'writes the stripped content' do
       subject.execute(translator, reader, writer)
 
       _(writer.string).must_equal 'some comment content'
