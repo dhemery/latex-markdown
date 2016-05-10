@@ -16,5 +16,17 @@ module DBP::BookCompiler::MarkdownToTex
         _(writer.string).must_equal '\somecommand{some argument}'
       end
     end
+
+    describe 'converts' do
+      describe 'span.class' do
+        let(:input) { %q{<span class="foo">span content</span>} }
+
+        it 'to \class command with span content as its argument' do
+          subject.translate(reader, writer)
+
+          _(writer.string).must_equal '\foo{span content}'
+        end
+      end
+    end
   end
 end
