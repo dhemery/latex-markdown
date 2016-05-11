@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'dbp/book_compiler/scriv2md'
+
+DBP::BookCompiler::Scriv2Md.new.run
