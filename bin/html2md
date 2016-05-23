@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+require 'pathname'
+require 'rake'
+require 'rake/file_utils'
+require 'dbp'
+
+data_dir = DBP.data_dir
+sed_dir = data_dir / 'sed'
+html_to_md_sed_command_file = (sed_dir / 'html2md.sed').to_s
+sh 'sed', '-E', '-f', html_to_md_sed_command_file
