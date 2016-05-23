@@ -1,7 +1,7 @@
 require_relative 'operator'
 
 module DBP::BookCompiler::MarkdownToTex
-  class WriteCaptured
+  class Write
     include Operator
 
     def operate(translator, captured)

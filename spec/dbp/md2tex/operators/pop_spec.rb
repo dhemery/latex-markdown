@@ -1,11 +1,11 @@
 require_relative '_helper'
-require 'dbp/book_compiler/markdown_to_tex/operators/write_captured'
+require 'dbp/book_compiler/markdown_to_tex/operators/pop'
 
 require 'strscan'
 
 module DBP::BookCompiler::MarkdownToTex
-  describe WriteCaptured do
-    subject { WriteCaptured.new }
+  describe Pop do
+    subject { Pop.new }
 
     describe 'tells the translator to' do
       let(:captured) { 'foo' }
@@ -14,8 +14,8 @@ module DBP::BookCompiler::MarkdownToTex
 
       after { translator.verify }
 
-      it 'write the captured text and enter copy_text state' do
-        translator.expect :write, nil, [captured]
+      it 'pop and enter copy_text state' do
+        translator.expect :pop, nil, []
         translator.expect :enter, nil, [:copy_text]
 
         subject.execute(translator, captured)
