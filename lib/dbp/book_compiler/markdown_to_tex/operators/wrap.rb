@@ -6,7 +6,6 @@ module DBP::BookCompiler::MarkdownToTex
 
     def initialize(wrappers)
       @wrappers = wrappers.reduce({}) { |h,w| h[w[:name]] = w; h }
-      puts @wrappers
     end
 
     def operate(translator, captured)
