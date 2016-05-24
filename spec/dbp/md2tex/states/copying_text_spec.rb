@@ -9,7 +9,7 @@ module DBP::BookCompiler::MarkdownToTex
     let(:scanner) { StringScanner.new(input) }
     let(:translator) do
       Object.new.tap do |t|
-        [:write, :enter].each { |m| t.define_singleton_method(m) { |_|} }
+        [:write, :transition_to].each { |m| t.define_singleton_method(m) { |_|} }
       end
     end
 
@@ -32,7 +32,7 @@ module DBP::BookCompiler::MarkdownToTex
 
           it "write the text that precedes the #{operator_char} and enter executing_operator state" do
             translator.expect :write, nil, [pre_operator]
-            translator.expect :enter, nil, [:executing_operator]
+            translator.expect :transition_to, nil, [:executing_operator]
 
             subject.enter(translator, scanner)
           end
