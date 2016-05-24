@@ -1,5 +1,5 @@
 require_relative '_helper'
-require 'dbp/book_compiler/markdown_to_tex/states/executing'
+require 'dbp/book_compiler/markdown_to_tex/states/executing_operator'
 
 require 'strscan'
 
