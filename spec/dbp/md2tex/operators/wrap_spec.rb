@@ -24,7 +24,7 @@ module DBP::BookCompiler::MarkdownToTex
       it 'write the open text, push the close text, and enter copy_text state' do
         translator.expect :write, nil, ['\begin{foo}']
         translator.expect :push, nil, ['\end{foo}']
-        translator.expect :enter, nil, [:copy_text]
+        translator.expect :enter, nil, [:copying_text]
 
         subject.execute(translator, captured)
       end

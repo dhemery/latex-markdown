@@ -1,8 +1,5 @@
-require_relative 'state'
-
 module DBP::BookCompiler::MarkdownToTex
   class ExecutingOperator
-    include State
 
     def initialize(operators)
       @operators_by_name = {}

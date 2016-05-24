@@ -4,7 +4,7 @@ module DBP
       module Operator
         def execute(translator, captured)
           operate(translator, captured)
-          translator.enter :copy_text
+          translator.enter :copying_text
         end
       end
     end

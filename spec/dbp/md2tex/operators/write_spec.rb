@@ -14,7 +14,7 @@ module DBP::BookCompiler::MarkdownToTex
 
       it 'write the captured text and enter copy_text state' do
         translator.expect :write, nil, [captured]
-        translator.expect :enter, nil, [:copy_text]
+        translator.expect :enter, nil, [:copying_text]
 
         subject.execute(translator, captured)
       end
