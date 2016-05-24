@@ -9,29 +9,33 @@ module DBP::BookCompiler::MarkdownToTex
     let(:scanner) { StringScanner.new(input) }
     let(:translator) do
       Object.new.tap do |t|
-        [:write, :enter].each { |m| t.define_singleton_method(m) { |_| } }
+        [:write, :enter].each { |m| t.define_singleton_method(m) { |_|} }
       end
     end
 
-    describe 'with input that contains *' do
-      let(:input) { 'some text and *some emphasized text*' }
+    %w{< * _}.each do |operator_char|
+      describe "with input that contains #{operator_char}" do
+        let(:pre_operator) { 'text before the operator'}
+        let(:post_operator) { 'text after the operator'}
+        let(:input) { "#{pre_operator}#{operator_char}#{post_operator}" }
 
-      it 'consumes the text preceding the *' do
-        subject.enter(translator, scanner)
-
-        _(scanner.rest).must_equal '*some emphasized text*'
-      end
-
-      describe 'tells the translator to' do
-        let(:translator) { MiniTest::Mock.new }
-
-        after { translator.verify }
-
-        it 'write the text that precedes the * and enter executing_operator state' do
-          translator.expect :write, nil, ['some text and ']
-          translator.expect :enter, nil, [:executing_operator]
-
+        it "consumes the text before #{operator_char}" do
           subject.enter(translator, scanner)
+
+          _(scanner.rest).must_equal "#{operator_char}#{post_operator}"
+        end
+
+        describe 'tells the translator to' do
+          let(:translator) { MiniTest::Mock.new }
+
+          after { translator.verify }
+
+          it "write the text that precedes the #{operator_char} and enter executing_operator state" do
+            translator.expect :write, nil, [pre_operator]
+            translator.expect :enter, nil, [:executing_operator]
+
+            subject.enter(translator, scanner)
+          end
         end
       end
     end

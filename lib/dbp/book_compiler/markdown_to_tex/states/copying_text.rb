@@ -1,6 +1,6 @@
 module DBP::BookCompiler::MarkdownToTex
   class CopyingText
-    COPYABLE_TEXT = /[^*]*/
+    COPYABLE_TEXT = /[^<*_]*/
     def enter(translator, scanner)
       scanner.scan COPYABLE_TEXT
       translator.write(scanner[0])
