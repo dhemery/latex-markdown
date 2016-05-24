@@ -1,8 +1,6 @@
 require_relative '_helper'
 require 'dbp/book_compiler/markdown_to_tex/operators/wrap'
 
-require 'strscan'
-
 module DBP::BookCompiler::MarkdownToTex
   describe Wrap do
     subject { Wrap.new(wrappers) }

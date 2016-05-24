@@ -1,8 +1,6 @@
 require_relative '_helper'
 require 'dbp/book_compiler/markdown_to_tex/operators/pop'
 
-require 'strscan'
-
 module DBP::BookCompiler::MarkdownToTex
   describe Pop do
     subject { Pop.new }
