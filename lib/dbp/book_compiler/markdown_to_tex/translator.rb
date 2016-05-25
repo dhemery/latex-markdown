@@ -1,5 +1,3 @@
-require_relative 'state'
-
 module DBP::BookCompiler::MarkdownToTex
   class Translator
     BODY_TEXT = {
@@ -17,26 +15,21 @@ module DBP::BookCompiler::MarkdownToTex
         COMMENT_CONTENT,
     ]
 
-    STATES = {
-        executing_operator: State.new(TOKENS)
-    }
-
-    def initialize(reader, writer)
-      @reader = reader
+    def initialize(scanner, writer, tokens = TOKENS)
+      @scanner = scanner
       @writer = writer
+      @tokens = tokens
     end
 
     def translate
-      transition_to(:executing_operator)
-      @state.enter(self, @reader) until @state.nil?
+      until @scanner.eos? do
+        token = @tokens.find { |token| @scanner.scan(token[:pattern]) }
+        token[:command].call(self, @scanner[1]) if token
+      end
     end
 
     def write(text)
       @writer.write(text)
-    end
-
-    def transition_to(state)
-      @state = STATES[state]
     end
   end
 end
