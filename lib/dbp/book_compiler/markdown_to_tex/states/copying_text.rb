@@ -1,10 +1,16 @@
+require_relative 'state'
+
 module DBP::BookCompiler::MarkdownToTex
   class CopyingText
-    COPYABLE_TEXT = /[^<*_]*/
-    def enter(translator, scanner)
-      scanner.scan COPYABLE_TEXT
-      translator.write(scanner[0])
-      translator.transition_to(:executing_operator)
+    include State
+
+    def initialize
+      @pattern = /[^<*_]*/
+      @next_state = :executing_operator
+    end
+
+    def respond(translator, scanned)
+      translator.write(scanned[0])
     end
   end
 end

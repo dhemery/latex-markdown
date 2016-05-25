@@ -5,39 +5,50 @@ require 'strscan'
 
 module DBP::BookCompiler::MarkdownToTex
   describe ExecutingOperator do
-    subject { ExecutingOperator.new(operators) }
-    let(:translator) { Object.new }
+    subject { ExecutingOperator.new([foo]) }
+    let(:translator) do
+      Object.new.tap do |t|
+        [:transition_to].each { |m| t.define_singleton_method(m) { |_| } }
+      end
+    end
     let(:scanner) { StringScanner.new(input) }
-    let(:input) { 'foo1barB' }
-
-    let(:operators) do
-      [foo_operator, bar_operator]
+    let(:input) { 'foo1     rabbit     monkey' }
+    let(:command) { MiniTest::Mock.new }
+    let(:pattern) { '(foo\d)[[:space:]]*([[:alpha:]]+)[[:space:]]*' }
+    let(:foo) do
+      {
+          names: %w(foo1 foo2 foo3),
+          pattern: pattern,
+          command: command
+      }
     end
 
-    let(:foo_operator) do
-      foo = MiniTest::Mock.new
-      foo.expect :pattern, 'foo\d', []
-      foo.expect :names, %w(foo1 foo2 foo3), []
-      foo
+    before do
+      command.expect :call, nil, [translator, 'foo1', 'rabbit']
     end
 
-    let(:bar_operator) do
-      bar = MiniTest::Mock.new
-      bar.expect :pattern, 'bar[[:upper:]]', []
-      bar.expect :names, %w(barA barB barC), []
-      bar
-    end
-
-    after do
-      operators.each { |o| o.verify }
-    end
-
-    it 'invokes the operator that matched the pattern' do
-      foo_operator.expect :execute, nil, [translator, 'foo1', scanner]
-
+    it %q{invokes the operator's command with the argument} do
       subject.enter(translator, scanner)
 
-      _(scanner.rest).must_equal 'barB'
+      command.verify
+    end
+
+    it %q{consumes the operator's entire pattern} do
+      subject.enter(translator, scanner)
+
+      _(scanner.rest).must_equal 'monkey'
+    end
+
+    describe 'tells the translator to' do
+      let(:translator) { MiniTest::Mock.new }
+
+      it 'transition to :copying_text' do
+        translator.expect :transition_to, nil, [:copying_text]
+
+        subject.enter(translator, scanner)
+
+        translator.verify
+      end
     end
   end
 end

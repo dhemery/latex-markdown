@@ -2,8 +2,16 @@ require_relative 'states/copying_text'
 
 module DBP::BookCompiler::MarkdownToTex
   class Translator
+    OPERATORS = [
+        {
+            names: ['!--'],
+            pattern: '<(!--)[[:space:]]*(.*?)[[:space:]]*-->',
+            command: -> (t, _, arg) { t.write(arg) }
+        }
+    ]
     STATES = {
-        copying_text: CopyingText.new
+        copying_text: CopyingText.new,
+        executing_operator: ExecutingOperator.new(OPERATORS)
     }
 
     def initialize(reader, writer)
@@ -13,7 +21,7 @@ module DBP::BookCompiler::MarkdownToTex
 
     def translate
       transition_to(:copying_text)
-      @state.enter(self, @reader)
+      @state.enter(self, @reader) until @state.nil?
     end
 
     def write(text)
