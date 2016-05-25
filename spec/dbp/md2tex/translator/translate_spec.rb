@@ -17,15 +17,15 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
-    # describe 'extracts' do
-    #   let(:input) { '<!-- \somecommand{some argument} -->' }
-    #
-    #   it 'comment content' do
-    #     subject.translate
-    #
-    #     _(writer.string).must_equal '\somecommand{some argument}'
-    #   end
-    # end
+    describe 'extracts' do
+      let(:input) { '<!-- \somecommand{some argument} -->' }
+
+      it 'comment content' do
+        subject.translate
+
+        _(writer.string).must_equal '\somecommand{some argument}'
+      end
+    end
 
     # describe 'converts' do
     #   describe 'span.class' do
