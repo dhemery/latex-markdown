@@ -27,6 +27,18 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
+    describe 'replaces' do
+      describe '<br/>' do
+        let(:input) { '<br/>' }
+
+        it 'with \break' do
+          subject.translate
+
+          _(writer.string).must_equal '\break '
+        end
+      end
+    end
+
     # describe 'converts' do
     #   describe 'span.class' do
     #     let(:input) { %q{<span class="foo">span content</span>} }

@@ -18,6 +18,7 @@ module DBP::BookCompiler::MarkdownToTex
     TOKENS = [
         BODY_TEXT,
         COMMENT_CONTENT,
+        BR_TAG,
     ]
 
     def initialize(scanner, writer, tokens = TOKENS)
