@@ -47,16 +47,16 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
-    # describe 'converts' do
-    #   describe 'div.class' do
-    #     let(:input) { %q{<div class="foo">div content</div>} }
-    #
-    #     it 'to a \begin{} macro with the class as its environment name' do
-    #       subject.translate
-    #
-    #       _(writer.string).must_equal '\begin{foo}div content\end{foo}'
-    #     end
-    #   end
-    # end
+    describe 'converts' do
+      describe 'div.class' do
+        let(:input) { %q{<div class="foo">div content</div>} }
+
+        it 'to a \begin{} macro with the class as its environment name' do
+          subject.translate
+
+          _(writer.string).must_equal '\begin{foo}div content\end{foo}'
+        end
+      end
+    end
   end
 end

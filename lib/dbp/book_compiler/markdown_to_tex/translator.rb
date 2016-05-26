@@ -37,6 +37,7 @@ module DBP::BookCompiler::MarkdownToTex
         BR_TAG,
         COMMENT_CONTENT,
         DIV_START_TAG,
+        END_TAG,
         UNRECOGNIZED,
     ]
 
@@ -44,6 +45,7 @@ module DBP::BookCompiler::MarkdownToTex
       @scanner = scanner
       @writer = writer
       @tokens = tokens
+      @stack = []
     end
 
     def translate
@@ -59,6 +61,16 @@ module DBP::BookCompiler::MarkdownToTex
     end
 
     def enter_environment(name)
+      write "\\begin{#{name}}"
+      push "\\end{#{name}}"
+    end
+
+    def pop
+      write @stack.pop
+    end
+
+    def push(text)
+      @stack.push text
     end
   end
 end
