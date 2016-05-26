@@ -10,6 +10,11 @@ module DBP::BookCompiler::MarkdownToTex
         command: -> (translator, captured) { translator.write(captured) }
     }
 
+    BR_TAG = {
+        pattern: /<br\s*\/>/,
+        command: -> (translator, _) { translator.write('\break ') }
+    }
+
     TOKENS = [
         BODY_TEXT,
         COMMENT_CONTENT,

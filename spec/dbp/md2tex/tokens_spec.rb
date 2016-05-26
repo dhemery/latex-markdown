@@ -90,5 +90,33 @@ module DBP::BookCompiler::MarkdownToTex
         end
       end
     end
+
+    describe 'BR_TAG' do
+      subject { Translator::BR_TAG }
+
+      describe :pattern do
+        let(:pattern) { subject[:pattern] }
+
+        describe 'against a string with a <br/> tag' do
+          it 'matches through the end of the tag' do
+            input = '<br    />after'
+            pattern =~ input
+            _($&).must_equal '<br    />'
+          end
+        end
+
+        describe :command do
+          let(:command) { subject[:command] }
+          let(:translator) { MiniTest::Mock.new }
+
+          after { translator.verify }
+
+          it 'writes a \break macro' do
+            translator.expect :write, nil, ['\break ']
+            command.call(translator, 'ignored capture')
+          end
+        end
+      end
+    end
   end
 end
