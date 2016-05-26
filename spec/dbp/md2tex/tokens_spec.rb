@@ -59,6 +59,24 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
+    describe :call do
+      subject { :call}
+
+      describe 'against a span tag with a class attribute' do
+        let(:class_attribute_value) { '     monkey     ' }
+        let(:tag) { %Q{<span                    class    =        "#{class_attribute_value}"              >} }
+        let(:input) { tag + 'additional text' }
+
+        it 'matches the tag' do
+          _(scanner.matched).must_equal tag
+        end
+
+        it 'captures the stripped class attribute value' do
+          _(scanner[1]).must_equal class_attribute_value.strip
+        end
+      end
+    end
+
     describe :exit do
       subject { :exit}
 

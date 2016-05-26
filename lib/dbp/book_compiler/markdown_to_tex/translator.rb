@@ -1,22 +1,25 @@
 module DBP::BookCompiler::MarkdownToTex
   class Translator
     TOKENS = {
+        # span.class -> call
+        call: /<span\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
+
         # text with no operators -> copy
         copy: /([^<*_]+)/,
 
-        # div.class -> enter the environment named by .class
+        # div.class -> enter
         enter: /<div\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
 
-        # any end tag -> exit the current environment or macro
+        # any end tag -> exit
         exit: /<\/.*?>/,
 
-        # comment -> extract the content
+        # comment -> extract
         extract: /<!--\s*(.*?)\s*-->/,
 
-        # void tag (currently only <br/>) -> replace with text from REPLACEMENTS
+        # void tag (currently only <br/>) -> replace
         replace: /<(br)\s*\/>/,
 
-        # any other text -> fail with a diagnostic
+        # any other text -> reject
         reject: /(.{1,80})/,
     }
 
@@ -35,6 +38,11 @@ module DBP::BookCompiler::MarkdownToTex
         token = TOKENS.each_key.find { |token| @scanner.scan(TOKENS[token]) }
         self.send(token, @scanner[1])
       end
+    end
+
+    def call(name)
+      write "\\#{name}{"
+      push '}'
     end
 
     def enter(name)
