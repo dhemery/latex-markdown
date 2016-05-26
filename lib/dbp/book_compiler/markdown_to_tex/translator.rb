@@ -15,6 +15,11 @@ module DBP::BookCompiler::MarkdownToTex
         command: -> (translator, capture) { translator.write(capture) }
     }
 
+    DIV_START_TAG = {
+        pattern: /<div\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
+        command: -> (translator, capture) { translator.enter_environment(capture) }
+    }
+
     # Matches any text and raises an error.
     # Match against this last to catch otherwise unmatched pattern.
     UNRECOGNIZED = {
@@ -24,8 +29,9 @@ module DBP::BookCompiler::MarkdownToTex
 
     TOKENS = [
         BODY_TEXT,
-        COMMENT_CONTENT,
         BR_TAG,
+        COMMENT_CONTENT,
+        DIV_START_TAG,
         UNRECOGNIZED,
     ]
 
@@ -44,6 +50,10 @@ module DBP::BookCompiler::MarkdownToTex
 
     def write(text)
       @writer.write(text)
+
+    end
+
+    def enter_environment(name)
     end
   end
 end

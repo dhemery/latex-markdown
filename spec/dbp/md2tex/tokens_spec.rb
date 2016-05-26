@@ -3,53 +3,57 @@ require 'dbp/book_compiler/markdown_to_tex/translator'
 
 module DBP::BookCompiler::MarkdownToTex
   describe Translator, 'tokens' do
+    CAPTURED_TEXT = 'some capture'
+
     describe 'BODY_TEXT' do
       subject { Translator::BODY_TEXT }
+      let(:translator) { MiniTest::Mock.new }
 
       describe :pattern do
-        let(:pattern) { subject[:pattern] }
-
         describe 'against a string with no operator characters' do
+          let(:scanner) { StringScanner.new(input) }
+          let(:input) { 'a string with no operator characters!@#$%&()-+=' }
+
           it 'matches the entire string' do
-            input = 'a bunch of text'
-            pattern =~ input
-            _($&).must_equal input
+            scanner.scan(subject[:pattern])
+
+            _(scanner.matched).must_equal input
           end
 
           it 'captures the entire match' do
-            input = 'a bunch of text'
-            pattern =~ input
-            _($1).must_equal input
+            subject[:pattern] =~ input
+
+            _(scanner[1]).must_equal scanner.matched
           end
         end
 
         %w{< * _}.each do |c|
           describe "against a string with operator character #{c}" do
+            let(:body_text) { 'before the operator character' }
+            let(:input) { body_text + c + 'additional text' }
+            let(:scanner) { StringScanner.new(input) }
+
             it 'stops matching at the operator character' do
-              input = "before#{c}after"
-              pattern =~ input
-              _($&).must_equal 'before'
+              scanner.scan(subject[:pattern])
+
+              _(scanner.matched).must_equal body_text
             end
 
             it 'captures the entire match' do
-              input = "before#{c}after"
-              pattern =~ input
-              _($1).must_equal 'before'
+              scanner.scan(subject[:pattern])
+
+              _(scanner[1]).must_equal scanner.matched
             end
           end
         end
 
         describe :command do
-          let(:command) { subject[:command] }
-          let(:translator) { MiniTest::Mock.new }
-
-          after { translator.verify }
-
           it 'writes the capture' do
-            capture = 'some capture'
+            translator.expect :write, nil, [CAPTURED_TEXT]
 
-            translator.expect :write, nil, [capture]
-            command.call(translator, capture)
+            subject[:command].call(translator, CAPTURED_TEXT)
+
+            translator.verify
           end
         end
       end
@@ -59,33 +63,34 @@ module DBP::BookCompiler::MarkdownToTex
       subject { Translator::COMMENT_CONTENT }
 
       describe :pattern do
-        let(:pattern) { subject[:pattern] }
-
         describe 'against a string with a comment' do
-          it 'matches through the end of the comment' do
-            input = '<!--some comment-->after'
-            pattern =~ input
-            _($&).must_equal '<!--some comment-->'
+          let(:content) { '                   some comment            ' }
+          let(:comment) { '<!--' + content + '-->' }
+          let(:input) { comment + 'additional text' }
+          let(:scanner) { StringScanner.new(input) }
+
+          it 'matches the comment' do
+            scanner.scan(subject[:pattern])
+
+            _(scanner.matched).must_equal comment
           end
 
           it 'captures the stripped comment content' do
-            input = '<!--                        some comment   -->'
-            pattern =~ input
-            _($1).must_equal 'some comment'
+            scanner.scan(subject[:pattern])
+
+            _(scanner[1]).must_equal content.strip
           end
         end
 
         describe :command do
-          let(:command) { subject[:command] }
           let(:translator) { MiniTest::Mock.new }
 
-          after { translator.verify }
-
           it 'writes the capture' do
-            capture = 'some capture'
+            translator.expect :write, nil, [CAPTURED_TEXT]
 
-            translator.expect :write, nil, [capture]
-            command.call(translator, capture)
+            subject[:command].call(translator, CAPTURED_TEXT)
+
+            translator.verify
           end
         end
       end
@@ -95,26 +100,65 @@ module DBP::BookCompiler::MarkdownToTex
       subject { Translator::BR_TAG }
 
       describe :pattern do
-        let(:pattern) { subject[:pattern] }
+        describe 'against a string with a BR tag' do
+          let(:tag) { '<br        />' }
+          let(:input) { tag + 'additional text' }
+          let(:scanner) { StringScanner.new(input) }
 
-        describe 'against a string with a <br/> tag' do
-          it 'matches through the end of the tag' do
-            input = '<br    />after'
-            pattern =~ input
-            _($&).must_equal '<br    />'
+          it 'matches the tag' do
+            scanner.scan(subject[:pattern])
+
+            _(scanner.matched).must_equal tag
           end
         end
 
         describe :command do
-          let(:command) { subject[:command] }
           let(:translator) { MiniTest::Mock.new }
-
-          after { translator.verify }
 
           it 'writes a \break macro' do
             translator.expect :write, nil, ['\break ']
-            command.call(translator, 'ignored capture')
+
+            subject[:command].call(translator, nil) # ignores the capture
+
+            translator.verify
           end
+        end
+      end
+    end
+
+    describe 'DIV_START_TAG' do
+      subject { Translator::DIV_START_TAG }
+
+      describe :pattern do
+        describe 'against a div tag with a class attribute' do
+          let(:class_attribute_value) { '     monkey     ' }
+          let(:tag) { %Q{<div                    class    =        "#{class_attribute_value}"              >} }
+          let(:input) { tag + 'additional text' }
+          let(:scanner) { StringScanner.new(input) }
+
+          it 'matches the tag' do
+            scanner.scan(subject[:pattern])
+
+            _(scanner.matched).must_equal tag
+          end
+
+          it 'captures the stripped class attribute value' do
+            scanner.scan(subject[:pattern])
+
+            _(scanner[1]).must_equal class_attribute_value.strip
+          end
+        end
+      end
+
+      describe :command do
+        let(:translator) { MiniTest::Mock.new }
+
+        it 'enters environment named after the capture' do
+          translator.expect :enter_environment, nil, [CAPTURED_TEXT]
+
+          subject[:command].call(translator, CAPTURED_TEXT)
+
+          translator.verify
         end
       end
     end

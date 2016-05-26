@@ -48,13 +48,13 @@ module DBP::BookCompiler::MarkdownToTex
     end
 
     # describe 'converts' do
-    #   describe 'span.class' do
-    #     let(:input) { %q{<span class="foo">span content</span>} }
+    #   describe 'div.class' do
+    #     let(:input) { %q{<div class="foo">div content</div>} }
     #
-    #     it 'to a a call to a macro named after the class, with the span content as its argument' do
+    #     it 'to a \begin{} macro with the class as its environment name' do
     #       subject.translate
     #
-    #       _(writer.string).must_equal '\foo{span content}'
+    #       _(writer.string).must_equal '\begin{foo}div content\end{foo}'
     #     end
     #   end
     # end
