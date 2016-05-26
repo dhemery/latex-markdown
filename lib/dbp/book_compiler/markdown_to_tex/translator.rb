@@ -36,30 +36,38 @@ module DBP::BookCompiler::MarkdownToTex
     def translate
       until @scanner.eos? do
         token = TOKENS.each_key.find { |token| @scanner.scan(TOKENS[token]) }
-        self.send(token, @scanner[1])
+        self.send(token, @scanner)
       end
     end
 
-    def call(name)
-      write "\\#{name}{"
+    def call(captured)
+      write "\\#{captured[1]}{"
       push '}'
     end
 
-    def enter(name)
-      write "\\begin{#{name}}"
-      push "\\end{#{name}}"
+    def copy(captured)
+      write captured[1]
+    end
+
+    def enter(captured)
+      write "\\begin{#{captured[1]}}"
+      push "\\end{#{captured[1]}}"
     end
 
     def exit(_)
       write @stack.pop
     end
 
-    def reject(text)
-      raise "Unrecognized text starting with: #{text}"
+    def extract(captured)
+      write captured[1]
     end
 
-    def replace(text)
-      write REPLACEMENTS[text]
+    def reject(captured)
+      raise "Unrecognized text starting with: #{captured[1]}"
+    end
+
+    def replace(captured)
+      write REPLACEMENTS[captured[1]]
     end
 
     def push(text)
@@ -69,8 +77,5 @@ module DBP::BookCompiler::MarkdownToTex
     def write(text)
       @writer.write(text)
     end
-
-    alias_method :copy, :write
-    alias_method :extract, :write
   end
 end
