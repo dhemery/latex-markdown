@@ -20,6 +20,11 @@ module DBP::BookCompiler::MarkdownToTex
         command: -> (translator, capture) { translator.enter_environment(capture) }
     }
 
+    END_TAG = {
+        pattern: /<\/.*?>/,
+        command: -> (translator, _) { translator.pop }
+    }
+
     # Matches any text and raises an error.
     # Match against this last to catch otherwise unmatched pattern.
     UNRECOGNIZED = {

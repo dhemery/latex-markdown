@@ -47,8 +47,8 @@ module DBP::BookCompiler::MarkdownToTex
           end
         end
 
-        describe :command do
-          it 'writes the capture' do
+        describe :command, 'tells the translator to' do
+          it 'write the capture' do
             translator.expect :write, nil, [CAPTURED_TEXT]
 
             subject[:command].call(translator, CAPTURED_TEXT)
@@ -82,10 +82,10 @@ module DBP::BookCompiler::MarkdownToTex
           end
         end
 
-        describe :command do
+        describe :command, 'tells the translator to' do
           let(:translator) { MiniTest::Mock.new }
 
-          it 'writes the capture' do
+          it 'write the capture' do
             translator.expect :write, nil, [CAPTURED_TEXT]
 
             subject[:command].call(translator, CAPTURED_TEXT)
@@ -112,10 +112,10 @@ module DBP::BookCompiler::MarkdownToTex
           end
         end
 
-        describe :command do
+        describe :command, 'tells the translator to' do
           let(:translator) { MiniTest::Mock.new }
 
-          it 'writes a \break macro' do
+          it 'write a \break macro' do
             translator.expect :write, nil, ['\break ']
 
             subject[:command].call(translator, nil) # ignores the capture
@@ -150,13 +150,43 @@ module DBP::BookCompiler::MarkdownToTex
         end
       end
 
-      describe :command do
+      describe :command, 'tells the translator to' do
         let(:translator) { MiniTest::Mock.new }
 
-        it 'enters environment named after the capture' do
+        it 'enter environment named after the capture' do
           translator.expect :enter_environment, nil, [CAPTURED_TEXT]
 
           subject[:command].call(translator, CAPTURED_TEXT)
+
+          translator.verify
+        end
+      end
+    end
+
+    describe 'END_TAG' do
+      subject { Translator::END_TAG }
+
+      describe :pattern do
+        describe 'against a string with any end tag' do
+          let(:tag) { '</                      monkeymonkey               >' }
+          let(:input) { tag + 'additional text' }
+          let(:scanner) { StringScanner.new(input) }
+
+          it 'matches the tag' do
+            scanner.scan(subject[:pattern])
+
+            _(scanner.matched).must_equal tag
+          end
+        end
+      end
+
+      describe :command, 'tells the translator to' do
+        let(:translator) { MiniTest::Mock.new }
+
+        it 'pop' do
+          translator.expect :pop, nil, []
+
+          subject[:command].call(translator, nil) # ignores the capture
 
           translator.verify
         end
