@@ -45,7 +45,43 @@ module DBP::BookCompiler::MarkdownToTex
 
           after { translator.verify }
 
-          it 'writes the captured text' do
+          it 'writes the capture' do
+            capture = 'some capture'
+
+            translator.expect :write, nil, [capture]
+            command.call(translator, capture)
+          end
+        end
+      end
+    end
+
+    describe 'COMMENT_CONTENT' do
+      subject { Translator::COMMENT_CONTENT }
+
+      describe :pattern do
+        let(:pattern) { subject[:pattern] }
+
+        describe 'against a string with a comment' do
+          it 'matches through the end of the comment' do
+            input = '<!--some comment-->after'
+            pattern =~ input
+            _($&).must_equal '<!--some comment-->'
+          end
+
+          it 'captures the stripped comment content' do
+            input = '<!--                        some comment   -->'
+            pattern =~ input
+            _($1).must_equal 'some comment'
+          end
+        end
+
+        describe :command do
+          let(:command) { subject[:command] }
+          let(:translator) { MiniTest::Mock.new }
+
+          after { translator.verify }
+
+          it 'writes the capture' do
             capture = 'some capture'
 
             translator.expect :write, nil, [capture]
