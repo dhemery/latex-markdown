@@ -37,10 +37,6 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
-    def copy(text)
-      write(text)
-    end
-
     def enter(name)
       write "\\begin{#{name}}"
       push "\\end{#{name}}"
@@ -48,10 +44,6 @@ module DBP::BookCompiler::MarkdownToTex
 
     def exit(_)
       write @stack.pop
-    end
-
-    def extract(comment)
-      write comment
     end
 
     def reject(text)
@@ -69,5 +61,8 @@ module DBP::BookCompiler::MarkdownToTex
     def write(text)
       @writer.write(text)
     end
+
+    alias_method :copy, :write
+    alias_method :extract, :write
   end
 end
