@@ -39,11 +39,19 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
+    describe 'raises an error' do
+      let(:input) { 'some okay text<WHATISTHIS?' }
+      it 'the characters that start with < do not match a token pattern' do
+        err = ->{ subject.translate }.must_raise RuntimeError
+        err.message.must_match '<WHATISTHIS?'
+      end
+    end
+
     # describe 'converts' do
     #   describe 'span.class' do
     #     let(:input) { %q{<span class="foo">span content</span>} }
     #
-    #     it 'to \class command with span content as its argument' do
+    #     it 'to a a call to a macro named after the class, with the span content as its argument' do
     #       subject.translate
     #
     #       _(writer.string).must_equal '\foo{span content}'
