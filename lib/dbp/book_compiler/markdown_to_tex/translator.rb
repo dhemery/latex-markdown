@@ -2,34 +2,34 @@ module DBP::BookCompiler::MarkdownToTex
   class Translator
     BODY_TEXT = {
         pattern: /([^<*_]+)/,
-        command: -> (translator, captured) { translator.write(captured) }
+        command: :write
     }
 
     BR_TAG = {
-        pattern: /<br\s*\/>/,
-        command: -> (translator, _) { translator.write('\break ') }
+        pattern: /<(br)\s*\/>/,
+        command: :replace
     }
 
     COMMENT_CONTENT = {
         pattern: /<!--\s*(.*?)\s*-->/,
-        command: -> (translator, capture) { translator.write(capture) }
+        command: :write
     }
 
     DIV_START_TAG = {
         pattern: /<div\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
-        command: -> (translator, capture) { translator.enter_environment(capture) }
+        command: :enter_environment
     }
 
     END_TAG = {
         pattern: /<\/.*?>/,
-        command: -> (translator, _) { translator.pop }
+        command: :pop
     }
 
     # Matches any text and raises an error.
     # Match against this last to catch otherwise unmatched pattern.
     UNRECOGNIZED = {
         pattern: /(.{1,80})/,
-        command: -> (_, capture) { raise "Unrecognized text starting with: #{capture}" }
+        command: :fail
     }
 
     TOKENS = [
@@ -41,6 +41,10 @@ module DBP::BookCompiler::MarkdownToTex
         UNRECOGNIZED,
     ]
 
+    REPLACEMENT = {
+        'br' => '\break '
+    }
+
     def initialize(scanner, writer, tokens = TOKENS)
       @scanner = scanner
       @writer = writer
@@ -51,13 +55,8 @@ module DBP::BookCompiler::MarkdownToTex
     def translate
       until @scanner.eos? do
         token = @tokens.find { |token| @scanner.scan(token[:pattern]) }
-        token[:command].call(self, @scanner[1])
+        self.send(token[:command], @scanner[1])
       end
-    end
-
-    def write(text)
-      @writer.write(text)
-
     end
 
     def enter_environment(name)
@@ -65,12 +64,24 @@ module DBP::BookCompiler::MarkdownToTex
       push "\\end{#{name}}"
     end
 
-    def pop
+    def fail(text)
+      raise "Unrecognized text starting with: #{text}"
+    end
+
+    def pop(_)
       write @stack.pop
     end
 
     def push(text)
       @stack.push text
+    end
+
+    def replace(text)
+      write REPLACEMENT[text]
+    end
+
+    def write(text)
+      @writer.write(text)
     end
   end
 end

@@ -46,16 +46,6 @@ module DBP::BookCompiler::MarkdownToTex
             end
           end
         end
-
-        describe :command, 'tells the translator to' do
-          it 'write the capture' do
-            translator.expect :write, nil, [CAPTURED_TEXT]
-
-            subject[:command].call(translator, CAPTURED_TEXT)
-
-            translator.verify
-          end
-        end
       end
     end
 
@@ -81,18 +71,6 @@ module DBP::BookCompiler::MarkdownToTex
             _(scanner[1]).must_equal content.strip
           end
         end
-
-        describe :command, 'tells the translator to' do
-          let(:translator) { MiniTest::Mock.new }
-
-          it 'write the capture' do
-            translator.expect :write, nil, [CAPTURED_TEXT]
-
-            subject[:command].call(translator, CAPTURED_TEXT)
-
-            translator.verify
-          end
-        end
       end
     end
 
@@ -109,18 +87,6 @@ module DBP::BookCompiler::MarkdownToTex
             scanner.scan(subject[:pattern])
 
             _(scanner.matched).must_equal tag
-          end
-        end
-
-        describe :command, 'tells the translator to' do
-          let(:translator) { MiniTest::Mock.new }
-
-          it 'write a \break macro' do
-            translator.expect :write, nil, ['\break ']
-
-            subject[:command].call(translator, nil) # ignores the capture
-
-            translator.verify
           end
         end
       end
@@ -149,18 +115,6 @@ module DBP::BookCompiler::MarkdownToTex
           end
         end
       end
-
-      describe :command, 'tells the translator to' do
-        let(:translator) { MiniTest::Mock.new }
-
-        it 'enter environment named after the capture' do
-          translator.expect :enter_environment, nil, [CAPTURED_TEXT]
-
-          subject[:command].call(translator, CAPTURED_TEXT)
-
-          translator.verify
-        end
-      end
     end
 
     describe 'END_TAG' do
@@ -177,18 +131,6 @@ module DBP::BookCompiler::MarkdownToTex
 
             _(scanner.matched).must_equal tag
           end
-        end
-      end
-
-      describe :command, 'tells the translator to' do
-        let(:translator) { MiniTest::Mock.new }
-
-        it 'pop' do
-          translator.expect :pop, nil, []
-
-          subject[:command].call(translator, nil) # ignores the capture
-
-          translator.verify
         end
       end
     end
