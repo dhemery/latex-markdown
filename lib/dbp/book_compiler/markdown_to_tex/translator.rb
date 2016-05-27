@@ -2,7 +2,7 @@ module DBP::BookCompiler::MarkdownToTex
   class Translator
     TOKENS = {
         text: /([^<*_]+)/,
-        emphasis: /(\*{1,2}|_{1,2})/,
+        emphasis: /(\*\*|_)/,
         open_tag: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
         end_tag: /<\/.*?>/,
         void_tag: /<([a-z]+)\s*\/>/,
@@ -10,16 +10,16 @@ module DBP::BookCompiler::MarkdownToTex
         unrecognized_text: /(.{1,80})/
     }
 
-    EMPHASIS = [
-        {
+    EMPHASIS_BY_DELIMITER = {
+        '_' => {
             macro: 'emph',
             enabled: false
         },
-        {
+        '**' => {
             macro: 'bf',
             enabled: false
         }
-    ]
+    }
 
     REPLACEMENTS_BY_TAG_NAME = {
         'br' => '\break '
@@ -55,7 +55,7 @@ module DBP::BookCompiler::MarkdownToTex
     end
 
     def emphasis(captured)
-      style = EMPHASIS[captured[1].length-1]
+      style = EMPHASIS_BY_DELIMITER[captured[1]]
       style[:enabled] = !style[:enabled]
       macro = style[:enabled] ? "\\#{style[:macro]}{" : '}'
       write macro
