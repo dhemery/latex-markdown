@@ -9,7 +9,7 @@ module DBP::BookCompiler::MarkdownToTex
 
     describe 'wraps' do
       describe 'div.class' do
-        let(:content) { 'some content'}
+        let(:content) { 'some content' }
         let(:environment) { 'foo' }
         let(:input) { %Q{<div class="#{environment}">#{content}</div>} }
 
@@ -21,7 +21,7 @@ module DBP::BookCompiler::MarkdownToTex
       end
 
       describe 'span.class' do
-        let(:content) { 'some content'}
+        let(:content) { 'some content' }
         let(:macro) { 'foo' }
         let(:input) { %Q{<span class="#{macro}">#{content}</span>} }
 
@@ -44,19 +44,42 @@ module DBP::BookCompiler::MarkdownToTex
     end
 
     describe 'extracts' do
-      let(:input) { '<!-- \somecommand{some argument} -->' }
 
-      it 'comment content' do
-        subject.translate
+      describe 'comment content' do
+        let(:input) { '<!-- \somecommand{some argument} -->' }
 
-        _(writer.string).must_equal '\somecommand{some argument}'
+        it 'as plain text' do
+          subject.translate
+
+          _(writer.string).must_equal '\somecommand{some argument}'
+        end
+      end
+
+      describe 'style and title yaml header properties' do
+        let(:style) { 'chapter' }
+        let(:title) { 'My Title' }
+        let(:input) do
+          [
+              '---',
+              "style: #{style}",
+              "title: #{title}",
+              '...',
+              ''
+          ].join($/)
+        end
+
+        it 'as a style macro' do
+          subject.translate
+
+          _(writer.string).must_equal "\\#{style}{#{title}}"
+        end
       end
     end
 
     describe 'rejects' do
       let(:input) { 'some okay text<WHATISTHIS?' }
       it 'a string starting with < that does not match any other token pattern' do
-        err = ->{ subject.translate }.must_raise RuntimeError
+        err = -> { subject.translate }.must_raise RuntimeError
         err.message.must_match '<WHATISTHIS?'
       end
     end

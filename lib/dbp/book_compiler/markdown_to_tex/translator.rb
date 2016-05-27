@@ -1,8 +1,11 @@
+require 'yaml'
+
 module DBP
   module BookCompiler
     module MarkdownToTex
       class Translator
         TOKENS = {
+            yaml_header: /---\s*\n((.|\n)*?)\n\.\.\.\s*\n/,
             text: /([^<*_]+)/,
             emphasis: /(\*\*|_)/,
             open_tag: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
@@ -11,6 +14,7 @@ module DBP
             comment: /<!--\s*(.*?)\s*-->/,
             unrecognized_text: /(.{1,80})/
         }
+
 
         EMPHASIS_BY_DELIMITER = {
             '_' => {
@@ -42,7 +46,6 @@ module DBP
           @scanner = scanner
           @writer = writer
           @stack = []
-          @emphasis = [false, false]
         end
 
         def translate
@@ -84,6 +87,11 @@ module DBP
 
         def void_tag(captured)
           write REPLACEMENTS_BY_TAG_NAME[captured[1]]
+        end
+
+        def yaml_header(captured)
+          yaml = YAML.load(captured.matched)
+          write "\\#{yaml['style']}{#{yaml['title']}}"
         end
 
         def push(text)
