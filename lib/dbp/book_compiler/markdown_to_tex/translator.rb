@@ -13,14 +13,14 @@ module DBP::BookCompiler::MarkdownToTex
         'br' => '\break '
     }
 
-    WRAPPERS_BY_TAG_NAME = {
+    ENVIRONMENT_TYPES_BY_TAG_NAME = {
         'div' => {
-            before: '\begin{%s}',
-            after: '\end{%s}'
+            enter: '\begin{%s}',
+            exit: '\end{%s}'
         },
         'span' => {
-            before: '\%s{',
-            after: '}'
+            enter: '\%s{',
+            exit: '}'
         },
     }
 
@@ -46,11 +46,10 @@ module DBP::BookCompiler::MarkdownToTex
     end
 
     def open_tag(captured)
-      tag_name = captured[1]
-      class_value = captured[2]
-      wrapper = WRAPPERS_BY_TAG_NAME[tag_name]
-      write(wrapper[:before] % class_value)
-      push(wrapper[:after] % class_value)
+      type = ENVIRONMENT_TYPES_BY_TAG_NAME[captured[1]]
+      name = captured[2]
+      write(type[:enter] % name)
+      push(type[:exit] % name)
     end
 
     def text(captured)
