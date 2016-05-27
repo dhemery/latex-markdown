@@ -126,18 +126,20 @@ module DBP::BookCompiler::MarkdownToTex
 
     describe :yaml_header do
       subject { :yaml_header }
-      let(:input) do
+
+      let(:yaml) do
         [
             '---           ',
             'key1: value1',
             'key2: value2',
-            '...             ',
-            ''
+            '...',
         ].join($/)
       end
 
+      let(:input) { "#{yaml}additional text"}
+
       it 'matches a YAML document' do
-        _(scanner.matched).must_equal input
+        _(scanner.matched).must_equal yaml
       end
     end
   end

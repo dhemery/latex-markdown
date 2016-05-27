@@ -64,7 +64,6 @@ module DBP::BookCompiler::MarkdownToTex
               "style: #{style}",
               "title: #{title}",
               '...',
-              ''
           ].join($/)
         end
 

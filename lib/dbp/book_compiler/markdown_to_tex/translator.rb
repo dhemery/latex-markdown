@@ -5,7 +5,7 @@ module DBP
     module MarkdownToTex
       class Translator
         TOKENS = {
-            yaml_header: /---\s*\n.*?\n\.\.\.\s*\n/m,
+            yaml_header: /---\s*\n.*?\n\.\.\./m,
             text: /[^<*_]+/,
             emphasis: /\*\*|_/,
             open_tag: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
