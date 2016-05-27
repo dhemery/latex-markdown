@@ -10,6 +10,17 @@ module DBP::BookCompiler::MarkdownToTex
         unrecognized_text: /(.{1,80})/
     }
 
+    EMPHASIS = [
+        {
+            macro: 'emph',
+            enabled: false
+        },
+        {
+            macro: 'bf',
+            enabled: false
+        }
+    ]
+
     REPLACEMENTS_BY_TAG_NAME = {
         'br' => '\break '
     }
@@ -29,6 +40,7 @@ module DBP::BookCompiler::MarkdownToTex
       @scanner = scanner
       @writer = writer
       @stack = []
+      @emphasis = [false, false]
     end
 
     def translate
@@ -40,6 +52,13 @@ module DBP::BookCompiler::MarkdownToTex
 
     def comment(captured)
       write captured[1]
+    end
+
+    def emphasis(captured)
+      style = EMPHASIS[captured[1].length-1]
+      style[:enabled] = !style[:enabled]
+      macro = style[:enabled] ? "\\#{style[:macro]}{" : '}'
+      write macro
     end
 
     def end_tag(_)

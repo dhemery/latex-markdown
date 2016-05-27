@@ -72,5 +72,27 @@ module DBP::BookCompiler::MarkdownToTex
         end
       end
     end
+
+    describe 'toggles' do
+      describe 'emphasis' do
+        let(:input) { 'regular *emphasized* regular _emphasized_ regular *emphasized_ regular _emphasized* regular' }
+
+        it 'by calling \emph{} with surrounded text' do
+          subject.translate
+
+          _(writer.string).must_equal "regular \\emph{emphasized} regular \\emph{emphasized} regular \\emph{emphasized} regular \\emph{emphasized} regular"
+        end
+      end
+
+      describe 'bold' do
+        let(:input) { 'regular **bold** regular __bold__ regular **bold__ regular __bold** regular' }
+
+        it 'by calling \bf{} with surrounded text' do
+          subject.translate
+
+          _(writer.string).must_equal "regular \\bf{bold} regular \\bf{bold} regular \\bf{bold} regular \\bf{bold} regular"
+        end
+      end
+    end
   end
 end
