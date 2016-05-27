@@ -11,7 +11,7 @@ module DBP::BookCompiler::MarkdownToTex
     end
 
     describe :copy do
-      subject { :copy}
+      subject { :copy }
 
       describe 'against a string with no operator characters' do
         let(:input) { 'a string with no operator characters!@#$%&()-+=' }
@@ -44,43 +44,30 @@ module DBP::BookCompiler::MarkdownToTex
     describe :enter do
       subject { :enter }
 
-      describe 'against a div tag with a class attribute' do
+      describe 'against a tag with a class attribute' do
         let(:class_attribute_value) { '     monkey     ' }
-        let(:tag) { %Q{<div                    class    =        "#{class_attribute_value}"              >} }
+        let(:tag_name) { 'mytag' }
+        let(:tag) { %Q{<#{tag_name}                    class    =        "#{class_attribute_value}"              >} }
         let(:input) { tag + 'additional text' }
 
         it 'matches the tag' do
           _(scanner.matched).must_equal tag
         end
 
-        it 'captures the stripped class attribute value' do
-          _(scanner[1]).must_equal class_attribute_value.strip
-        end
-      end
-    end
-
-    describe :call do
-      subject { :call}
-
-      describe 'against a span tag with a class attribute' do
-        let(:class_attribute_value) { '     monkey     ' }
-        let(:tag) { %Q{<span                    class    =        "#{class_attribute_value}"              >} }
-        let(:input) { tag + 'additional text' }
-
-        it 'matches the tag' do
-          _(scanner.matched).must_equal tag
+        it 'captures the tag name in capture 1' do
+          _(scanner[1]).must_equal tag_name
         end
 
-        it 'captures the stripped class attribute value' do
-          _(scanner[1]).must_equal class_attribute_value.strip
+        it 'captures the stripped class attribute value in capture 2' do
+          _(scanner[2]).must_equal class_attribute_value.strip
         end
       end
     end
 
     describe :exit do
-      subject { :exit}
+      subject { :exit }
 
-      describe 'against a string with any end tag' do
+      describe 'against an end tag' do
         let(:tag) { '</                      monkeymonkey               >' }
         let(:input) { tag + 'additional text' }
 
@@ -111,7 +98,7 @@ module DBP::BookCompiler::MarkdownToTex
     describe :replace do
       subject { :replace }
 
-      describe 'against a string with a BR tag' do
+      describe 'against a void tag' do
         let(:tag) { '<br        />' }
         let(:input) { tag + 'additional text' }
 

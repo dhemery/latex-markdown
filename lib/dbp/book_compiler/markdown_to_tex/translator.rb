@@ -1,14 +1,11 @@
 module DBP::BookCompiler::MarkdownToTex
   class Translator
     TOKENS = {
-        # span.class -> call
-        call: /<span\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
-
         # text with no operators -> copy
         copy: /([^<*_]+)/,
 
-        # div.class -> enter
-        enter: /<div\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
+        # tag.class -> enter
+        enter: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
 
         # any end tag -> exit
         exit: /<\/.*?>/,
@@ -23,8 +20,21 @@ module DBP::BookCompiler::MarkdownToTex
         reject: /(.{1,80})/,
     }
 
+    # void tags (e.g. <br />) are replaced by fixed text
     REPLACEMENTS = {
         'br' => '\break '
+    }
+
+    # start tags (e.g, <div> and <span>) enter a macro or environment
+    WRAPPERS = {
+        'div' => {
+            before: '\begin{%s}',
+            after: '\end{%s}'
+        },
+        'span' => {
+            before: '\%s{',
+            after: '}'
+        },
     }
 
     def initialize(scanner, writer)
@@ -40,18 +50,16 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
-    def call(captured)
-      write "\\#{captured[1]}{"
-      push '}'
-    end
-
     def copy(captured)
       write captured[1]
     end
 
     def enter(captured)
-      write "\\begin{#{captured[1]}}"
-      push "\\end{#{captured[1]}}"
+      tag = captured[1]
+      name = captured[2]
+      wrapper = WRAPPERS[tag]
+      write(wrapper[:before] % name)
+      push(wrapper[:after] % name)
     end
 
     def exit(_)
