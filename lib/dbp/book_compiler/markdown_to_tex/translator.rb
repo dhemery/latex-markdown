@@ -5,16 +5,15 @@ module DBP
     module MarkdownToTex
       class Translator
         TOKENS = {
-            yaml_header: /---\s*\n((.|\n)*?)\n\.\.\.\s*\n/,
-            text: /([^<*_]+)/,
-            emphasis: /(\*\*|_)/,
+            yaml_header: /---\s*\n.*?\n\.\.\.\s*\n/m,
+            text: /[^<*_]+/,
+            emphasis: /\*\*|_/,
             open_tag: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
-            end_tag: /<\/.*?>/,
+            end_tag: /<\/([a-z]+)\s*>/,
             void_tag: /<([a-z]+)\s*\/>/,
             comment: /<!--\s*(.*?)\s*-->/,
-            unrecognized_text: /(.{1,80})/
+            unrecognized_text: /.{1,80}/
         }
-
 
         EMPHASIS_BY_DELIMITER = {
             '_' => {
@@ -60,7 +59,7 @@ module DBP
         end
 
         def emphasis(captured)
-          style = EMPHASIS_BY_DELIMITER[captured[1]]
+          style = EMPHASIS_BY_DELIMITER[captured.matched]
           style[:enabled] = !style[:enabled]
           macro = style[:enabled] ? "\\#{style[:macro]}{" : '}'
           write macro
@@ -78,11 +77,11 @@ module DBP
         end
 
         def text(captured)
-          write captured[1]
+          write captured.matched
         end
 
         def unrecognized_text(captured)
-          raise "Unrecognized text starting with: #{captured[1]}"
+          raise "Unrecognized text starting with: #{captured.matched}"
         end
 
         def void_tag(captured)

@@ -22,7 +22,7 @@ module DBP::BookCompiler::MarkdownToTex
           _(scanner.matched).must_equal comment
         end
 
-        it 'captures the stripped comment content' do
+        it 'captures the stripped comment content in capture group 1' do
           _(scanner[1]).must_equal content.strip
         end
       end
@@ -38,10 +38,6 @@ module DBP::BookCompiler::MarkdownToTex
           it 'matches the delimiter' do
             _(scanner.matched).must_equal delimiter
           end
-
-          it 'captures the entire match' do
-            _(scanner[1]).must_equal scanner.matched
-          end
         end
       end
     end
@@ -50,11 +46,16 @@ module DBP::BookCompiler::MarkdownToTex
       subject { :end_tag }
 
       describe 'against an end tag' do
-        let(:tag) { '</                      monkeymonkey               >' }
+        let(:tag_name) { 'monkeymonkey' }
+        let(:tag) { "</#{tag_name}               >" }
         let(:input) { "#{tag}additional text" }
 
         it 'matches the tag' do
           _(scanner.matched).must_equal tag
+        end
+
+        it 'captures the tag name in capture group 1' do
+          _(scanner[1]).must_equal tag_name
         end
       end
     end
@@ -72,11 +73,11 @@ module DBP::BookCompiler::MarkdownToTex
           _(scanner.matched).must_equal tag
         end
 
-        it 'captures the tag name in capture 1' do
+        it 'captures the tag name in capture group 1' do
           _(scanner[1]).must_equal tag_name
         end
 
-        it 'captures the stripped class attribute value in capture 2' do
+        it 'captures the stripped class attribute value in capture group 2' do
           _(scanner[2]).must_equal class_attribute_value.strip
         end
       end
@@ -91,10 +92,6 @@ module DBP::BookCompiler::MarkdownToTex
         it 'matches the entire string' do
           _(scanner.matched).must_equal input
         end
-
-        it 'captures the entire match' do
-          _(scanner[1]).must_equal scanner.matched
-        end
       end
 
       %w{< * _}.each do |c|
@@ -104,10 +101,6 @@ module DBP::BookCompiler::MarkdownToTex
 
           it 'matches the text before the operator character' do
             _(scanner.matched).must_equal text
-          end
-
-          it 'captures the entire match' do
-            _(scanner[1]).must_equal scanner.matched
           end
         end
       end
@@ -125,7 +118,7 @@ module DBP::BookCompiler::MarkdownToTex
           _(scanner.matched).must_equal tag
         end
 
-        it 'captures the tag name' do
+        it 'captures the tag name in capture group 1' do
           _(scanner[1]).must_equal tag_name
         end
       end
