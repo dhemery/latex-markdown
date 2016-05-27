@@ -2,6 +2,7 @@ module DBP::BookCompiler::MarkdownToTex
   class Translator
     TOKENS = {
         text: /([^<*_]+)/,
+        emphasis: /(\*{1,2}|_{1,2})/,
         open_tag: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
         end_tag: /<\/.*?>/,
         void_tag: /<([a-z]+)\s*\/>/,

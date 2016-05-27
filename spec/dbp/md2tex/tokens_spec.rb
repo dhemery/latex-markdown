@@ -11,7 +11,7 @@ module DBP::BookCompiler::MarkdownToTex
     end
 
     describe :comment do
-      subject { :comment}
+      subject { :comment }
 
       describe 'against a comment' do
         let(:content) { '                   some comment            ' }
@@ -24,6 +24,64 @@ module DBP::BookCompiler::MarkdownToTex
 
         it 'captures the stripped comment content' do
           _(scanner[1]).must_equal content.strip
+        end
+      end
+    end
+
+    describe :emphasis do
+      subject { :emphasis }
+
+      %w(* _).each do |marker_character|
+        describe "against one marker character (#{marker_character})" do
+          let(:marker) { marker_character }
+          let(:input) { "#{marker}additional text" }
+
+          it 'matches the marker character' do
+            _(scanner.matched).must_equal marker
+          end
+
+          it 'captures the entire match' do
+            _(scanner[1]).must_equal scanner.matched
+          end
+        end
+
+        describe "against two marker characters (#{marker_character * 2})" do
+          let(:marker) { marker_character * 2 }
+          let(:input) { "#{marker}additional text" }
+
+          it 'matches the two marker characters' do
+            _(scanner.matched).must_equal marker
+          end
+
+          it 'captures the entire match' do
+            _(scanner[1]).must_equal scanner.matched
+          end
+        end
+
+        describe "against three marker characters (#{marker_character * 3})" do
+          let(:input) { "#{marker_character * 3}additional text" }
+
+          it 'matches the first two characters' do
+            _(scanner.matched).must_equal marker_character * 2
+          end
+
+          it 'captures the entire match' do
+            _(scanner[1]).must_equal scanner.matched
+          end
+        end
+      end
+
+      %w(*_ **_ _* __*).each do |mixed|
+        describe "against mixed pattern #{mixed}" do
+          let(:input) { mixed }
+
+          it 'matches only like characters' do
+            _(scanner.matched).must_equal mixed.chop
+          end
+
+          it 'captures the entire match' do
+            _(scanner[1]).must_equal scanner.matched
+          end
         end
       end
     end
