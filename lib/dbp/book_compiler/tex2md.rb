@@ -49,7 +49,7 @@ module DBP
       end
 
       def tex_file_pattern(source)
-        source.file? ? source : source / '**.*.tex'
+        source.file? ? source : source / '**' / '*.tex'
       end
 
       def tex_files

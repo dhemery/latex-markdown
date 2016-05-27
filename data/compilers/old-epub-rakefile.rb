@@ -7,7 +7,7 @@ require 'rake/ext/string'
 PUBLICATION_SOURCE_DIR = Pathname(ENV['DBP_PUBLICATION_DIR'])
 PUBLICATION_SOURCE_FILE = PUBLICATION_SOURCE_DIR / 'publication.yaml'
 MANUSCRIPT_SOURCE_DIR = PUBLICATION_SOURCE_DIR / 'manuscript'
-MANUSCRIPT_LISTING_SOURCE_FILE = MANUSCRIPT_SOURCE_DIR / '_listing.yaml'
+MANUSCRIPT_LISTING_SOURCE_FILE = MANUSCRIPT_SOURCE_DIR / 'listing.yaml'
 
 FIXED_DIR = Pathname('_fixed')
 FIXED_FILES = FileList[FIXED_DIR / '**/*']
@@ -27,6 +27,10 @@ MANUSCRIPT_DIR = Pathname('manuscript')
 MARKDOWN_PATH = "%{^#{MANUSCRIPT_SOURCE_DIR}/,#{MANUSCRIPT_DIR}/}X.md"
 EPUB_PUBLICATION_FILES = files_copied(from: PUBLICATION_SOURCE_DIR / 'epub', to: '.')
 
+MANUSCRIPT_FILES = files_created(from_each: MANUSCRIPT_SOURCE_DIR / '**/*.tex', as: MARKDOWN_PATH) do |dep|
+  sh 'tex2md', dep[:source], dep[:dir]
+end
+
 BUILD_DIR = Pathname('_site')
 OPF_FILE = BUILD_DIR / 'package.opf'
 
@@ -40,7 +44,7 @@ end
 # This actually builds all of the content files,
 # not only the OPF file.
 file OPF_FILE => SOURCE_FILES
-file OPF_FILE => files_copied(from: MANUSCRIPT_SOURCE_DIR, to: MANUSCRIPT_DIR)
+file OPF_FILE => MANUSCRIPT_FILES
 file OPF_FILE => MANUSCRIPT_LISTING_FILE
 file OPF_FILE => EPUB_PUBLICATION_FILES
 file OPF_FILE => PUBLICATION_DATA_FILE

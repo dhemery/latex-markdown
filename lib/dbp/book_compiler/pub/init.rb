@@ -36,7 +36,7 @@ module DBP
         end
 
         def extract_mss
-          sh 'scriv2tex', mss_source.to_s, dest_dir.to_s
+          sh 'scriv2md', mss_source.to_s, dest_dir.to_s
           puts 'Extracted manuscript', "   from #{mss_source}", "   into #{dest_dir}/manuscript"
         end
 

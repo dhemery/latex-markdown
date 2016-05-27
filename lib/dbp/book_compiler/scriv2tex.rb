@@ -77,7 +77,7 @@ module DBP
       end
 
       def write_listing_file(scrivener)
-        listing_file = @manuscript_dir / 'listing.yaml'
+        listing_file = @manuscript_dir / '_listing.yaml'
         listing_file.dirname.mkpath
         listing_file.open('w') do |l|
           l.puts scrivener.documents.map { |doc| doc.path.sub_ext('').to_s }.to_yaml
