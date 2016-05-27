@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-require 'dbp/book_compiler/tex2md'
+require 'dbp/book_compiler/md2tex'
 
 DBP::BookCompiler::Md2TeX.new.run

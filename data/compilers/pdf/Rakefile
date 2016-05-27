@@ -12,9 +12,14 @@ PDF_PUBLICATION_SOURCE_DIR = PUBLICATION_SOURCE_DIR / 'pdf'
 PDF_FILE = Pathname(ENV['DBP_OUTPUT_FILE'])
 
 MANUSCRIPT_SOURCE_DIR =  PUBLICATION_SOURCE_DIR / 'manuscript'
-MANUSCRIPT_LISTING_SOURCE_FILE = MANUSCRIPT_SOURCE_DIR / 'listing.yaml'
+MANUSCRIPT_LISTING_SOURCE_FILE = MANUSCRIPT_SOURCE_DIR / '_listing.yaml'
 MANUSCRIPT_DIR = Pathname('manuscript')
 MANUSCRIPT_LISTING_FILE = Pathname('manuscript.tex')
+TEX_PATH = "%{^#{MANUSCRIPT_SOURCE_DIR}/,#{MANUSCRIPT_DIR}/}X.tex"
+MANUSCRIPT_FILES = files_created(from_each: MANUSCRIPT_SOURCE_DIR / '**/*.md', as: TEX_PATH) do |dep|
+  sh 'md2tex', dep[:source], dep[:dir]
+end
+
 
 file MANUSCRIPT_LISTING_FILE => [MANUSCRIPT_LISTING_SOURCE_FILE] do |t|
   File.open(t.name, 'w') do |f|
@@ -25,7 +30,7 @@ end
 PUBLICATION_DATA_FILE = Pathname('publication.tex')
 
 file PDF_FILE => FileList['**/*.tex']
-file PDF_FILE => files_copied(from: MANUSCRIPT_SOURCE_DIR, to: MANUSCRIPT_DIR)
+file PDF_FILE => MANUSCRIPT_FILES
 file PDF_FILE => files_copied(from: PDF_PUBLICATION_SOURCE_DIR, to: '.')
 file PDF_FILE => [MANUSCRIPT_LISTING_FILE, PUBLICATION_DATA_FILE, PDF_FORMAT_FILE]
 file PDF_FILE do |t|

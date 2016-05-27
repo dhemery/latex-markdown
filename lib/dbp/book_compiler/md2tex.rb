@@ -7,7 +7,7 @@ require 'dbp/book_compiler/util/cli'
 
 module DBP
   module BookCompiler
-    class TeX2Md
+    class Md2TeX
       include CLI
 
       def initialize
