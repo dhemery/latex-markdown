@@ -1,32 +1,19 @@
 module DBP::BookCompiler::MarkdownToTex
   class Translator
     TOKENS = {
-        # text with no operators -> copy
-        copy: /([^<*_]+)/,
-
-        # tag.class -> enter
-        enter: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
-
-        # any end tag -> exit
-        exit: /<\/.*?>/,
-
-        # comment -> extract
-        extract: /<!--\s*(.*?)\s*-->/,
-
-        # void tag (currently only <br/>) -> replace
-        replace: /<(br)\s*\/>/,
-
-        # any other text -> reject
-        reject: /(.{1,80})/,
+        text: /([^<*_]+)/,
+        open_tag: /<([a-z]+)\s+class\s*=\s*"\s*([^[:space:]]+)\s*"\s*>/,
+        end_tag: /<\/.*?>/,
+        void_tag: /<([a-z]+)\s*\/>/,
+        comment: /<!--\s*(.*?)\s*-->/,
+        unrecognized_text: /(.{1,80})/
     }
 
-    # void tags (e.g. <br />) are replaced by fixed text
-    REPLACEMENTS = {
+    REPLACEMENTS_BY_TAG_NAME = {
         'br' => '\break '
     }
 
-    # start tags (e.g, <div> and <span>) enter a macro or environment
-    WRAPPERS = {
+    WRAPPERS_BY_TAG_NAME = {
         'div' => {
             before: '\begin{%s}',
             after: '\end{%s}'
@@ -50,32 +37,32 @@ module DBP::BookCompiler::MarkdownToTex
       end
     end
 
-    def copy(captured)
+    def comment(captured)
       write captured[1]
     end
 
-    def enter(captured)
-      tag = captured[1]
-      name = captured[2]
-      wrapper = WRAPPERS[tag]
-      write(wrapper[:before] % name)
-      push(wrapper[:after] % name)
-    end
-
-    def exit(_)
+    def end_tag(_)
       write @stack.pop
     end
 
-    def extract(captured)
+    def open_tag(captured)
+      tag_name = captured[1]
+      class_value = captured[2]
+      wrapper = WRAPPERS_BY_TAG_NAME[tag_name]
+      write(wrapper[:before] % class_value)
+      push(wrapper[:after] % class_value)
+    end
+
+    def text(captured)
       write captured[1]
     end
 
-    def reject(captured)
+    def unrecognized_text(captured)
       raise "Unrecognized text starting with: #{captured[1]}"
     end
 
-    def replace(captured)
-      write REPLACEMENTS[captured[1]]
+    def void_tag(captured)
+      write REPLACEMENTS_BY_TAG_NAME[captured[1]]
     end
 
     def push(text)
