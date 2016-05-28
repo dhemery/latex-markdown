@@ -2,6 +2,7 @@ $text-size: 100%;
 $heading-scale: 1.2;
 $heading-2-size: $text-size * $heading-scale;
 $heading-1-size: $heading-2-size * $heading-scale;
+$fine-print-size: $text-size * .75;
 
 body { font-size: $text-size; }
 
@@ -72,4 +73,8 @@ h4, h5 { font-style: italic; }
     padding: 0;
     line-height: 1;
   }
+}
+
+.fine-print {
+  font-size: $fine-print-size;
 }
