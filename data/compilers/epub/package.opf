@@ -7,17 +7,18 @@ exclude-from-manifest: yes
   {% assign manuscript = site.data.manuscript %}
   {% assign publication = site.data.publication  %}
   <metadata xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:opf='http://www.idpf.org/2007/opf'>
-    <dc:format>application/epub+zip</dc:format>
-    <dc:language>en-US</dc:language>
-    <dc:title>{{ publication.title }}</dc:title>
-    <dc:identifier id='isbn' opf:scheme='ISBN'>{{ publication.isbn.ebook }}</dc:identifier>
-    <dc:publisher>Driscoll Brook Press</dc:publisher>
+    <dc:creator opf:role='aut' opf:file-as='Emery, Dale Hartley'>Dale Hartley Emery</dc:creator>
     <dc:date opf:event='publication'>{{ publication.date }}</dc:date>
     <dc:description>{{ publication.description }}</dc:description>
-    <dc:creator opf:role='aut' opf:file-as='Emery, Dale Hartley'>Dale Hartley Emery</dc:creator>
+    <dc:format>application/epub+zip</dc:format>
+    <dc:identifier id='isbn' opf:scheme='ISBN'>{{ publication.isbn.ebook }}</dc:identifier>
+    <dc:language>en-US</dc:language>
+    <dc:publisher>Driscoll Brook Press</dc:publisher>
+    <dc:type>Text</dc:type>
+    <dc:title>{{ publication.title }}</dc:title>
     {% for subject in publication.subjects %}<dc:subject>{{ subject }}</dc:subject>{% endfor %}
-    {% for genre in publication.genres %}<dc:type>{{ genre }}</dc:type>{% endfor %}
     {% for claim in publication.rights %}<dc:rights>{{ claim.material }} © {{ claim.date }} {{ claim.owner }}</dc:rights>{% endfor %}
+    <meta name='cover' content='publication-cover-jpg' />
   </metadata>
   <manifest>
     {% for page in site.pages %}{% unless page.exclude-from-manifest %}{% include manifest-entry.xml path=page.url %}{% endunless %}{% endfor %}
