@@ -3,6 +3,7 @@
 \catcode`\{=1     % { begin group
 \catcode`\}=2     % } end group
 % \catcode`\$=3     % $ shift into and out of math mode
+\catcode`\$=11     % Treat $ as a letter
 \catcode`\&=4     % & alignment tab
 \catcode`\#=6     % # macro parameter prefix
 \catcode`\^=7     % ^ superscript operator
@@ -24,7 +25,7 @@
 \outer\def\^^L{\par}
 
 \def\'#1{{\accent"13 #1}}
-\chardef\$=`\$
+%\chardef\$=`\$
 
 \def\break{\penalty-10000 }
 \def\nobreak{\penalty10000 }
