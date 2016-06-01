@@ -42,6 +42,7 @@ file PUBLICATION_DATA_FILE => PUBLICATION_DATA_SOURCE_FILE do |t|
   File.open(t.name, 'w') do |f|
     f.puts "\\title={#{publication['title']}}"
     f.puts "\\author={#{publication['author']['name']}}"
+    f.puts "\\version={#{publication['version']}}"
     f.puts '\\isbns={'
     f.puts publication['isbn'].map{|k,v| "ISBN: #{v} (#{k})"}.join('\\break ')
     f.puts '}'
