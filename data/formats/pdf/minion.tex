@@ -1,0 +1,50 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Minion Pro Titling and Text Fonts
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Minion Pro Optical Sizes
+% - Caption 8 (5.9-8.9)
+% - Regular 11 (8.9-14.9)
+% - Subhead 18 (14.9-22.9)
+% - Display 36 (22.9-72)
+
+% #1: typeface name
+% #2: ftag to select the typeface
+% #3: ftag (if any) to select the typeface's regular weight (rg)
+% #4: ftag to select the typeface's italic slant (it)
+% #5: ftag to select the typeface's bold weight (bf)
+% #6: ftag (if any) to select the typeface's regular weight, roman slant (rg, rm)
+
+\def\miniontypeface{
+  \newtypeface{minion}{MinionPro}{}{It}{Bold}{Regular}
+}
+
+\def\miniontext{
+  \miniontypeface
+
+  \newtypestyle{text}{minion}{}{\the\textsize}{rg}{rm}{nv}{po}
+  \newtypestyle{smalltext}{minion}{}{\the\smalltextsize}{rg}{rm}{nv}{po}
+
+  % expand body and small fonts, but not others
+  \gdef\ontextfontload##1{\pdffontexpand##1 30 30 1 autoexpand}
+  \gdef\onsmalltextfontload##1{\pdffontexpand##1 30 30 1 autoexpand}
+
+  \global\maxtextcharheightratio={.732} % .731 (
+  \global\maxtextchardepthratio={.299} % .298italic Q
+}
+
+\def\miniontitles{
+  \miniontypeface
+  \newtypestyle{ahead}{minion}{Disp}{\the\aheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{bhead}{minion}{Disp}{\the\bheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{chead}{minion}{Subh}{\the\cheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{caption}{minion}{Capt}{\the\captionsize}{rg}{rm}{sc}{po}
+
+  \gdef\booktitlefont{\ahead}
+  \gdef\authornamefont{\bhead}
+  \gdef\parttitlefont{\ahead}
+  \gdef\chaptertitlefont{\chead}
+  \gdef\pageframefont{\caption}
+}
