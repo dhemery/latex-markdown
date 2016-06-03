@@ -1,0 +1,20 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Proxima Titling Fonts
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtypeface{proxima}{ProximaNova}{Regular}{It}{Bold}{Regular}
+
+\def\proximatitles{
+  \newtypestyle{ahead}{proxima}{}{\the\aheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{bhead}{proxima}{}{\the\bheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{chead}{proxima}{}{\the\cheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{caption}{proxima}{}{\the\captionsize}{rg}{rm}{sc}{po}
+
+  \gdef\booktitlefont{\ahead}
+  \gdef\authornamefont{\bhead}
+  \gdef\parttitlefont{\ahead}
+  \gdef\chaptertitlefont{\chead}
+  \gdef\pageframefont{\caption}
+}
