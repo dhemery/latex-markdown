@@ -7,7 +7,7 @@ isbn:
   print: 000-0-00000-000-0
   ebook: 111-1-11111-111-1
 date: 2020
-version: 1
+version: 1.0.0
 rights:
   -
     material: Text
@@ -22,6 +22,8 @@ rights:
     owner: XXX
 subjects:
   - Fiction
-genres:
-  - Genre1
-  - Genre2
+description: >
+  Description…
+
+  … goes here
+

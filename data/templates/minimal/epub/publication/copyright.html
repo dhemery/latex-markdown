@@ -21,9 +21,9 @@ guide: copyright-information
 </ul>
 
 <ul class='plain-list'>
-  {% for isbn in publication.isbn %}
-  <li>ISBN: {{ isbn[1] }} ({{ isbn[0] }})</li>
-  {% endfor %}
+    {% for isbn in publication.isbn %}
+    <li>ISBN: {{ isbn[1] }} ({{ isbn[0] }})</li>
+    {% endfor %}
 </ul>
 
 <p>
@@ -55,5 +55,7 @@ guide: copyright-information
 </p>
 
 <p class="fine-print">
+    Version {{ publication.version }}
+    <br />
     {{ site.time | date_to_xmlschema }}
 </p>
