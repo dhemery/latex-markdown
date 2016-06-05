@@ -1,41 +1,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Garamond Titling and Text Fonts
+% Optima Titling Fonts
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Garamond Premier Pro Optical Sizes
-% - Caption 8 (5.9-8.9)
-% - Regular 11 (8.9-14.9)
-% - Subhead 18 (14.9-22.9)
-% - Display 36 (22.9-72)
-
-\def\garamondtypeface{
-  \newtypeface{garamond}{GaramondPremrPro}{}{It}{Bd}{}
+\def\optimatypeface{
+  \newtypeface{optima}{OptimaNovaLTPro}{}{Italic}{Bold}{Regular}
 }
 
-\def\garamondtext{
-  \garamondtypeface
+\def\optimatitles{
+  \optimatypeface
+  \newtypestyle{ahead}{optima}{}{\the\aheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{bhead}{optima}{}{\the\bheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{chead}{optima}{}{\the\cheadsize}{rg}{rm}{sc}{po}
+  \newtypestyle{caption}{optima}{}{\the\captionsize}{rg}{rm}{sc}{po}
 
-  \newtypestyle{text}{garamond}{}{\the\textsize}{rg}{rm}{nv}{po}
-  \newtypestyle{smalltext}{garamond}{}{\the\smalltextsize}{rg}{rm}{nv}{po}
-
-  % expand body and small fonts, but not others
-  \gdef\ontextfontload##1{\pdffontexpand##1 30 30 1 autoexpand}
-  \gdef\onsmalltextfontload##1{\pdffontexpand##1 30 30 1 autoexpand}
-
-  \global\maxtextcharheightratio={.732} % .731 (
-  \global\maxtextchardepthratio={.299} % .298italic Q
-}
-
-\def\garamondtitles{
-  \garamondtypeface
-  \newtypestyle{ahead}{garamond}{Disp}{\the\aheadsize}{rg}{rm}{sc}{po}
-  \newtypestyle{bhead}{garamond}{Disp}{\the\bheadsize}{rg}{rm}{sc}{po}
-  \newtypestyle{chead}{garamond}{Subh}{\the\cheadsize}{rg}{rm}{sc}{po}
-  \newtypestyle{caption}{garamond}{Capt}{\the\captionsize}{rg}{rm}{sc}{po}
-
-  \newtypestyle{runin}{garamond}{}{\the\textsize}{rg}{rm}{sc}{po}
+  \newtypestyle{runin}{optima}{}{\the\textsize}{rg}{rm}{sc}{po}
 
   \gdef\booktitlefont{\ahead}
   \gdef\authornamefont{\bhead}
