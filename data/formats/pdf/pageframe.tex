@@ -58,6 +58,6 @@
 % No foot on normal pages
 \normalfoot={\hfil}
 % Recto pages: title at spine margin, page number at edge margin
-\normalrectohead={\the\title \hfil \number\pageno}
+\normalrectohead={\hfil \the\title \hfil \zerowidthflushright{\number\pageno}}
 % Verso pages: page number at edge margin, author name at spine margin
-\normalversohead={\number\pageno \hfil \the\author}
+\normalversohead={\zerowidthflushleft{\number\pageno}\hfil \the\author \hfil}
