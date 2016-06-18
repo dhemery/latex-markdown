@@ -12,3 +12,4 @@ defaults:
   values:
     layout:
 exclude: [Rakefile]
+timezone: Etc/UTC
