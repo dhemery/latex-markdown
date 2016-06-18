@@ -76,4 +76,3 @@ desc 'Build the mobi file'
 task mobi: MOBI_FILE
 
 CLEAN.include BOOK_BUILD_DIR
-CLOBBER.include OUT_DIR

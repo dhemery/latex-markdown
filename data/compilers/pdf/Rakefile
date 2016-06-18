@@ -56,5 +56,3 @@ task default: [:pdf]
 
 desc 'Typeset the book as a PDF file (default)'
 task pdf: [PDF_FILE]
-
-CLOBBER.include(PDF_FILE, PDF_FILE.ext('log'))

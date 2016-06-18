@@ -82,5 +82,3 @@ task epub: [EPUB_FILE]
 
 desc 'Check the epub file'
 task check_options: [EPUB_CHECK_REPORT]
-
-CLEAN.include BUILD_DIR

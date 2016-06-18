@@ -12,6 +12,3 @@ task format: [PDF_FORMAT_FILE]
 file PDF_FORMAT_FILE => FileList['*.tex'] do
   sh 'pdftex', '-interaction=batchmode', '-etex', '-enc',  '-ini', '-jobname', PDF_FORMAT_FILE.pathmap('%X').to_s, 'dbp'
 end
-
-CLEAN.include(PDF_FORMAT_FILE.ext('log'))
-CLOBBER.include(PDF_FORMAT_FILE)
