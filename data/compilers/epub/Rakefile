@@ -49,6 +49,7 @@ file OPF_FILE do
 end
 
 EPUB_FILE = Pathname(ENV['DBP_OUTPUT_FILE'])
+
 OUT_DIR = EPUB_FILE.dirname
 directory OUT_DIR
 file EPUB_FILE => [OPF_FILE, OUT_DIR] + FIXED_FILES do |t|

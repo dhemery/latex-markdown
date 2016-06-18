@@ -9,9 +9,6 @@ require_relative 'utils'
 COMPILERS_DIR = DBP.compilers_dir
 FORMATS_DIR = DBP.formats_dir
 
-puts "COMPILERS_DIR: #{COMPILERS_DIR}"
-puts "FORMATS_DIR  : #{FORMATS_DIR}"
-
 PUBLICATION_DIR = Pathname(ENV['DBP_PUBLICATION_DIR'])
 DBP_BUILD_DIR = Pathname(ENV['DBP_BUILD_DIR'])
 OUT_DIR = Pathname(ENV['DBP_OUT_DIR'])
@@ -20,13 +17,14 @@ PUBLICATION_DATA_FILE = PUBLICATION_DIR / 'publication.yaml'
 
 PUBLICATION = YAML.load_file(PUBLICATION_DATA_FILE)
 SLUG = PUBLICATION['slug']
+VERSION = PUBLICATION['version']
 
 BOOK_BUILD_DIR = DBP_BUILD_DIR + SLUG
 
 directory OUT_DIR
 
 def output_file(medium)
-  (OUT_DIR / SLUG).ext(medium.to_s)
+  OUT_DIR / "#{SLUG}-#{VERSION}.#{medium.to_s}"
 end
 
 def produce(medium:, prereqs: [], **env)
