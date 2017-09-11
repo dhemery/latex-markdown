@@ -37,7 +37,7 @@ module DBP
             },
             'span' => {
                 enter: '\%s{',
-                exit: '}'
+                exit: '}%.0s' # The %.0s part of the format accepts and discards the argument
             },
         }
 
@@ -49,7 +49,7 @@ module DBP
 
         def translate
           until @scanner.eos? do
-            token = TOKENS.each_key.find { |token| @scanner.scan(TOKENS[token]) }
+            token = TOKENS.each_key.find { |tok| @scanner.scan(TOKENS[tok]) }
             self.send(token, @scanner)
           end
         end
