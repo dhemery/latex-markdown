@@ -1,5 +1,6 @@
+require 'pathname'
 require 'rake/clean'
-require 'rake/ext/pathname'
+require 'rake/ext/string'
 
 PDF_FORMAT_FILE = Pathname(ENV['DBP_OUTPUT_FILE'])
 
@@ -10,5 +11,5 @@ desc 'Build the format file'
 task format: [PDF_FORMAT_FILE]
 
 file PDF_FORMAT_FILE => FileList['*.tex'] do
-  sh 'pdftex', '-interaction=batchmode', '-etex', '-enc',  '-ini', '-jobname', PDF_FORMAT_FILE.pathmap('%X').to_s, 'dbp'
+  sh 'pdftex', '-interaction=batchmode', '-etex', '-enc',  '-ini', '-jobname', PDF_FORMAT_FILE.to_s.pathmap('%X').to_s, 'dbp'
 end

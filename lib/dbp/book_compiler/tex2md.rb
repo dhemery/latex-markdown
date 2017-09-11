@@ -1,7 +1,8 @@
 require 'dbp/book_compiler/tex_to_markdown/translator'
+require 'pathname'
 require 'strscan'
 require 'rake'
-require 'rake/ext/pathname'
+require 'rake/ext/string'
 
 require 'dbp/book_compiler/util/cli'
 
@@ -37,7 +38,7 @@ module DBP
       private
 
       def md_out(tex_in)
-        tex_in.pathmap(@tex_path_to_md_path)
+        Pathname(tex_in.to_s.pathmap(@tex_path_to_md_path))
       end
 
       def scanner(tex_in)

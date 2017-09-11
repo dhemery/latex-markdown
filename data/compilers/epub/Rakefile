@@ -1,7 +1,6 @@
 require 'rake/clean'
 require 'pathname'
 require 'yaml'
-require 'rake/ext/pathname'
 require 'rake/ext/string'
 
 PUBLICATION_SOURCE_DIR = Pathname(ENV['DBP_PUBLICATION_DIR'])
@@ -68,7 +67,7 @@ file MANUSCRIPT_LISTING_FILE => MANUSCRIPT_LISTING_SOURCE_FILE do |t|
   end
 end
 
-EPUB_CHECK_REPORT = EPUB_FILE.ext('json')
+EPUB_CHECK_REPORT = EPUB_FILE.to_s.ext('json')
 file EPUB_CHECK_REPORT => EPUB_FILE do |t|
   sh 'epubcheck', t.source, '--warn', '--json', t.name
 end

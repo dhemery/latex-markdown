@@ -1,7 +1,7 @@
-require 'rake/clean'
 require 'pathname'
 require 'yaml'
-require 'rake/ext/pathname'
+require 'rake/clean'
+require 'rake/ext/string'
 require 'dbp'
 
 require_relative 'utils'
